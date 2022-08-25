@@ -174,9 +174,45 @@ oBien _ _ = True
 {- 1. Definir el tipo de dato Persona, como un nombre y la edad de la persona. Realizar las
 siguientes funciones: -}
 
-data Persona = Persona String Int
+data Persona = Perso String Int
+     deriving Show
                --      Nombre Edad
+     
+elian :: Persona
+elian = Perso "Elian" 19 
+
+alan :: Persona
+alan = Perso "Alan" 17
 
 -- * Devuelve el nombre de una persona
 nombre :: Persona -> String
+nombre (Perso nom _) = nom
 
+-- * Devuelve la edad de una persona
+edad :: Persona -> Int
+edad (Perso _ ed) = ed
+
+-- * Aumenta en uno la edad de la persona.
+crecer :: Persona -> Persona
+crecer (Perso nom ed) = (Perso nom (ed+1))
+
+-- * Dados un nombre y una persona, devuelve una persona con la edad de la persona y el nuevo nombre.
+cambioDeNombre :: String -> Persona -> Persona
+cambioDeNombre x (Perso nom ed) = (Perso x ed)
+
+-- * Dadas dos personas indica si la primera es mayor que la segunda.
+esMayorQueLaOtra :: Persona -> Persona -> Bool
+esMayorQueLaOtra (Perso nom ed) (Perso nom1 ed1) = (ed>ed1)
+
+-- * Dadas dos personas devuelve a la persona que sea mayor.
+laQueEsMayor :: Persona -> Persona -> Persona
+laQueEsMayor (Perso nom ed) (Perso nom2 ed2) = if (ed>ed2)
+                                                  then (Perso nom ed)
+                                                  else (Perso nom2 ed2) 
+
+{- 2. Definir los tipos de datos Pokemon, como un TipoDePokemon (agua, fuego o planta) y un
+porcentaje de energía; y Entrenador, como un nombre y dos Pokémon. Luego definir las
+siguientes funciones:
+ -}
+
+ 
