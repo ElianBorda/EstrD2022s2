@@ -38,8 +38,15 @@ maxDelPar (n, m) =  if n > m
      Ejemplo: maxDePar (divisionYResto (suma 5 5) (sucesor 0)) -}
 
 -- (1)
--- sumar (maxDelPar (8, 2)) (fst (divisionYResto (8, (sucesor 3))))
+-- sumar (maxDelPar (8, 2)) (fst (divisionYResto 8 (sucesor 3)))
 
 -- (2)
+-- maxDelPar ((sumar (maxDelPar (3, 4)) (fst (divisionYResto 12 2))), (fst (divisionYResto 4 (sucesor 1))))
+
+-- (3)
+-- fst (divisionYResto (sumar 10 (sucesor 9)) (sucesor 1))
+
+-- (4)
+-- sumar (fst (divisionYResto (maxDelPar (8, (sumar 5 (fst (divisionYResto 27 3))))) 2)) (sumar (sucesor 1) 1)
 
  
