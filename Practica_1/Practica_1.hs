@@ -50,3 +50,133 @@ maxDelPar (n, m) =  if n > m
 -- sumar (fst (divisionYResto (maxDelPar (8, (sumar 5 (fst (divisionYResto 27 3))))) 2)) (sumar (sucesor 1) 1)
 
  
+-- ##### #3 Tipos Enumerativos #####
+
+{- 1. Definir el tipo de dato Dir, con las alternativas Norte, Sur, Este y Oeste. Luego implementar
+las siguientes funciones: -}
+
+data Dir = Norte | Sur | Este | Oeste
+     deriving Show
+
+-- a) Dada una dirección devuelve su opuesta.
+opuesto :: Dir -> Dir
+opuesto Norte = Sur
+opuesto Sur = Norte
+opuesto Este = Oeste
+opuesto Oeste = Este
+
+-- b) Dadas dos direcciones, indica si son la misma. Nota: utilizar pattern matching y no ==.
+iguales :: Dir -> Dir -> Bool
+iguales Este Este = True
+iguales Oeste Oeste = True
+iguales Norte Norte = True
+iguales Sur Sur = True
+iguales _ _ = False
+
+{- c) Dada una dirección devuelve su siguiente, en sentido horario, y suponiendo que no existe
+la siguiente dirección a Oeste. ¿Posee una precondición esta función? ¿Es una función
+total o parcial? ¿Por qué? -}
+
+siguiente :: Dir -> Dir
+-- Precond: Solamente norte, sur y este tiene direcciones siguientes  
+siguiente Norte = Este
+siguiente Este = Sur
+siguiente Sur = Oeste
+siguiente _ = error "Oeste no tiene siguiente"
+
+{- 2. Definir el tipo de dato DiaDeSemana, con las alternativas Lunes, Martes, Miércoles, Jueves,
+Viernes, Sabado y Domingo. Supongamos que el primer día de la semana es lunes, y el último
+es domingo. Luego implementar las siguientes funciones: -}
+
+data DiaDeSemana = Lunes | Martes | Miercoles | Jueves | Viernes | Sabado | Domingo 
+     deriving Show
+
+{- a) Devuelve un par donde la primera componente es el primer día de la semana, y la
+segunda componente es el último día de la semana. Considerar definir subtareas útiles
+que puedan servir después. -}
+
+primeroYUltimoDia :: (DiaDeSemana, DiaDeSemana)
+primeroYUltimoDia = (primerDia, ultimoDia)
+
+primerDia :: DiaDeSemana
+primerDia = Lunes
+
+ultimoDia :: DiaDeSemana
+ultimoDia = Domingo
+
+{- b) Dado un día de la semana indica si comienza con la letra M. -}
+
+empiezaConM :: DiaDeSemana -> Bool
+empiezaConM Miercoles = True
+empiezaConM Martes = True
+empiezaConM _ = False
+
+{- c) Dado dos días de semana, indica si el primero viene después que el segundo. Analizar
+la calidad de la solución respecto de la cantidad de casos analizados (entre los casos
+analizados en esta y cualquier subtarea, deberían ser no más de 9 casos). -}
+
+vieneDespues :: DiaDeSemana -> DiaDeSemana -> Bool
+vieneDespues Lunes Martes = True
+vieneDespues Martes Miercoles = True
+vieneDespues Miercoles Jueves = True
+vieneDespues Jueves Viernes = True
+vieneDespues Viernes Sabado = True
+vieneDespues Sabado Domingo = True
+vieneDespues Domingo Lunes = True
+vieneDespues _ _ = False
+
+{- d) Dado un día de la semana indica si no es ni el primer ni el ultimo dia. -}
+
+estaEnElMedio :: DiaDeSemana -> Bool
+estaEnElMedio Lunes = False
+estaEnElMedio Domingo = False
+estaEnElMedio _ = True
+
+{-3. Los booleanos también son un tipo de enumerativo. Un booleano es True o False. Defina
+las siguientes funciones utilizando pattern matching (no usar las funciones sobre booleanos
+ya definidas en Haskell):-}
+
+
+{- a) Dado un booleano, si es True devuelve False, y si es False devuelve True.
+En Haskell ya está definida como not. -}
+
+negar :: Bool -> Bool
+negar False = True
+negar True = False
+
+{- b) Dados dos booleanos, si el primero es True y el segundo es False, devuelve False, sino
+devuelve True. Esta función debe ser tal que implica False (error "Mal") devuelva
+True.
+Nota: no viene implementada en Haskell. -}
+
+implica :: Bool -> Bool -> Bool
+implica True False = False
+implica _ _ = True
+
+{- c) Dados dos booleanos si ambos son True devuelve True, sino devuelve False. Esta
+función debe ser tal que yTambien False (error "Mal") devuelva False.
+En Haskell ya está definida como \&\&. -}
+
+yTambien :: Bool -> Bool -> Bool
+yTambien True True = True
+yTambien _ _ = False
+
+{- d) Dados dos booleanos si alguno de ellos es True devuelve True, sino devuelve False.
+Esta función debe ser tal que oBien True (error "Mal") devuelva True.
+En Haskell ya está definida como ||. -}
+
+oBien :: Bool -> Bool -> Bool
+oBien False False = False
+oBien _ _ = True
+
+-- ##### #4 Registros #####
+
+{- 1. Definir el tipo de dato Persona, como un nombre y la edad de la persona. Realizar las
+siguientes funciones: -}
+
+data Persona = Persona String Int
+               --      Nombre Edad
+
+-- * Devuelve el nombre de una persona
+nombre :: Persona -> String
+
