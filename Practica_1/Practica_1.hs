@@ -215,4 +215,52 @@ porcentaje de energía; y Entrenador, como un nombre y dos Pokémon. Luego defin
 siguientes funciones:
  -}
 
- 
+data TipoDePokemon = Agua | Fuego | Planta
+     deriving Show
+data Pokemon = Pokemon_ TipoDePokemon    Int
+     deriving Show
+               --       Tipo de Pokemon  Porcentaje de energia
+data Entrenador = Entrenador_ String  (Pokemon, Pokemon)
+     deriving Show
+                  --          nombre  2 pokemones
+
+-- DATOS
+suicune, squirtle, charmander, vulpix, tangela, chikorita :: Pokemon
+suicune    = Pokemon_ Agua   21
+squirtle   = Pokemon_ Agua   31
+vulpix     = Pokemon_ Fuego  54
+charmander = Pokemon_ Fuego  71
+tangela    = Pokemon_ Planta 18
+chikorita  = Pokemon_ Planta 29
+
+erika, kiawe, misty :: Entrenador
+erika = Entrenador_ "Erika" (squirtle, chikorita)
+kiawe = Entrenador_ "Kiawe" (charmander, vulpix)
+misty = Entrenador_ "Misty" (suicune, tangela)
+
+
+{- * Dados dos Pokémon indica si el primero, en base al tipo, es superior al segundo. Agua
+supera a fuego, fuego a planta y planta a agua. Y cualquier otro caso es falso. -}
+superaA :: Pokemon -> Pokemon -> Bool
+superaA (Pokemon_ tipo ener) (Pokemon_ tipo1 ener1) = elTipoSuperaA tipo tipo1
+
+elTipoSuperaA :: TipoDePokemon -> TipoDePokemon -> Bool
+elTipoSuperaA Agua Fuego = True
+elTipoSuperaA Fuego Planta = True
+elTipoSuperaA Planta Agua = True
+elTipoSuperaA _ _ = False
+
+-- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
+cantidadDePokemonDe :: TipoDePokemon -> Entrenador -> Int
+cantidadDePokemonDe Agua (Entrenador_ _ poke) = cantidadTipoPokemon Agua poke
+cantidadDePokemonDe Fuego (Entrenador_ _ poke) = cantidadTipoPokemon Fuego poke
+cantidadDePokemonDe Planta (Entrenador_ _ poke) = cantidadTipoPokemon Planta poke
+
+cantidadTipoPokemon :: TipoDePokemon -> (Pokemon, Pokemon) -> Int
+cantidadTipoPokemon Agua ((Pokemon_ Agua _), (Pokemon_ Agua _)) = 2
+cantidadTipoPokemon Fuego ((Pokemon_ Fuego _), (Pokemon_ Fuego _)) = 2
+cantidadTipoPokemon Planta ((Pokemon_ Planta _), (Pokemon_ Planta _)) = 2
+cantidadTipoPokemon Agua ((Pokemon_ Agua _), _) = 1
+cantidadTipoPokemon Fuego ((Pokemon_ Fuego _), _) = 1
+cantidadTipoPokemon Planta ((Pokemon_ Planta _), _) = 1
+cantidadTipoPokemon _ (_, _) = 0
