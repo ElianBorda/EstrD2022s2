@@ -49,8 +49,11 @@ maxDelPar (n, m) =  if n > m
 -- (4)
 -- sumar (fst (divisionYResto (maxDelPar (8, (sumar 5 (fst (divisionYResto 27 3))))) 2)) (sumar (sucesor 1) 1)
 
+
  
 -- ##### #3 Tipos Enumerativos #####
+
+
 
 {- 1. Definir el tipo de dato Dir, con las alternativas Norte, Sur, Este y Oeste. Luego implementar
 las siguientes funciones: -}
@@ -169,7 +172,12 @@ oBien :: Bool -> Bool -> Bool
 oBien False False = False
 oBien _ _ = True
 
+
+
+
 -- ##### #4 Registros #####
+
+
 
 {- 1. Definir el tipo de dato Persona, como un nombre y la edad de la persona. Realizar las
 siguientes funciones: -}
@@ -252,15 +260,84 @@ elTipoSuperaA _ _ = False
 
 -- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
 cantidadDePokemonDe :: TipoDePokemon -> Entrenador -> Int
-cantidadDePokemonDe Agua (Entrenador_ _ poke) = cantidadTipoPokemon Agua poke
-cantidadDePokemonDe Fuego (Entrenador_ _ poke) = cantidadTipoPokemon Fuego poke
-cantidadDePokemonDe Planta (Entrenador_ _ poke) = cantidadTipoPokemon Planta poke
+cantidadDePokemonDe x (Entrenador_ _ pokePar) = cantidadDeTipoPokemon x pokePar
 
-cantidadTipoPokemon :: TipoDePokemon -> (Pokemon, Pokemon) -> Int
-cantidadTipoPokemon Agua ((Pokemon_ Agua _), (Pokemon_ Agua _)) = 2
-cantidadTipoPokemon Fuego ((Pokemon_ Fuego _), (Pokemon_ Fuego _)) = 2
-cantidadTipoPokemon Planta ((Pokemon_ Planta _), (Pokemon_ Planta _)) = 2
-cantidadTipoPokemon Agua ((Pokemon_ Agua _), _) = 1
-cantidadTipoPokemon Fuego ((Pokemon_ Fuego _), _) = 1
-cantidadTipoPokemon Planta ((Pokemon_ Planta _), _) = 1
-cantidadTipoPokemon _ (_, _) = 0
+cantidadDeTipoPokemon :: TipoDePokemon -> (Pokemon, Pokemon) -> Int
+cantidadDeTipoPokemon x ((Pokemon_ tipoP _), (Pokemon_ tipoP2 _)) = ((unoSiCeroSino (esDelMismoTipo x tipoP)) + 
+                                                                    (unoSiCeroSino (esDelMismoTipo x tipoP2)))
+
+esDelMismoTipo :: TipoDePokemon -> TipoDePokemon -> Bool
+esDelMismoTipo Planta Planta = True
+esDelMismoTipo Agua Agua = True
+esDelMismoTipo Fuego Fuego = True
+esDelMismoTipo _ _ = False
+
+unoSiCeroSino :: Bool -> Int
+unoSiCeroSino True = 1
+unoSiCeroSino False = 0
+
+
+
+
+-- * ##### #5 Funciones Polimorficas #####
+
+
+
+-- 1.Defina las siguientes funciones polimórficas:
+
+-- a) Dado un elemento de algún tipo devuelve ese mismo elemento.
+loMismo :: a -> a
+loMismo x = x
+
+-- b) Dado un elemento de algún tipo devuelve el número 7.
+siempreSiete :: a -> Int
+siempreSiete x = 7
+
+-- c) Dadas una tupla, invierte sus componentes.
+swap :: (a,b) -> (b, a)
+swap (x, y) = (y, x)
+
+-- 2. Responda la siguiente pregunta: ¿Por qué estas funciones son polimórficas?
+
+{- Estas funciones son polimorficas porque no tienen restricciones de tipo en la definicion. Sus estructuras
+pueden trabajar con cualquier tipo de datos, ya que ademas no poseen operaciones no polimorficas. En consecuencia, 
+cumplen con la generalizacion de tipos -}
+
+-- * ##### #6 Pattern matching sobre lista #####
+
+
+
+{- 1. Defina las siguientes funciones polimórficas utilizando pattern matching sobre listas (no
+utilizar las funciones que ya vienen con Haskell): -}
+
+{- 2. Dada una lista de elementos, si es vacía devuelve True, sino devuelve False.
+Definida en Haskell como null. -}
+estaVacia :: [a] -> Bool
+estaVacia [] = True
+estaVacia (_:_) = False
+
+{- 3. Dada una lista devuelve su primer elemento.
+Definida en Haskell como head.
+Nota: tener en cuenta que el constructor de listas es :
+-}
+elPrimero :: [a] -> a
+-- PRECOND: La lista no esta vacia
+elPrimero (x:_) = x
+elPrimero _ = error "La lista esta vacia"
+
+{- 4. Dada una lista devuelve esa lista menos el primer elemento.
+Definida en Haskell como tail.
+Nota: tener en cuenta que el constructor de listas es :
+-}
+sinElPrimero :: [a] -> [a]
+-- PRECOND: La lista tiene mas de un elemento
+sinElPrimero (_:ls) = ls
+sinElPrimero _ = error "La lista no tiene mas de un elemento"
+
+
+{- 5. Dada una lista devuelve un par, donde la primera componente es el primer elemento de la
+lista, y la segunda componente es esa lista pero sin el primero.
+Nota: tener en cuenta que el constructor de listas es :
+-}
+splitHead :: [a] -> (a, [a])
+splitHead ls = ((elPrimero ls),(sinElPrimero ls))
