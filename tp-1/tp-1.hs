@@ -30,8 +30,9 @@ divisionYResto n m = (div n m, mod n m)
 -- Dado un par de números devuelve el mayor de estos. 
 maxDelPar :: (Int, Int) -> Int
 maxDelPar (n, m) =  if n > m
-                        then fst (n, m)
-                        else snd (n, m)
+                        then n
+                        else m
+-- CORREGIDO
 
 {- 2.De 4 ejemplos de expresiones diferentes que denoten el número 10, utilizando en cada expresión 
      a todas las funciones del punto anterior.
