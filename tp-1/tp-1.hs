@@ -210,13 +210,13 @@ cambioDeNombre x (Perso nom ed) = (Perso x ed)
 
 -- * Dadas dos personas indica si la primera es mayor que la segunda.
 esMayorQueLaOtra :: Persona -> Persona -> Bool
-esMayorQueLaOtra (Perso nom ed) (Perso nom1 ed1) = (ed>ed1)
+esMayorQueLaOtra (Perso _ ed) (Perso _ ed1) = (ed>ed1)
 
 -- * Dadas dos personas devuelve a la persona que sea mayor.
 laQueEsMayor :: Persona -> Persona -> Persona
-laQueEsMayor (Perso nom ed) (Perso nom2 ed2) = if (ed>ed2)
-                                                  then (Perso nom ed)
-                                                  else (Perso nom2 ed2) 
+laQueEsMayor p1 p2 = if esMayorQueLaOtra p1 p2
+                         then p1
+                         else p2 
 
 {- 2. Definir los tipos de datos Pokemon, como un TipoDePokemon (agua, fuego o planta) y un
 porcentaje de energía; y Entrenador, como un nombre y dos Pokémon. Luego definir las

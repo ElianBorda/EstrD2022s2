@@ -177,4 +177,62 @@ sinLosPrimeros n (x:xs) = sinLosPrimeros (n-1) xs
 
 -------------------------------------------
 
+-- ##### 3. Registros #####
 
+-------------------------------------------
+
+-- 1. Definir el tipo de dato Persona, como un nombre y la edad de la persona.
+
+data Persona = P  String Int
+               -- nombre edad
+    deriving Show
+
+juan, jose, miguel, roberto :: Persona
+juan = P "Juan" 20
+jose = P "Jose" 35
+miguel = P "Miguel" 28
+roberto = P "Roberto" 27
+
+-------------------------------------------
+
+-- Dados una edad y una lista de personas devuelve a las personas mayores a esa edad
+mayoresA :: Int -> [Persona] -> [Persona]
+mayoresA _ [] = []
+mayoresA ed (p:ps) = if (edad p)>ed
+                        then p : mayoresA ed ps
+                        else mayoresA ed ps
+
+edad :: Persona -> Int
+edad (P _ ed) = ed 
+
+-------------------------------------------
+
+-- Dada una lista de personas devuelve el promedio de edad entre esas personas. Precon-
+-- dición: la lista al menos posee una persona.
+promedioEdad :: [Persona] -> Int
+promedioEdad ps = promedio (edades ps)
+
+
+edades :: [Persona] -> [Int]
+edades [] = []
+edades (p:ps) = (edad p) : edades ps
+
+
+promedio :: [Int] -> Int
+promedio ns = div (sumatoria ns) (longitud ns)
+
+-------------------------------------------
+
+-- Dada una lista de personas devuelve la persona más vieja de la lista. Precondición: la
+-- lista al menos posee una persona.
+elMasViejo :: [Persona] -> Persona
+elMasViejo (p:[]) = p
+elMasViejo (p:p2:ps) =  elMasViejo ((laQueEsMayor p p2):ps) 
+
+esMayorQueLaOtra :: Persona -> Persona -> Bool
+esMayorQueLaOtra (P _ ed) (P _ ed1) = (ed>ed1)
+
+laQueEsMayor :: Persona -> Persona -> Persona
+laQueEsMayor p1 p2 = if esMayorQueLaOtra p1 p2
+                         then p1
+                         else p2 
