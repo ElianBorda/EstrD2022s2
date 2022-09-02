@@ -43,10 +43,6 @@ aplanar :: [[a]] -> [a]
 aplanar [] = []
 aplanar (x:xs) = agregar x (aplanar xs)
 
-agregar :: [ a ] -> [ a ] -> [ a ]
-agregar [] ys = ys
-agregar (x:xs) ys = x : agregar xs ys
-
 ------------------------------------------
 
 -- 7. Dados un elemento e y una lista xs devuelve True si existe un elemento en xs que sea igual
@@ -125,4 +121,7 @@ maxDelPar (n, m) =  if n > m
 
 -- 15. Dada una lista devuelve el mínimo
 elMinimo :: Ord a => [a] -> a
-elMinimo [a] 
+elMinimo (x:[]) = x
+elMinimo (x:x2:xs) = if x<x2
+                        then elMinimo (x:xs)
+                        else elMinimo (x2:xs)
