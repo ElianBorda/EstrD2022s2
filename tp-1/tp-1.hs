@@ -171,7 +171,7 @@ En Haskell ya está definida como ||. -}
 
 oBien :: Bool -> Bool -> Bool
 oBien False False = False
-oBien _ _ = True
+oBien _ _ = False
 
 
 
@@ -203,15 +203,17 @@ edad (Perso _ ed) = ed
 
 -- * Aumenta en uno la edad de la persona.
 crecer :: Persona -> Persona
-crecer (Perso nom ed) = (Perso nom (ed+1))
+crecer (Perso nom ed) = Perso nom (ed+1)
 
 -- * Dados un nombre y una persona, devuelve una persona con la edad de la persona y el nuevo nombre.
 cambioDeNombre :: String -> Persona -> Persona
-cambioDeNombre x (Perso nom ed) = (Perso x ed)
+cambioDeNombre x (Perso nom ed) = Perso x ed
 
 -- * Dadas dos personas indica si la primera es mayor que la segunda.
 esMayorQueLaOtra :: Persona -> Persona -> Bool
-esMayorQueLaOtra (Perso _ ed) (Perso _ ed1) = (ed>ed1)
+esMayorQueLaOtra (Perso _ ed) (Perso _ ed1) = ed>ed1
+
+-- CORREGIDO
 
 -- * Dadas dos personas devuelve a la persona que sea mayor.
 laQueEsMayor :: Persona -> Persona -> Persona
