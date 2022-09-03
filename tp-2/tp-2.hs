@@ -236,3 +236,108 @@ laQueEsMayor :: Persona -> Persona -> Persona
 laQueEsMayor p1 p2 = if esMayorQueLaOtra p1 p2
                          then p1
                          else p2 
+
+-------------------------------------------
+
+-- 2. Modificaremos la representación de Entreador y Pokemon de la práctica anterior de la siguiente
+-- manera:
+data TipoDePokemon = Agua | Fuego | Planta
+    deriving Show
+data Pokemon = ConsPokemon TipoDePokemon Int
+    deriving Show
+data Entrenador = ConsEntrenador String [Pokemon]
+    deriving Show
+
+-- DATOS
+suicune, squirtle, charmander, vulpix, tangela, chikorita, charizard, bulbasor :: Pokemon
+suicune    = ConsPokemon Agua   21
+squirtle   = ConsPokemon Agua   31
+vulpix     = ConsPokemon Fuego  54
+charmander = ConsPokemon Fuego  71
+charizard  = ConsPokemon Fuego  25
+tangela    = ConsPokemon Planta 18
+chikorita  = ConsPokemon Planta 29
+bulbasor   = ConsPokemon Planta 50
+
+erika, kiawe, misty :: Entrenador
+erika = ConsEntrenador "Erika" [squirtle, chikorita, charizard]
+kiawe = ConsEntrenador "Kiawe" [charmander, vulpix, bulbasor]
+misty = ConsEntrenador "Misty" [suicune, tangela]
+
+-------------------------------------------
+
+-- * Devuelve la cantidad de Pokémon que posee el entrenador.
+cantPokemon :: Entrenador -> Int
+cantPokemon e = longitud (pokemones e) 
+
+pokemones :: Entrenador -> [Pokemon]
+pokemones (ConsEntrenador _ ps) = ps
+-------------------------------------------
+
+-- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
+cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
+cantPokemonDe t e = longitud (listarPorTipo (pokemones e) t)
+
+listarPorTipo :: [Pokemon] -> TipoDePokemon -> [Pokemon]
+listarPorTipo [] _     = []
+listarPorTipo (p:ps) t = if esDeTipo p t
+                             then p : listarPorTipo ps t
+                             else listarPorTipo ps t
+
+esDeTipo :: Pokemon -> TipoDePokemon -> Bool
+esDeTipo p t = esIgualTipoQue (tipoDePokemon p) t
+
+esIgualTipoQue :: TipoDePokemon -> TipoDePokemon -> Bool
+esIgualTipoQue Agua Agua = True
+esIgualTipoQue Fuego Fuego = True
+esIgualTipoQue Planta Planta = True
+esIgualTipoQue _ _ = False 
+
+tipoDePokemon :: Pokemon -> TipoDePokemon
+tipoDePokemon (ConsPokemon t _) = t 
+
+
+
+-------------------------------------------
+
+-- * Dados dos entrenadores, indica la cantidad de Pokemon de cierto tipo, que le ganarían
+-- a los Pokemon del segundo entrenador.
+losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
+losQueLeGanan t e e2 = longitud  (pokemonesQueGanaronA (listarPorTipo (pokemones e) t) (pokemones e2))
+
+pokemonesQueGanaronA :: [Pokemon] -> [Pokemon] -> [Pokemon]
+pokemonesQueGanaronA [] _       = []
+pokemonesQueGanaronA _ []       = []
+pokemonesQueGanaronA (p:ps) ps2 = if superaEnPoderATodos p ps2
+                                      then p : pokemonesQueGanaronA ps ps2
+                                      else pokemonesQueGanaronA ps ps2
+
+superaEnPoderATodos :: Pokemon -> [Pokemon] -> Bool
+superaEnPoderATodos p (p2:[])  = superaEnPoderA p p2
+superaEnPoderATodos p (p2:ps2) = superaEnPoderA p p2 && superaEnPoderATodos p ps2 
+
+superaEnPoderA :: Pokemon -> Pokemon -> Bool
+superaEnPoderA p p2 = elPoderEsMayorQue (poderDePokemon p) (poderDePokemon p2)
+
+poderDePokemon :: Pokemon -> Int
+poderDePokemon (ConsPokemon _ d) = d
+
+elPoderEsMayorQue :: Int -> Int -> Bool
+elPoderEsMayorQue n m = n>m 
+-------------------------------------------
+
+--Dado un entrenador, devuelve True si posee al menos un Pokémon de cada tipo posible.
+esMaestroPokemon :: Entrenador -> Bool
+esMaestroPokemon e = tieneTodosLosTiposPokemon (pokemones e)
+
+tieneTodosLosTiposPokemon :: [Pokemon] -> Bool
+tieneTodosLosTiposPokemon ps = (tienePokemonDeTipo ps Agua)
+                               &&
+                               (tienePokemonDeTipo ps Fuego)
+                               &&
+                               (tienePokemonDeTipo ps Planta)
+                               
+tienePokemonDeTipo :: [Pokemon] -> TipoDePokemon -> Bool
+tienePokemonDeTipo [] _ = False
+tienePokemonDeTipo (p:ps) t = esDeTipo p t || tienePokemonDeTipo ps t
+
