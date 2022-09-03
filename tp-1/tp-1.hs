@@ -219,7 +219,9 @@ esMayorQueLaOtra (Perso _ ed) (Perso _ ed1) = ed>ed1
 laQueEsMayor :: Persona -> Persona -> Persona
 laQueEsMayor p1 p2 = if esMayorQueLaOtra p1 p2
                          then p1
-                         else p2 
+                         else p2
+
+-- CORREGIDO 
 
 {- 2. Definir los tipos de datos Pokemon, como un TipoDePokemon (agua, fuego o planta) y un
 porcentaje de energía; y Entrenador, como un nombre y dos Pokémon. Luego definir las
