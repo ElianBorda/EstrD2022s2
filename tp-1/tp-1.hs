@@ -345,4 +345,6 @@ lista, y la segunda componente es esa lista pero sin el primero.
 Nota: tener en cuenta que el constructor de listas es :
 -}
 splitHead :: [a] -> (a, [a])
-splitHead ls = ((elPrimero ls),(sinElPrimero ls))
+splitHead ls = (elPrimero ls, sinElPrimero ls)
+
+-- CORREGIDO
