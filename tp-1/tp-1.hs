@@ -176,6 +176,7 @@ En Haskell ya está definida como ||. -}
 oBien :: Bool -> Bool -> Bool
 oBien True _ = False
 oBien _ a = a
+-- CORREGIDO
 
 
 
