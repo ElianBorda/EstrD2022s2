@@ -233,7 +233,7 @@ data TipoDePokemon = Agua | Fuego | Planta
 data Pokemon = Pokemon_ TipoDePokemon    Int
      deriving Show
                --       Tipo de Pokemon  Porcentaje de energia
-data Entrenador = Entrenador_ String  (Pokemon, Pokemon)
+data Entrenador = Entrenador_ String  Pokemon Pokemon
      deriving Show
                   --          nombre  2 pokemones
 
@@ -247,9 +247,9 @@ tangela    = Pokemon_ Planta 18
 chikorita  = Pokemon_ Planta 29
 
 erika, kiawe, misty :: Entrenador
-erika = Entrenador_ "Erika" (squirtle, chikorita)
-kiawe = Entrenador_ "Kiawe" (charmander, vulpix)
-misty = Entrenador_ "Misty" (suicune, tangela)
+erika = Entrenador_ "Erika" squirtle chikorita
+kiawe = Entrenador_ "Kiawe" charmander vulpix
+misty = Entrenador_ "Misty" suicune tangela
 
 
 {- * Dados dos Pokémon indica si el primero, en base al tipo, es superior al segundo. Agua
@@ -265,11 +265,11 @@ elTipoSuperaA _ _ = False
 
 -- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
 cantidadDePokemonDe :: TipoDePokemon -> Entrenador -> Int
-cantidadDePokemonDe x (Entrenador_ _ pokePar) = cantidadDeTipoPokemon x pokePar
+cantidadDePokemonDe x (Entrenador_ _ poke1 poke2) = cantidadDeTipoPokemon x poke1 poke2
 
-cantidadDeTipoPokemon :: TipoDePokemon -> (Pokemon, Pokemon) -> Int
-cantidadDeTipoPokemon x ((Pokemon_ tipoP _), (Pokemon_ tipoP2 _)) = ((unoSiCeroSino (esDelMismoTipo x tipoP)) + 
-                                                                    (unoSiCeroSino (esDelMismoTipo x tipoP2)))
+cantidadDeTipoPokemon :: TipoDePokemon -> Pokemon -> Pokemon -> Int
+cantidadDeTipoPokemon x (Pokemon_ tipoP _) (Pokemon_ tipoP2 _) = (unoSiCeroSino (esDelMismoTipo x tipoP)) + 
+                                                                    (unoSiCeroSino (esDelMismoTipo x tipoP2))
 
 esDelMismoTipo :: TipoDePokemon -> TipoDePokemon -> Bool
 esDelMismoTipo Planta Planta = True
