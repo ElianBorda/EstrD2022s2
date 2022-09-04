@@ -411,7 +411,7 @@ aparicionesProyecto p (p2:ps) = if esProyectoIgualQue p p2
 esProyectoIgualQue :: Proyecto -> Proyecto -> Bool
 esProyectoIgualQue (ConsProyecto n) (ConsProyecto n2) = n==n2
 
---------------------------
+------------------------------------------
 
 -- Dada una empresa indica la cantidad de desarrolladores senior que posee, que pertecen
 -- además a los proyectos dados por parámetro.
@@ -452,3 +452,15 @@ esSeniorityIgualQue _ _                   = False
 seniority :: Rol -> Seniority
 seniority (Developer s p)   = s
 seniority (Management s p)  = s
+
+------------------------------------------
+
+-- Indica la cantidad de empleados que trabajan en alguno de los proyectos dados.
+cantQueTrabajanEn :: [Proyecto] -> Empresa -> Int
+cantQueTrabajanEn ps e = longitud( rolesConAlgunProyecto (roles e) ps)
+
+
+-- Devuelve una lista de pares que representa a los proyectos (sin repetir) junto con su
+-- cantidad de personas involucradas.
+asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
+asignadosPorProyecto e = 
