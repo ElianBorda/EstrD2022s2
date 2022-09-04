@@ -120,14 +120,18 @@ la calidad de la solución respecto de la cantidad de casos analizados (entre lo
 analizados en esta y cualquier subtarea, deberían ser no más de 9 casos). -}
 
 vieneDespues :: DiaDeSemana -> DiaDeSemana -> Bool
-vieneDespues Lunes Martes = True
-vieneDespues Martes Miercoles = True
-vieneDespues Miercoles Jueves = True
-vieneDespues Jueves Viernes = True
-vieneDespues Viernes Sabado = True
-vieneDespues Sabado Domingo = True
-vieneDespues Domingo Lunes = True
-vieneDespues _ _ = False
+vieneDespues a b = codigoDia a > codigoDia b
+
+codigoDia :: DiaDeSemana -> Int
+codigoDia Lunes     = 1
+codigoDia Martes    = 2
+codigoDia Miercoles = 3
+codigoDia Jueves    = 4
+codigoDia Viernes   = 5
+codigoDia Sabado    = 6
+codigoDia Domingo   = 7
+
+-- CORREGIDO
 
 {- d) Dado un día de la semana indica si no es ni el primer ni el ultimo dia. -}
 
