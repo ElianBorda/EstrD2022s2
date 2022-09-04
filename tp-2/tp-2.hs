@@ -341,3 +341,114 @@ tienePokemonDeTipo :: [Pokemon] -> TipoDePokemon -> Bool
 tienePokemonDeTipo [] _ = False
 tienePokemonDeTipo (p:ps) t = esDeTipo p t || tienePokemonDeTipo ps t
 
+-------------------------------------------
+
+-- 3. El tipo de dato Rol representa los roles (desarollo o management) de empleados IT dentro
+-- de una empresa de software, junto al proyecto en el que se encuentran. Así, una empresa es
+-- una lista de personas con diferente rol. La definición es la siguiente:
+
+data Seniority = Junior | SemiSenior | Senior
+ deriving Show
+data Proyecto = ConsProyecto String
+ deriving Show
+data Rol = Developer Seniority Proyecto | Management Seniority Proyecto
+ deriving Show
+data Empresa = ConsEmpresa [Rol]
+ deriving Show
+
+-- DATOS
+nttData, cisco, henry, mercadoLibre, oracle :: Empresa
+nttData      = ConsEmpresa [(Developer Junior paginaWeb1), (Developer Junior paginaWeb2)]
+cisco        = ConsEmpresa [(Management SemiSenior crud1), (Management Junior api1), (Management Senior paginaWeb3)]
+henry        = ConsEmpresa [(Management Senior crud2), (Developer SemiSenior api2), (Developer Senior crud2)]
+mercadoLibre = ConsEmpresa [(Developer Senior api2)]
+oracle       = ConsEmpresa [(Management Junior paginaWeb3), (Developer Senior paginaWeb3), (Management Junior api2), (Developer Senior paginaWeb1), (Management Senior crud1)]
+
+paginaWeb1, paginaWeb2, paginaWeb3, crud1, crud2, api1, api2 :: Proyecto
+paginaWeb1 = ConsProyecto "PaginaWeb1"
+paginaWeb2 = ConsProyecto "PaginaWeb2"
+paginaWeb3 = ConsProyecto "PaginaWeb3"
+crud1      = ConsProyecto "Crud1"
+crud2      = ConsProyecto "Crud2"
+api1       = ConsProyecto "Api1"
+api2       = ConsProyecto "Api2"
+
+
+
+------------------------------------------
+
+-- Dada una empresa denota la lista de proyectos en los que trabaja, sin elementos repetidos.
+proyectos :: Empresa -> [Proyecto]
+proyectos e = sinProyectosRepetidos( pedirProyectosDeRoles (roles e))
+
+roles :: Empresa -> [Rol]
+roles (ConsEmpresa rs) = rs
+
+pedirProyectosDeRoles :: [Rol] -> [Proyecto]
+pedirProyectosDeRoles []     = []
+pedirProyectosDeRoles (r:rs) = proyecto r : pedirProyectosDeRoles rs
+
+proyecto :: Rol -> Proyecto
+proyecto (Developer s p)  = p
+proyecto (Management s p) = p
+
+sinProyectosRepetidos :: [Proyecto] -> [Proyecto]
+sinProyectosRepetidos []     = [] 
+sinProyectosRepetidos (p:ps) = if seRepiteEn p ps
+                                    then sinProyectosRepetidos ps
+                                    else p : sinProyectosRepetidos ps
+
+
+seRepiteEn :: Proyecto -> [Proyecto] -> Bool
+seRepiteEn p ps = (aparicionesProyecto p ps)>=1
+
+aparicionesProyecto :: Proyecto -> [Proyecto] -> Int
+aparicionesProyecto _ []      = 0
+aparicionesProyecto p (p2:ps) = if esProyectoIgualQue p p2
+                                    then 1 + aparicionesProyecto p ps
+                                    else aparicionesProyecto p ps
+ 
+esProyectoIgualQue :: Proyecto -> Proyecto -> Bool
+esProyectoIgualQue (ConsProyecto n) (ConsProyecto n2) = n==n2
+
+--------------------------
+
+-- Dada una empresa indica la cantidad de desarrolladores senior que posee, que pertecen
+-- además a los proyectos dados por parámetro.
+losDevSenior :: Empresa -> [Proyecto] -> Int
+losDevSenior e ps = longitud (rolesConAlgunProyecto (rolesDeveloperDeSeniority (roles e) Senior) ps)
+
+rolesConAlgunProyecto :: [Rol] -> [Proyecto] -> [Rol]
+rolesConAlgunProyecto [] _ = []
+rolesConAlgunProyecto (r:rs) ps = if tieneAlgunProyectoEn r ps
+                                        then r : rolesConAlgunProyecto rs ps
+                                        else rolesConAlgunProyecto rs ps
+
+tieneAlgunProyectoEn :: Rol -> [Proyecto] -> Bool
+tieneAlgunProyectoEn r (p:[]) = esProyectoIgualQue (proyecto r) p
+tieneAlgunProyectoEn r (p:ps) = esProyectoIgualQue (proyecto r) p || tieneAlgunProyectoEn r ps
+
+rolesDeveloperDeSeniority :: [Rol]  -> Seniority -> [Rol]
+rolesDeveloperDeSeniority [] _      = []
+rolesDeveloperDeSeniority (r:rs) s = if esRolDeveloperDeSeniority r s
+                                    then r : rolesDeveloperDeSeniority rs s
+                                    else rolesDeveloperDeSeniority rs s
+
+esRolDeveloperDeSeniority :: Rol -> Seniority -> Bool
+esRolDeveloperDeSeniority r s = (esRolDeveloper r) 
+                                && 
+                                (esSeniorityIgualQue (seniority r) s)
+
+esRolDeveloper :: Rol -> Bool
+esRolDeveloper (Developer s p)  = True
+esRolDeveloper (Management s p) = False
+
+esSeniorityIgualQue :: Seniority -> Seniority -> Bool
+esSeniorityIgualQue Junior Junior         = True
+esSeniorityIgualQue SemiSenior SemiSenior = True
+esSeniorityIgualQue Senior Senior         = True
+esSeniorityIgualQue _ _                   = False
+
+seniority :: Rol -> Seniority
+seniority (Developer s p)   = s
+seniority (Management s p)  = s
