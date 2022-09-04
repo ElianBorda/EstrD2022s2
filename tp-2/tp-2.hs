@@ -463,4 +463,9 @@ cantQueTrabajanEn ps e = longitud( rolesConAlgunProyecto (roles e) ps)
 -- Devuelve una lista de pares que representa a los proyectos (sin repetir) junto con su
 -- cantidad de personas involucradas.
 asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
-asignadosPorProyecto e = 
+asignadosPorProyecto e = proyectoConCantDePersonasEn (proyectos e) e
+
+proyectoConCantDePersonasEn :: [Proyecto] -> Empresa -> [(Proyecto, Int)]
+proyectoConCantDePersonasEn [] _      = []
+proyectoConCantDePersonasEn (p:ps) e  = (p, aparicionesProyecto p (pedirProyectosDeRoles (roles e))) : proyectoConCantDePersonasEn ps e
+ 
