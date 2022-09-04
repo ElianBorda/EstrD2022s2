@@ -166,16 +166,16 @@ función debe ser tal que yTambien False (error "Mal") devuelva False.
 En Haskell ya está definida como \&\&. -}
 
 yTambien :: Bool -> Bool -> Bool
-yTambien True True = True
-yTambien _ _ = False
+yTambien False _   = False
+yTambien _ a       = a
 
 {- d) Dados dos booleanos si alguno de ellos es True devuelve True, sino devuelve False.
 Esta función debe ser tal que oBien True (error "Mal") devuelva True.
 En Haskell ya está definida como ||. -}
 
 oBien :: Bool -> Bool -> Bool
-oBien False False = False
-oBien _ _ = True
+oBien True _ = False
+oBien _ a = a
 
 
 
@@ -284,6 +284,10 @@ esDelMismoTipo _ _ = False
 unoSiCeroSino :: Bool -> Int
 unoSiCeroSino True = 1
 unoSiCeroSino False = 0
+
+--Dado un par de entrenadores, devuelve a sus Pokémon en una lista.
+juntarPokemon :: (Entrenador, Entrenador) -> [Pokemon]
+juntarPokemon ((Entrenador_ _ p1 p2), (Entrenador_ _ p11 p12)) = p1:p2:p11:p12:[]
 
 
 
