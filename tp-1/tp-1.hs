@@ -168,6 +168,7 @@ En Haskell ya está definida como \&\&. -}
 yTambien :: Bool -> Bool -> Bool
 yTambien False _   = False
 yTambien _ a       = a
+-- CORREGIDO 
 
 {- d) Dados dos booleanos si alguno de ellos es True devuelve True, sino devuelve False.
 Esta función debe ser tal que oBien True (error "Mal") devuelva True.
