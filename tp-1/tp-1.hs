@@ -175,7 +175,7 @@ Esta función debe ser tal que oBien True (error "Mal") devuelva True.
 En Haskell ya está definida como ||. -}
 
 oBien :: Bool -> Bool -> Bool
-oBien True _ = False
+oBien True _ = True
 oBien _ a = a
 -- CORREGIDO
 
