@@ -41,7 +41,13 @@ disyuncion (b:bs) = b || disyuncion bs
 -- 6. Dada una lista de listas, devuelve una única lista con todos sus elementos.
 aplanar :: [[a]] -> [a]
 aplanar [] = []
-aplanar (x:xs) = agregar x (aplanar xs)
+aplanar (xs:xss) = agregar xs (aplanar xss)
+
+-- Otra solucion
+aplanar' :: [[a]] -> [a]
+aplanar' [] = []
+aplanar' (xs:xss) = xs ++ aplanar' xss
+-- CORREGIDO
 
 ------------------------------------------
 
