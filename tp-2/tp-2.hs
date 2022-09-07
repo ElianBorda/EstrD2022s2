@@ -284,7 +284,7 @@ pokemones (ConsEntrenador _ ps) = ps
 -------------------------------------------
 
 -- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
-cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
+{- cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
 cantPokemonDe t e = longitud (listarPorTipo (pokemones e) t)
 
 listarPorTipo :: [Pokemon] -> TipoDePokemon -> [Pokemon]
@@ -303,7 +303,20 @@ esIgualTipoQue Planta Planta = True
 esIgualTipoQue _ _ = False 
 
 tipoDePokemon :: Pokemon -> TipoDePokemon
-tipoDePokemon (ConsPokemon t _) = t 
+tipoDePokemon (ConsPokemon t _) = t -}
+
+cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
+cantPokemonDe t e = cantPokemonEnListaDeTipo (pokemones e) t 
+
+cantPokemonDeTipoEn :: [Pokemon] -> TipoDePokemon -> Int
+cantPokemonDeTipoEn [] _     =
+cantPokemonDeTipoEn (p:ps) t = unoSi (esDeTipo p t) + cantPokemonDeTipoEn ps
+
+unoSi :: Bool -> Int
+unoSi True = 1
+unoSi False = 0
+-- CORREGIDO
+
 
 
 
