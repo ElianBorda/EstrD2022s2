@@ -128,9 +128,10 @@ maxDelPar (n, m) =  if n > m
 -- 15. Dada una lista devuelve el mínimo
 elMinimo :: Ord a => [a] -> a
 elMinimo (x:[]) = x
-elMinimo (x:x2:xs) = if x<x2
-                        then elMinimo (x:xs)
-                        else elMinimo (x2:xs)
+elMinimo (x:xs) = if x<(elMinimo xs) 
+                       then x
+                       else elMinimo xs
+--CORREGIDO 
 
 ------------------------------------------
 
