@@ -221,7 +221,7 @@ promedioEdad ps = promedio (edades ps)
 
 edades :: [Persona] -> [Int]
 edades [] = []
-edades (p:ps) = (edad p) : edades ps
+edades (p:ps) = edad p : edades ps
 
 
 promedio :: [Int] -> Int
@@ -236,12 +236,13 @@ elMasViejo (p:[]) = p
 elMasViejo (p:p2:ps) =  elMasViejo ((laQueEsMayor p p2):ps) 
 
 esMayorQueLaOtra :: Persona -> Persona -> Bool
-esMayorQueLaOtra (P _ ed) (P _ ed1) = (ed>ed1)
+esMayorQueLaOtra (P _ ed) (P _ ed1) = ed>ed1
 
 laQueEsMayor :: Persona -> Persona -> Persona
 laQueEsMayor p1 p2 = if esMayorQueLaOtra p1 p2
                          then p1
                          else p2 
+--CORREGIDO
 
 -------------------------------------------
 
