@@ -292,7 +292,9 @@ juntarPokemon :: (Entrenador, Entrenador) -> [Pokemon]
 juntarPokemon (e1, e2) = pokemones e1 ++ pokemones e2
 
 pokemones :: Entrenador -> [Pokemon]
-pokemones (Entrenador)
+pokemones (E _ poke1 poke2) = poke1:poke2:[]
+
+-- CORREGIDO
 
 
 
