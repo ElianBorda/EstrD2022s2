@@ -233,7 +233,8 @@ promedio ns = div (sumatoria ns) (longitud ns)
 -- lista al menos posee una persona.
 elMasViejo :: [Persona] -> Persona
 elMasViejo (p:[]) = p
-elMasViejo (p:p2:ps) =  elMasViejo ((laQueEsMayor p p2):ps) 
+elMasViejo (p:ps) =  laQueEsMayor p (elMasViejo ps)
+--CORREGIDO
 
 esMayorQueLaOtra :: Persona -> Persona -> Bool
 esMayorQueLaOtra (P _ ed) (P _ ed1) = ed>ed1
