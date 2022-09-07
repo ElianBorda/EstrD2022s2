@@ -269,9 +269,9 @@ chikorita  = ConsPokemon Planta 29
 bulbasor   = ConsPokemon Planta 50
 
 erika, kiawe, misty :: Entrenador
-erika = ConsEntrenador "Erika" [squirtle, chikorita, charizard]
-kiawe = ConsEntrenador "Kiawe" [charmander, vulpix, bulbasor]
-misty = ConsEntrenador "Misty" [suicune, tangela]
+erika = ConsEntrenador "Erika" [squirtle, chikorita,suicune ]
+kiawe = ConsEntrenador "Kiawe" [charmander, vulpix, charizard]
+misty = ConsEntrenador "Misty" [tangela, bulbasor]
 
 -------------------------------------------
 
@@ -306,25 +306,24 @@ tipoDePokemon :: Pokemon -> TipoDePokemon
 tipoDePokemon (ConsPokemon t _) = t -}
 
 cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
-cantPokemonDe t e = cantPokemonEnListaDeTipo (pokemones e) t 
+cantPokemonDe t e = cantPokemonDeTipoEn (pokemones e) t 
 
 cantPokemonDeTipoEn :: [Pokemon] -> TipoDePokemon -> Int
-cantPokemonDeTipoEn [] _     =
-cantPokemonDeTipoEn (p:ps) t = unoSi (esDeTipo p t) + cantPokemonDeTipoEn ps
+cantPokemonDeTipoEn [] _     = 0
+cantPokemonDeTipoEn (p:ps) t = unoSi (esDeTipo p t) + cantPokemonDeTipoEn ps t
 
 unoSi :: Bool -> Int
-unoSi True = 1
+unoSi True  = 1
 unoSi False = 0
+
+
 -- CORREGIDO
-
-
-
 
 -------------------------------------------
 
 -- * Dados dos entrenadores, indica la cantidad de Pokemon de cierto tipo, que le ganarían
 -- a los Pokemon del segundo entrenador.
-losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
+{- losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
 losQueLeGanan t e e2 = longitud  (pokemonesQueGanaronA (listarPorTipo (pokemones e) t) (pokemones e2))
 
 pokemonesQueGanaronA :: [Pokemon] -> [Pokemon] -> [Pokemon]
@@ -345,7 +344,41 @@ poderDePokemon :: Pokemon -> Int
 poderDePokemon (ConsPokemon _ d) = d
 
 elPoderEsMayorQue :: Int -> Int -> Bool
-elPoderEsMayorQue n m = n>m 
+elPoderEsMayorQue n m = n>m -}
+
+losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
+losQueLeGanan t e1 e2 = deTipoQueGananA t (pokemones e1) (pokemones e2)
+
+deTipoQueGananA :: TipoDePokemon -> [Pokemon] -> [Pokemon] -> Int
+deTipoQueGananA _ _ []              = 0
+deTipoQueGananA _ [] _              = 0
+deTipoQueGananA t (p1:ps1) (p2:ps2) = unoSi (esDeTipoQueSuperaA t p1 p2) + deTipoQueGananA t ps1 ps2
+
+esDeTipoQueSuperaA :: TipoDePokemon -> Pokemon -> Pokemon -> Bool
+esDeTipoQueSuperaA t p1 p2 = superaA p1 p2 && esDeTipo p1 t
+
+esDeTipo :: Pokemon -> TipoDePokemon -> Bool
+esDeTipo p t = esIgualTipoQue (tipoDePokemon p) t
+
+esIgualTipoQue :: TipoDePokemon -> TipoDePokemon -> Bool
+esIgualTipoQue Agua Agua = True
+esIgualTipoQue Fuego Fuego = True
+esIgualTipoQue Planta Planta = True
+esIgualTipoQue _ _ = False 
+
+tipoDePokemon :: Pokemon -> TipoDePokemon
+tipoDePokemon (ConsPokemon t _) = t
+
+superaA :: Pokemon -> Pokemon -> Bool
+superaA (ConsPokemon t1 _) (ConsPokemon t2 _) = elTipoSuperaA t1 t2
+
+elTipoSuperaA :: TipoDePokemon -> TipoDePokemon -> Bool
+elTipoSuperaA Agua Fuego = True
+elTipoSuperaA Fuego Planta = True
+elTipoSuperaA Planta Agua = True
+elTipoSuperaA _ _ = False
+
+
 -------------------------------------------
 
 --Dado un entrenador, devuelve True si posee al menos un Pokémon de cada tipo posible.
