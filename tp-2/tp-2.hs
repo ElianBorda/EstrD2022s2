@@ -41,7 +41,13 @@ disyuncion (b:bs) = b || disyuncion bs
 -- 6. Dada una lista de listas, devuelve una única lista con todos sus elementos.
 aplanar :: [[a]] -> [a]
 aplanar [] = []
-aplanar (x:xs) = agregar x (aplanar xs)
+aplanar (xs:xss) = agregar xs (aplanar xss)
+
+-- Otra solucion
+aplanar' :: [[a]] -> [a]
+aplanar' [] = []
+aplanar' (xs:xss) = xs ++ aplanar' xss
+-- CORREGIDO
 
 ------------------------------------------
 
@@ -122,9 +128,10 @@ maxDelPar (n, m) =  if n > m
 -- 15. Dada una lista devuelve el mínimo
 elMinimo :: Ord a => [a] -> a
 elMinimo (x:[]) = x
-elMinimo (x:x2:xs) = if x<x2
-                        then elMinimo (x:xs)
-                        else elMinimo (x2:xs)
+elMinimo (x:xs) = if x<(elMinimo xs) 
+                       then x
+                       else elMinimo xs
+--CORREGIDO 
 
 ------------------------------------------
 
@@ -215,7 +222,7 @@ promedioEdad ps = promedio (edades ps)
 
 edades :: [Persona] -> [Int]
 edades [] = []
-edades (p:ps) = (edad p) : edades ps
+edades (p:ps) = edad p : edades ps
 
 
 promedio :: [Int] -> Int
@@ -227,15 +234,17 @@ promedio ns = div (sumatoria ns) (longitud ns)
 -- lista al menos posee una persona.
 elMasViejo :: [Persona] -> Persona
 elMasViejo (p:[]) = p
-elMasViejo (p:p2:ps) =  elMasViejo ((laQueEsMayor p p2):ps) 
+elMasViejo (p:ps) =  laQueEsMayor p (elMasViejo ps)
+--CORREGIDO
 
 esMayorQueLaOtra :: Persona -> Persona -> Bool
-esMayorQueLaOtra (P _ ed) (P _ ed1) = (ed>ed1)
+esMayorQueLaOtra (P _ ed) (P _ ed1) = ed>ed1
 
 laQueEsMayor :: Persona -> Persona -> Persona
 laQueEsMayor p1 p2 = if esMayorQueLaOtra p1 p2
                          then p1
                          else p2 
+--CORREGIDO
 
 -------------------------------------------
 
@@ -275,7 +284,7 @@ pokemones (ConsEntrenador _ ps) = ps
 -------------------------------------------
 
 -- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
-cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
+{- cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
 cantPokemonDe t e = longitud (listarPorTipo (pokemones e) t)
 
 listarPorTipo :: [Pokemon] -> TipoDePokemon -> [Pokemon]
@@ -294,7 +303,20 @@ esIgualTipoQue Planta Planta = True
 esIgualTipoQue _ _ = False 
 
 tipoDePokemon :: Pokemon -> TipoDePokemon
-tipoDePokemon (ConsPokemon t _) = t 
+tipoDePokemon (ConsPokemon t _) = t -}
+
+cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
+cantPokemonDe t e = cantPokemonEnListaDeTipo (pokemones e) t 
+
+cantPokemonDeTipoEn :: [Pokemon] -> TipoDePokemon -> Int
+cantPokemonDeTipoEn [] _     =
+cantPokemonDeTipoEn (p:ps) t = unoSi (esDeTipo p t) + cantPokemonDeTipoEn ps
+
+unoSi :: Bool -> Int
+unoSi True = 1
+unoSi False = 0
+-- CORREGIDO
+
 
 
 

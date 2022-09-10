@@ -175,7 +175,7 @@ Esta función debe ser tal que oBien True (error "Mal") devuelva True.
 En Haskell ya está definida como ||. -}
 
 oBien :: Bool -> Bool -> Bool
-oBien True _ = False
+oBien True _ = True
 oBien _ a = a
 -- CORREGIDO
 
@@ -236,32 +236,32 @@ siguientes funciones:
 
 data TipoDePokemon = Agua | Fuego | Planta
      deriving Show
-data Pokemon = Pokemon_ TipoDePokemon    Int
+data Pokemon = P TipoDePokemon    Int
      deriving Show
                --       Tipo de Pokemon  Porcentaje de energia
-data Entrenador = Entrenador_ String  Pokemon Pokemon
+data Entrenador = E String  Pokemon Pokemon
      deriving Show
                   --          nombre  2 pokemones
 
 -- DATOS
 suicune, squirtle, charmander, vulpix, tangela, chikorita :: Pokemon
-suicune    = Pokemon_ Agua   21
-squirtle   = Pokemon_ Agua   31
-vulpix     = Pokemon_ Fuego  54
-charmander = Pokemon_ Fuego  71
-tangela    = Pokemon_ Planta 18
-chikorita  = Pokemon_ Planta 29
+suicune    = P Agua   21
+squirtle   = P Agua   31
+vulpix     = P Fuego  54
+charmander = P Fuego  71
+tangela    = P Planta 18
+chikorita  = P Planta 29
 
 erika, kiawe, misty :: Entrenador
-erika = Entrenador_ "Erika" squirtle chikorita
-kiawe = Entrenador_ "Kiawe" charmander vulpix
-misty = Entrenador_ "Misty" suicune tangela
+erika = E "Erika" squirtle chikorita
+kiawe = E "Kiawe" charmander vulpix
+misty = E "Misty" suicune tangela
 
 
 {- * Dados dos Pokémon indica si el primero, en base al tipo, es superior al segundo. Agua
 supera a fuego, fuego a planta y planta a agua. Y cualquier otro caso es falso. -}
 superaA :: Pokemon -> Pokemon -> Bool
-superaA (Pokemon_ tipo ener) (Pokemon_ tipo1 ener1) = elTipoSuperaA tipo tipo1
+superaA (P tipo ener) (P tipo1 ener1) = elTipoSuperaA tipo tipo1
 
 elTipoSuperaA :: TipoDePokemon -> TipoDePokemon -> Bool
 elTipoSuperaA Agua Fuego = True
@@ -271,10 +271,10 @@ elTipoSuperaA _ _ = False
 
 -- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
 cantidadDePokemonDe :: TipoDePokemon -> Entrenador -> Int
-cantidadDePokemonDe x (Entrenador_ _ poke1 poke2) = cantidadDeTipoPokemon x poke1 poke2
+cantidadDePokemonDe x (E _ poke1 poke2) = cantidadDeTipoPokemon x poke1 poke2
 
 cantidadDeTipoPokemon :: TipoDePokemon -> Pokemon -> Pokemon -> Int
-cantidadDeTipoPokemon x (Pokemon_ tipoP _) (Pokemon_ tipoP2 _) = (unoSiCeroSino (esDelMismoTipo x tipoP)) + 
+cantidadDeTipoPokemon x (P tipoP _) (P tipoP2 _) = (unoSiCeroSino (esDelMismoTipo x tipoP)) + 
                                                                     (unoSiCeroSino (esDelMismoTipo x tipoP2))
 
 esDelMismoTipo :: TipoDePokemon -> TipoDePokemon -> Bool
@@ -289,7 +289,12 @@ unoSiCeroSino False = 0
 
 --Dado un par de entrenadores, devuelve a sus Pokémon en una lista.
 juntarPokemon :: (Entrenador, Entrenador) -> [Pokemon]
-juntarPokemon ((Entrenador_ _ p1 p2), (Entrenador_ _ p11 p12)) = p1:p2:p11:p12:[]
+juntarPokemon (e1, e2) = pokemones e1 ++ pokemones e2
+
+pokemones :: Entrenador -> [Pokemon]
+pokemones (E _ poke1 poke2) = poke1:poke2:[]
+
+-- CORREGIDO
 
 
 
