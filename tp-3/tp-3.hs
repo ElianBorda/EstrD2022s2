@@ -102,6 +102,21 @@ cantTesorosEn n Fin            = 0
 cantTesorosEn n (Nada cam)     = cantTesorosEn (n-1) cam
 cantTesorosEn n (Cofre os cam) = cantidadDeTesoros (Cofre os cam) + cantTesorosEn (n-1) cam
 
+-- 2. Tipos arbóreos
+
+-- 2.1. Árboles binarios
+
+data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
+ deriving Show
+
+node1 = NodeT 5 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
+
+-- 1. Dado un árbol binario de enteros devuelve la suma entre sus elementos.
+sumarT :: Tree Int -> Int
+sumarT EmptyT          = 0
+sumarT (NodeT n n1 n2) = n + sumarT n1 + sumarT n2
+
+
 
 
 
