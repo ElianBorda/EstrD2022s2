@@ -36,8 +36,10 @@ sacar c (Bolita col cel) = if esColor col c
                               then cel
                               else Bolita col (sacar c cel)
 
-
-
+-- Dado un número n, un color c, y una celda, agrega n bolitas de color c a la celda.
+ponerN :: Int -> Color -> Celda -> Celda
+ponerN 0 _ cel = cel 
+ponerN n c cel = ponerN (n-1) c (poner c cel) 
 
 
 
