@@ -110,11 +110,35 @@ data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
  deriving Show
 
 node1 = NodeT 5 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
+node2 = NodeT 3 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
 
 -- 1. Dado un árbol binario de enteros devuelve la suma entre sus elementos.
 sumarT :: Tree Int -> Int
 sumarT EmptyT          = 0
 sumarT (NodeT n n1 n2) = n + sumarT n1 + sumarT n2
+
+-- 2. Dado un árbol binario devuelve su cantidad de elementos, es decir, el tamaño del árbol (size
+-- en inglés).
+sizeT :: Tree a -> Int
+sizeT EmptyT          = 0 
+sizeT (NodeT _ n1 n2) = 1 + sizeT n1 + sizeT n2
+
+-- 3. Dado un árbol de enteros devuelve un árbol con el doble de cada número.
+mapDobleT :: Tree Int -> Tree Int
+mapDobleT EmptyT          = EmptyT
+mapDobleT (NodeT n n1 n2) = NodeT (n*2) (mapDobleT n1) (mapDobleT n2)
+
+-- 4. Dados un elemento y un árbol binario devuelve True si existe un elemento igual a ese en el
+-- arbol.
+perteneceT :: Eq a => a -> Tree a -> Bool
+perteneceT _ EmptyT           = False
+perteneceT x (NodeT y1 n1 n2) = x==y1 || perteneceT x n1 || perteneceT x n2
+
+-- 5. Dados un elemento e y un árbol binario devuelve la cantidad de elementos del árbol que son
+-- iguales a e.
+aparicionesT :: Eq a => a -> Tree a -> Int
+aparicionesT _ EmptyT          = 0
+aparicionesT x (NodeT y n1 n2) = unoSi (x==y) + aparicionesT x n1 + aparicionesT x n2
 
 
 
