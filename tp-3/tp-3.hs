@@ -42,5 +42,41 @@ ponerN 0 _ cel = cel
 ponerN n c cel = ponerN (n-1) c (poner c cel) 
 
 
+-- 1.2. Camino hacia el tesoro
+
+data Objeto = Cacharro | Tesoro
+data Camino = Fin | Cofre [Objeto] Camino | Nada Camino
+
+camino1 = Cofre [Cacharro, Cacharro] (Nada (Cofre [Cacharro] (Cofre [Cacharro,Tesoro] Fin)))
+camino2 = Cofre [Cacharro, Cacharro] (Nada (Cofre [Cacharro] (Cofre [Cacharro] Fin)))
+
+
+-- Indica si hay un cofre con un tesoro en el camino.
+hayTesoro :: Camino -> Bool
+hayTesoro Fin          = False
+hayTesoro (Nada c)     = hayTesoro c 
+hayTesoro (Cofre os c) = tieneTesoro os || hayTesoro c
+
+tieneTesoro :: [Objeto] -> Bool
+tieneTesoro []     = False
+tieneTesoro (o:os) = esTesoro o || tieneTesoro os
+
+esTesoro :: Objeto -> Bool
+esTesoro Tesoro = True
+esTesoro _      = False
+
+-- Indica la cantidad de pasos que hay que recorrer hasta llegar al primer cofre con un tesoro.
+-- Si un cofre con un tesoro está al principio del camino, la cantidad de pasos a recorrer es 0.
+-- Precondición: tiene que haber al menos un tesoro.
+pasosHastaTesoro :: Camino -> Int
+pasosHastaTesoro Fin            = error "No existe un tesoro"
+pasosHastaTesoro (Nada cam)     = 1 + pasosHastaTesoro cam 
+pasosHastaTesoro (Cofre os cam) = if tieneTesoro os
+                                    then 0
+                                    else 1 + pasosHastaTesoro cam
+
+
+
+
 
 
