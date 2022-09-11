@@ -452,7 +452,7 @@ esProyectoIgualQue (ConsProyecto n) (ConsProyecto n2) = n==n2
 
 -- Dada una empresa indica la cantidad de desarrolladores senior que posee, que pertecen
 -- además a los proyectos dados por parámetro.
-losDevSenior :: Empresa -> [Proyecto] -> Int
+{- losDevSenior :: Empresa -> [Proyecto] -> Int
 losDevSenior e ps = longitud (rolesConAlgunProyecto (rolesDeveloperDeSeniority (roles e) Senior) ps)
 
 rolesConAlgunProyecto :: [Rol] -> [Proyecto] -> [Rol]
@@ -488,13 +488,40 @@ esSeniorityIgualQue _ _                   = False
 
 seniority :: Rol -> Seniority
 seniority (Developer s p)   = s
-seniority (Management s p)  = s
+seniority (Management s p)  = s -}
+
+losDevSenior :: Empresa -> [Proyecto] -> Int
+losDevSenior _ []     = 0 
+losDevSenior e (p:ps) = cantDevSeniorQueTrabajanEn (roles e) p + losDevSenior e ps 
+
+cantDevSeniorQueTrabajanEn :: [Rol] -> Proyecto -> Int
+cantDevSeniorQueTrabajanEn [] _     = 0
+cantDevSeniorQueTrabajanEn (r:rs) p = unoSi (esDevSeniorQueTrabajaEn r p) + cantDevSeniorQueTrabajanEn rs p
+
+esDevSeniorQueTrabajaEn :: Rol -> Proyecto -> Bool
+esDevSeniorQueTrabajaEn r p = esDevSenior r && trabajaEn r p
+
+esDevSenior :: Rol -> Bool
+esDevSenior (Developer Senior p) = True
+esDevSenior _                    = False
+
+trabajaEn :: Rol -> Proyecto -> Bool
+trabajaEn r p = esProyectoIgualQue (proyecto r) p 
+
 
 ------------------------------------------
 
 -- Indica la cantidad de empleados que trabajan en alguno de los proyectos dados.
 cantQueTrabajanEn :: [Proyecto] -> Empresa -> Int
-cantQueTrabajanEn ps e = longitud( rolesConAlgunProyecto (roles e) ps)
+cantQueTrabajanEn ps e = cantRolesConAlgunProyecto (roles e) ps
+
+cantRolesConAlgunProyecto :: [Rol] -> [Proyecto] -> Int
+cantRolesConAlgunProyecto [] _      = 0
+cantRolesConAlgunProyecto (r:rs) ps = unoSi (tieneAlgunProyectoEn r ps) + cantRolesConAlgunProyecto rs ps
+                                        
+tieneAlgunProyectoEn :: Rol -> [Proyecto] -> Bool
+tieneAlgunProyectoEn r (p:[]) = esProyectoIgualQue (proyecto r) p
+tieneAlgunProyectoEn r (p:ps) = esProyectoIgualQue (proyecto r) p || tieneAlgunProyectoEn r ps
 
 
 -- Devuelve una lista de pares que representa a los proyectos (sin repetir) junto con su
