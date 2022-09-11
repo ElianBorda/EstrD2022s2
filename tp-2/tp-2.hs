@@ -284,14 +284,18 @@ pokemones (ConsEntrenador _ ps) = ps
 -------------------------------------------
 
 -- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
-{- cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
-cantPokemonDe t e = longitud (listarPorTipo (pokemones e) t)
 
-listarPorTipo :: [Pokemon] -> TipoDePokemon -> [Pokemon]
-listarPorTipo [] _     = []
-listarPorTipo (p:ps) t = if esDeTipo p t
-                             then p : listarPorTipo ps t
-                             else listarPorTipo ps t
+cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
+cantPokemonDe t e = cantPokemonDeTipoEn (pokemones e) t 
+
+cantPokemonDeTipoEn :: [Pokemon] -> TipoDePokemon -> Int
+cantPokemonDeTipoEn [] _     = 0
+cantPokemonDeTipoEn (p:ps) t = unoSi (esDeTipo p t) + cantPokemonDeTipoEn ps t
+
+unoSi :: Bool -> Int
+unoSi True = 1
+unoSi False = 0
+-- CORREGIDO
 
 esDeTipo :: Pokemon -> TipoDePokemon -> Bool
 esDeTipo p t = esIgualTipoQue (tipoDePokemon p) t
@@ -303,20 +307,7 @@ esIgualTipoQue Planta Planta = True
 esIgualTipoQue _ _ = False 
 
 tipoDePokemon :: Pokemon -> TipoDePokemon
-tipoDePokemon (ConsPokemon t _) = t -}
-
-cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
-cantPokemonDe t e = cantPokemonEnListaDeTipo (pokemones e) t 
-
-cantPokemonDeTipoEn :: [Pokemon] -> TipoDePokemon -> Int
-cantPokemonDeTipoEn [] _     =
-cantPokemonDeTipoEn (p:ps) t = unoSi (esDeTipo p t) + cantPokemonDeTipoEn ps
-
-unoSi :: Bool -> Int
-unoSi True = 1
-unoSi False = 0
--- CORREGIDO
-
+tipoDePokemon (ConsPokemon t _) = t 
 
 
 
@@ -362,6 +353,12 @@ tieneTodosLosTiposPokemon ps = (tienePokemonDeTipo ps Agua)
 tienePokemonDeTipo :: [Pokemon] -> TipoDePokemon -> Bool
 tienePokemonDeTipo [] _ = False
 tienePokemonDeTipo (p:ps) t = esDeTipo p t || tienePokemonDeTipo ps t
+
+listarPorTipo :: [Pokemon] -> TipoDePokemon -> [Pokemon]
+listarPorTipo [] _     = []
+listarPorTipo (p:ps) t = if esDeTipo p t
+                             then p : listarPorTipo ps t
+                             else listarPorTipo ps t
 
 -------------------------------------------
 
