@@ -49,7 +49,7 @@ data Camino = Fin | Cofre [Objeto] Camino | Nada Camino
 
 camino1 = Cofre [Cacharro, Cacharro] (Nada (Cofre [Cacharro] (Cofre [Cacharro,Tesoro] Fin)))
 camino2 = Cofre [Cacharro, Cacharro] (Nada (Cofre [Cacharro] (Cofre [Cacharro] Fin)))
-camino3 = Cofre [Cacharro, Cacharro] (Nada (Cofre [Cacharro] (Cofre [Cacharro,Tesoro] (Cofre [Tesoro,Tesoro] (Nada Fin)))))
+camino3 = Cofre [Cacharro, Cacharro] (Nada (Cofre [Cacharro] (Cofre [Cacharro,Tesoro] (Cofre [Tesoro,Tesoro] (Nada (Cofre [Cacharro, Cacharro] Fin))))))
 
 
 -- Indica si hay un cofre con un tesoro en el camino.
@@ -92,6 +92,15 @@ cantidadDeTesoros (Cofre os c) = if tieneTesoro os
 -- el rango es 3 y 5, indica la cantidad de tesoros que hay entre hacer 3 pasos y hacer 5. Están
 -- incluidos tanto 3 como 5 en el resultado.
 cantTesorosEntre :: Int -> Int -> Camino -> Int
+cantTesorosEntre 0 n c           = cantTesorosEn n c
+cantTesorosEntre n m (Nada c)    = cantTesorosEntre (n-1) (m-1) c
+cantTesorosEntre n m (Cofre _ c) = cantTesorosEntre (n-1) (m-1) c
+
+cantTesorosEn :: Int -> Camino -> Int
+cantTesorosEn 0 _              = 0
+cantTesorosEn n Fin            = 0
+cantTesorosEn n (Nada cam)     = cantTesorosEn (n-1) cam
+cantTesorosEn n (Cofre os cam) = cantidadDeTesoros (Cofre os cam) + cantTesorosEn (n-1) cam
 
 
 
