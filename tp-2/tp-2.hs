@@ -526,10 +526,21 @@ tieneAlgunProyectoEn r (p:ps) = esProyectoIgualQue (proyecto r) p || tieneAlgunP
 
 -- Devuelve una lista de pares que representa a los proyectos (sin repetir) junto con su
 -- cantidad de personas involucradas.
-asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
+{- asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
 asignadosPorProyecto e = proyectoConCantDePersonasEn (proyectos e) e
 
 proyectoConCantDePersonasEn :: [Proyecto] -> Empresa -> [(Proyecto, Int)]
 proyectoConCantDePersonasEn [] _      = []
-proyectoConCantDePersonasEn (p:ps) e  = (p, aparicionesProyecto p (pedirProyectosDeRoles (roles e))) : proyectoConCantDePersonasEn ps e
+proyectoConCantDePersonasEn (p:ps) e  = (p, aparicionesProyecto p (pedirProyectosDeRoles (roles e))) : proyectoConCantDePersonasEn ps e -}
+
+asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
+asignadosPorProyecto e = proyectosConCantPersonas (proyectos e) (roles e)  
+
+proyectosConCantPersonas :: [Proyecto] -> [Rol] -> [(Proyecto, Int)]
+proyectosConCantPersonas [] _      = []
+proyectosConCantPersonas (p:ps) rs = (p, cantPersonasCon rs p) : proyectosConCantPersonas ps rs
+
+cantPersonasCon :: [Rol] -> Proyecto -> Int
+cantPersonasCon [] _     = 0
+cantPersonasCon (r:rs) p = unoSi (esProyectoIgualQue (proyecto r) p) + cantPersonasCon rs p
  
