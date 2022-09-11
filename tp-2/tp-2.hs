@@ -272,6 +272,7 @@ erika, kiawe, misty :: Entrenador
 erika = ConsEntrenador "Erika" [squirtle, chikorita, charizard]
 kiawe = ConsEntrenador "Kiawe" [charmander, vulpix, bulbasor]
 misty = ConsEntrenador "Misty" [suicune, tangela]
+blaine = ConsEntrenador "Kiawe" [charmander, vulpix, charizard]
 
 -------------------------------------------
 
@@ -315,28 +316,23 @@ tipoDePokemon (ConsPokemon t _) = t
 
 -- * Dados dos entrenadores, indica la cantidad de Pokemon de cierto tipo, que le ganarían
 -- a los Pokemon del segundo entrenador.
+
 losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
-losQueLeGanan t e e2 = longitud  (pokemonesQueGanaronA (listarPorTipo (pokemones e) t) (pokemones e2))
+losQueLeGanan _ (ConsEntrenador _ []) _                            = 0
+losQueLeGanan t (ConsEntrenador n1 (p1:ps1)) (ConsEntrenador n2 ps2) = unoSi (superaATodos p1 ps2) + losQueLeGanan t (ConsEntrenador n1 ps1) (ConsEntrenador n2 ps2)
 
-pokemonesQueGanaronA :: [Pokemon] -> [Pokemon] -> [Pokemon]
-pokemonesQueGanaronA [] _       = []
-pokemonesQueGanaronA _ []       = []
-pokemonesQueGanaronA (p:ps) ps2 = if superaEnPoderATodos p ps2
-                                      then p : pokemonesQueGanaronA ps ps2
-                                      else pokemonesQueGanaronA ps ps2
+superaATodos :: Pokemon -> [Pokemon] -> Bool
+superaATodos _ []        = True
+superaATodos p1 (p2:ps2) = superaA p1 p2 && superaATodos p1 ps2 
 
-superaEnPoderATodos :: Pokemon -> [Pokemon] -> Bool
-superaEnPoderATodos p (p2:[])  = superaEnPoderA p p2
-superaEnPoderATodos p (p2:ps2) = superaEnPoderA p p2 && superaEnPoderATodos p ps2 
+superaA :: Pokemon -> Pokemon -> Bool
+superaA (ConsPokemon t1 _) (ConsPokemon t2 _) = elTipoSuperaA t1 t2
 
-superaEnPoderA :: Pokemon -> Pokemon -> Bool
-superaEnPoderA p p2 = elPoderEsMayorQue (poderDePokemon p) (poderDePokemon p2)
-
-poderDePokemon :: Pokemon -> Int
-poderDePokemon (ConsPokemon _ d) = d
-
-elPoderEsMayorQue :: Int -> Int -> Bool
-elPoderEsMayorQue n m = n>m 
+elTipoSuperaA :: TipoDePokemon -> TipoDePokemon -> Bool
+elTipoSuperaA Agua Fuego = True
+elTipoSuperaA Fuego Planta = True
+elTipoSuperaA Planta Agua = True
+elTipoSuperaA _ _ = False
 -------------------------------------------
 
 --Dado un entrenador, devuelve True si posee al menos un Pokémon de cada tipo posible.
