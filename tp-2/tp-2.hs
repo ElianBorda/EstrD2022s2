@@ -319,7 +319,10 @@ tipoDePokemon (ConsPokemon t _) = t
 
 losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
 losQueLeGanan _ (ConsEntrenador _ []) _                            = 0
-losQueLeGanan t (ConsEntrenador n1 (p1:ps1)) (ConsEntrenador n2 ps2) = unoSi (superaATodos p1 ps2) + losQueLeGanan t (ConsEntrenador n1 ps1) (ConsEntrenador n2 ps2)
+losQueLeGanan t (ConsEntrenador n1 ps1) (ConsEntrenador n2 ps2) = unoSi (superaATodos (primerPokemon ps1) ps2) + losQueLeGanan t (ConsEntrenador n1 ps1) (ConsEntrenador n2 ps2)
+
+primerPokemon :: [Pokemon] -> Pokemon
+primerPokemon (p:ps) = p
 
 superaATodos :: Pokemon -> [Pokemon] -> Bool
 superaATodos _ []        = True
