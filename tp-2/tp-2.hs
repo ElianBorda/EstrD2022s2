@@ -484,8 +484,19 @@ esDevSeniorQueTrabajaEn :: Rol -> Proyecto -> Bool
 esDevSeniorQueTrabajaEn r p = esDevSenior r && trabajaEn r p
 
 esDevSenior :: Rol -> Bool
-esDevSenior (Developer Senior p) = True
-esDevSenior _                    = False
+esDevSenior r = esDeveloper r && esSenior (seniority r)
+
+esDeveloper :: Rol -> Bool
+esDeveloper (Developer _ _)  = True
+esDeveloper (Management _ _) = False
+
+esSenior :: Seniority -> Bool
+esSenior Senior = True
+esSenior _      = False
+
+seniority :: Rol -> Seniority
+seniority (Developer s _)  = s
+seniority (Management s _) = s
 
 trabajaEn :: Rol -> Proyecto -> Bool
 trabajaEn r p = esProyectoIgualQue (proyecto r) p 
