@@ -111,6 +111,8 @@ data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
 
 node1 = NodeT 5 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
 node2 = NodeT 3 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
+--nodeToList = (NodeT 3 (NodeT 4 (NodeT "B" EmptyT EmptyT) (NodeT 5 (NodeT "A" EmptyT EmptyT) (NodeT 6 EmptyT EmptyT))) (NodeT 4 EmptyT EmptyT))
+nodeToListSimple = (NodeT 5 (NodeT 4 EmptyT EmptyT) (NodeT 3 EmptyT EmptyT))
 
 -- 1. Dado un árbol binario de enteros devuelve la suma entre sus elementos.
 sumarT :: Tree Int -> Int
@@ -149,13 +151,29 @@ leaves (NodeT x n1 n2) = x : leaves n1 ++ leaves n2
 -- Nota: la altura de un árbol (height en inglés), también llamada profundidad, es la cantidad
 -- de niveles del árbol.
 -- La altura para EmptyT es 0, y para una hoja es 1.
-heightT :: Tree a -> Int
+{- heightT :: Tree a -> Int
 heightT EmptyT         = 0
-heightT (Node _ n1 n2) = unoSi (hayNivel n1 n2)
+heightT (Node _ n1 n2) = unoSi (hayNivel n1 n2) -}
 
 -- 8. Dado un árbol devuelve el árbol resultante de intercambiar el hijo izquierdo con el derecho,
 -- en cada nodo del árbol.
 mirrorT :: Tree a -> Tree a
+mirrorT EmptyT          = EmptyT
+mirrorT (NodeT x n1 n2) = (NodeT x n2 n1) 
+
+-- 9. Dado un árbol devuelve una lista que representa el resultado de recorrerlo en modo in-order.
+-- Nota: En el modo in-order primero se procesan los elementos del hijo izquierdo, luego la raiz
+-- y luego los elementos del hijo derecho.
+toList :: Tree a -> [a]
+toList EmptyT          = [] 
+toList (NodeT x n1 n2) = toList n2 ++ (x:[]) ++ toList n1
+
+-- Dados un número n y un árbol devuelve una lista con los nodos de nivel n. El nivel de un
+-- nodo es la distancia que hay de la raíz hasta él. La distancia de la raiz a sí misma es 0, y la
+-- distancia de la raiz a uno de sus hijos es 1.
+-- Nota: El primer nivel de un árbol (su raíz) es 0.
+
+
 
 
 
