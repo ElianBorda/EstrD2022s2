@@ -140,8 +140,22 @@ aparicionesT :: Eq a => a -> Tree a -> Int
 aparicionesT _ EmptyT          = 0
 aparicionesT x (NodeT y n1 n2) = unoSi (x==y) + aparicionesT x n1 + aparicionesT x n2
 
+-- 6. Dado un árbol devuelve los elementos que se encuentran en sus hojas.
+leaves :: Tree a -> [a]
+leaves EmptyT          = []
+leaves (NodeT x n1 n2) = x : leaves n1 ++ leaves n2
 
+-- 7. Dado un árbol devuelve su altura.
+-- Nota: la altura de un árbol (height en inglés), también llamada profundidad, es la cantidad
+-- de niveles del árbol.
+-- La altura para EmptyT es 0, y para una hoja es 1.
+heightT :: Tree a -> Int
+heightT EmptyT         = 0
+heightT (Node _ n1 n2) = unoSi (hayNivel n1 n2)
 
+-- 8. Dado un árbol devuelve el árbol resultante de intercambiar el hijo izquierdo con el derecho,
+-- en cada nodo del árbol.
+mirrorT :: Tree a -> Tree a
 
 
 
