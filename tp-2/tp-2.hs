@@ -410,26 +410,6 @@ proyecto :: Rol -> Proyecto
 proyecto (Developer s p)  = p
 proyecto (Management s p) = p
 
-{-
-sinProyectosRepetidos :: [Proyecto] -> [Proyecto]
-sinProyectosRepetidos []     = [] 
-sinProyectosRepetidos (p:ps) = if seRepiteEn p ps
-                                    then sinProyectosRepetidos ps
-                                    else p : sinProyectosRepetidos ps
-
-
-seRepiteEn :: Proyecto -> [Proyecto] -> Bool
-seRepiteEn p ps = (aparicionesProyecto p ps)>=1
-
-aparicionesProyecto :: Proyecto -> [Proyecto] -> Int
-aparicionesProyecto _ []      = 0
-aparicionesProyecto p (p2:ps) = if esProyectoIgualQue p p2
-                                    then 1 + aparicionesProyecto p ps
-                                    else aparicionesProyecto p ps
- 
-esProyectoIgualQue :: Proyecto -> Proyecto -> Bool
-esProyectoIgualQue (ConsProyecto n) (ConsProyecto n2) = n==n2
--}
 
 sinProyectosRepetidos :: [Proyecto] -> [Proyecto]
 sinProyectosRepetidos []     = []
@@ -437,18 +417,17 @@ sinProyectosRepetidos (p:ps) = if seRepiteEn p (sinProyectosRepetidos ps)
                                     then sinProyectosRepetidos ps
                                     else p : sinProyectosRepetidos ps
 
-
 seRepiteEn :: Proyecto -> [Proyecto] -> Bool
-seRepiteEn p ps = (aparicionesProyecto p ps)>=1
+seRepiteEn _ []        = False
+seRepiteEn p1 (p2:ps2) = esProyectoIgualQue p1 p2 || seRepiteEn p1 ps2
 
-aparicionesProyecto :: Proyecto -> [Proyecto] -> Int
-aparicionesProyecto _ []      = 0
-aparicionesProyecto p (p2:ps) = if esProyectoIgualQue p p2
-                                    then 1 + aparicionesProyecto p ps
-                                    else aparicionesProyecto p ps
- 
 esProyectoIgualQue :: Proyecto -> Proyecto -> Bool
 esProyectoIgualQue (ConsProyecto n) (ConsProyecto n2) = n==n2
+
+{- 
+ 
+esProyectoIgualQue :: Proyecto -> Proyecto -> Bool
+esProyectoIgualQue (ConsProyecto n) (ConsProyecto n2) = n==n2 -}
 
 
 ------------------------------------------
