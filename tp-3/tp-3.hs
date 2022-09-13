@@ -179,6 +179,10 @@ toList (NodeT x n1 n2) = toList n2 ++ (x:[]) ++ toList n1
 -- distancia de la raiz a uno de sus hijos es 1.
 -- Nota: El primer nivel de un árbol (su raíz) es 0.
 levelN :: Int -> Tree a -> [a]
+levelN 0 (NodeT x _ _)   = x:[] 
+levelN _ EmptyT          = []
+levelN n (NodeT x n1 n2) = levelN (n-1) n1 ++ levelN (n-1) n2
+
 
 
 
