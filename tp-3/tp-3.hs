@@ -112,7 +112,7 @@ data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
 node1 = NodeT 5 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
 node2 = NodeT 3 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
 --nodeToList = (NodeT 3 (NodeT 4 (NodeT "B" EmptyT EmptyT) (NodeT 5 (NodeT "A" EmptyT EmptyT) (NodeT 6 EmptyT EmptyT))) (NodeT 4 EmptyT EmptyT))
-nodeToListSimple = (NodeT 5 (NodeT 4 (NodeT 6 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT))
+nodeToListSimple = (NodeT 5 (NodeT 4 (NodeT 6 (NodeT 10 EmptyT EmptyT) EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT))
 
 -- 1. Dado un árbol binario de enteros devuelve la suma entre sus elementos.
 sumarT :: Tree Int -> Int
@@ -183,6 +183,17 @@ levelN 0 (NodeT x _ _)   = x:[]
 levelN _ EmptyT          = []
 levelN n (NodeT x n1 n2) = levelN (n-1) n1 ++ levelN (n-1) n2
 
+
+-- 11.Dado un árbol devuelve una lista de listas en la que cada elemento representa un nivel de
+-- dicho árbol.
+listPerLevel :: Tree a -> [[a]]
+listPerLevel EmptyT          = []
+listPerLevel (NodeT x n1 n2) = (x:[]):[] ++ concatListasDeListas (listPerLevel n1) (listPerLevel n2)
+
+concatListasDeListas :: [[a]] -> [[a]] -> [[a]]
+concatListasDeListas xss []            = xss
+concatListasDeListas [] yss            = yss
+concatListasDeListas (xs:xss) (ys:yss) = (xs++ys) : concatListasDeListas xss yss
 
 
 
