@@ -209,6 +209,37 @@ longitud :: [a] -> Int
 longitud []     = 0
 longitud (x:xs) = 1 + longitud xs  
 
+-- 2.2. Expresiones Aritméticas
+
+data ExpA = Valor Int | Sum ExpA ExpA | Prod ExpA ExpA | Neg ExpA
+    deriving Show
+
+exp1 = (Sum (Prod (Sum (Valor 1) (Valor 0)) (Prod (Valor 1) (Valor 0))) (Prod (Sum (Valor 1) (Valor 1)) (Neg (Valor 4))))
+
+-- 2. Dada una expresión aritmética, la simplifica según los siguientes criterios (descritos utilizando
+-- notación matemática convencional):
+simplificar :: ExpA -> ExpA
+simplificar (Valor m)    = Valor m
+simplificar (Neg n)      = simplificarNeg (simplificar n)
+simplificar (Prod n1 n2) = simplificarProd (simplificar n1) (simplificar n2)
+simplificar (Sum n1 n2)  = simplificarSum (simplificar n1) (simplificar n2)
+
+simplificarNeg :: ExpA -> ExpA
+simplificarNeg (Neg ex) = ex
+simplificarNeg ex       = Neg ex 
+
+simplificarProd :: ExpA -> ExpA -> ExpA
+simplificarProd (Valor 0) _  = Valor 0
+simplificarProd _ (Valor 0)  = Valor 0
+simplificarProd (Valor 1) ex = ex
+simplificarProd ex (Valor 1) = ex
+simplificarProd ex ex2       = Prod ex ex2
+
+simplificarSum :: ExpA -> ExpA -> ExpA
+simplificarSum (Valor 0) ex  = ex
+simplificarSum ex (Valor 0)  = ex
+simplificarSum ex1 ex2       = Sum ex1 ex2
+
 
 
 
