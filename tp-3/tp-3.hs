@@ -195,6 +195,23 @@ concatListasDeListas xss []            = xss
 concatListasDeListas [] yss            = yss
 concatListasDeListas (xs:xss) (ys:yss) = (xs++ys) : concatListasDeListas xss yss
 
+-- 12. Devuelve los elementos de la rama más larga del árbol
+ramaMasLarga :: Tree a -> [a]
+ramaMasLarga EmptyT          = []
+ramaMasLarga (NodeT x n1 n2) = x : if esMasLargaQue (ramaMasLarga n1) (ramaMasLarga n2)
+                                        then ramaMasLarga n1
+                                        else ramaMasLarga n2
+
+esMasLargaQue :: [a] -> [a] -> Bool
+esMasLargaQue xs ys = longitud xs > longitud ys
+
+longitud :: [a] -> Int
+longitud []     = 0
+longitud (x:xs) = 1 + longitud xs  
+
+
+
+
 
 
 
