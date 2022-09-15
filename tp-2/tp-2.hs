@@ -317,12 +317,13 @@ tipoDePokemon (ConsPokemon t _) = t
 -- * Dados dos entrenadores, indica la cantidad de Pokemon de cierto tipo, que le ganarían
 -- a los Pokemon del segundo entrenador.
 
-losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
-losQueLeGanan _ (ConsEntrenador _ []) _                            = 0
-losQueLeGanan t (ConsEntrenador n1 ps1) (ConsEntrenador n2 ps2) = unoSi (superaATodos (primerPokemon ps1) ps2) + losQueLeGanan t (ConsEntrenador n1 ps1) (ConsEntrenador n2 ps2)
 
-primerPokemon :: [Pokemon] -> Pokemon
-primerPokemon (p:ps) = p
+losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
+losQueLeGanan t (ConsEntrenador _ ps1) (ConsEntrenador _ ps2) = cantDePokeDeTipoQueGananA t ps1 ps2
+
+cantDePokeDeTipoQueGananA:: TipoDePokemon -> [Pokemon] -> [Pokemon] -> Int
+cantDePokeDeTipoQueGananA _ [] _         = 0
+cantDePokeDeTipoQueGananA t (p1:ps1) ps2 = unoSi (superaATodos p1 ps2) + cantDePokeDeTipoQueGananA t ps1 ps2
 
 superaATodos :: Pokemon -> [Pokemon] -> Bool
 superaATodos _ []        = True
@@ -336,6 +337,7 @@ elTipoSuperaA Agua Fuego = True
 elTipoSuperaA Fuego Planta = True
 elTipoSuperaA Planta Agua = True
 elTipoSuperaA _ _ = False
+
 -------------------------------------------
 
 --Dado un entrenador, devuelve True si posee al menos un Pokémon de cada tipo posible.
