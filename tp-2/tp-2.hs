@@ -272,6 +272,7 @@ erika, kiawe, misty :: Entrenador
 erika = ConsEntrenador "Erika" [squirtle, chikorita,suicune ]
 kiawe = ConsEntrenador "Kiawe" [charmander, vulpix, charizard]
 misty = ConsEntrenador "Misty" [tangela, bulbasor]
+blaine = ConsEntrenador "Kiawe" [charmander, vulpix, charizard]
 
 -------------------------------------------
 
@@ -284,14 +285,18 @@ pokemones (ConsEntrenador _ ps) = ps
 -------------------------------------------
 
 -- * Devuelve la cantidad de Pokémon de determinado tipo que posee el entrenador.
-{- cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
-cantPokemonDe t e = longitud (listarPorTipo (pokemones e) t)
 
-listarPorTipo :: [Pokemon] -> TipoDePokemon -> [Pokemon]
-listarPorTipo [] _     = []
-listarPorTipo (p:ps) t = if esDeTipo p t
-                             then p : listarPorTipo ps t
-                             else listarPorTipo ps t
+cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
+cantPokemonDe t e = cantPokemonDeTipoEn (pokemones e) t 
+
+cantPokemonDeTipoEn :: [Pokemon] -> TipoDePokemon -> Int
+cantPokemonDeTipoEn [] _     = 0
+cantPokemonDeTipoEn (p:ps) t = unoSi (esDeTipo p t) + cantPokemonDeTipoEn ps t
+
+unoSi :: Bool -> Int
+unoSi True = 1
+unoSi False = 0
+-- CORREGIDO
 
 esDeTipo :: Pokemon -> TipoDePokemon -> Bool
 esDeTipo p t = esIgualTipoQue (tipoDePokemon p) t
@@ -303,6 +308,7 @@ esIgualTipoQue Planta Planta = True
 esIgualTipoQue _ _ = False 
 
 tipoDePokemon :: Pokemon -> TipoDePokemon
+<<<<<<< HEAD
 tipoDePokemon (ConsPokemon t _) = t -}
 
 cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
@@ -318,28 +324,37 @@ unoSi False = 0
 
 
 -- CORREGIDO
+=======
+tipoDePokemon (ConsPokemon t _) = t 
+
+
+>>>>>>> 5131e83f817c711134edf58f1e3b1321266396c7
 
 -------------------------------------------
 
 -- * Dados dos entrenadores, indica la cantidad de Pokemon de cierto tipo, que le ganarían
 -- a los Pokemon del segundo entrenador.
+<<<<<<< HEAD
 {- losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
 losQueLeGanan t e e2 = longitud  (pokemonesQueGanaronA (listarPorTipo (pokemones e) t) (pokemones e2))
+=======
 
-pokemonesQueGanaronA :: [Pokemon] -> [Pokemon] -> [Pokemon]
-pokemonesQueGanaronA [] _       = []
-pokemonesQueGanaronA _ []       = []
-pokemonesQueGanaronA (p:ps) ps2 = if superaEnPoderATodos p ps2
-                                      then p : pokemonesQueGanaronA ps ps2
-                                      else pokemonesQueGanaronA ps ps2
+losQueLeGanan :: TipoDePokemon -> Entrenador -> Entrenador -> Int
+losQueLeGanan _ (ConsEntrenador _ []) _                            = 0
+losQueLeGanan t (ConsEntrenador n1 ps1) (ConsEntrenador n2 ps2) = unoSi (superaATodos (primerPokemon ps1) ps2) + losQueLeGanan t (ConsEntrenador n1 ps1) (ConsEntrenador n2 ps2)
+>>>>>>> 5131e83f817c711134edf58f1e3b1321266396c7
 
-superaEnPoderATodos :: Pokemon -> [Pokemon] -> Bool
-superaEnPoderATodos p (p2:[])  = superaEnPoderA p p2
-superaEnPoderATodos p (p2:ps2) = superaEnPoderA p p2 && superaEnPoderATodos p ps2 
+primerPokemon :: [Pokemon] -> Pokemon
+primerPokemon (p:ps) = p
 
-superaEnPoderA :: Pokemon -> Pokemon -> Bool
-superaEnPoderA p p2 = elPoderEsMayorQue (poderDePokemon p) (poderDePokemon p2)
+superaATodos :: Pokemon -> [Pokemon] -> Bool
+superaATodos _ []        = True
+superaATodos p1 (p2:ps2) = superaA p1 p2 && superaATodos p1 ps2 
 
+superaA :: Pokemon -> Pokemon -> Bool
+superaA (ConsPokemon t1 _) (ConsPokemon t2 _) = elTipoSuperaA t1 t2
+
+<<<<<<< HEAD
 poderDePokemon :: Pokemon -> Int
 poderDePokemon (ConsPokemon _ d) = d
 
@@ -372,13 +387,18 @@ tipoDePokemon (ConsPokemon t _) = t
 superaA :: Pokemon -> Pokemon -> Bool
 superaA (ConsPokemon t1 _) (ConsPokemon t2 _) = elTipoSuperaA t1 t2
 
+=======
+>>>>>>> 5131e83f817c711134edf58f1e3b1321266396c7
 elTipoSuperaA :: TipoDePokemon -> TipoDePokemon -> Bool
 elTipoSuperaA Agua Fuego = True
 elTipoSuperaA Fuego Planta = True
 elTipoSuperaA Planta Agua = True
 elTipoSuperaA _ _ = False
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 5131e83f817c711134edf58f1e3b1321266396c7
 -------------------------------------------
 
 --Dado un entrenador, devuelve True si posee al menos un Pokémon de cada tipo posible.
@@ -395,6 +415,12 @@ tieneTodosLosTiposPokemon ps = (tienePokemonDeTipo ps Agua)
 tienePokemonDeTipo :: [Pokemon] -> TipoDePokemon -> Bool
 tienePokemonDeTipo [] _ = False
 tienePokemonDeTipo (p:ps) t = esDeTipo p t || tienePokemonDeTipo ps t
+
+listarPorTipo :: [Pokemon] -> TipoDePokemon -> [Pokemon]
+listarPorTipo [] _     = []
+listarPorTipo (p:ps) t = if esDeTipo p t
+                             then p : listarPorTipo ps t
+                             else listarPorTipo ps t
 
 -------------------------------------------
 
@@ -447,30 +473,31 @@ proyecto :: Rol -> Proyecto
 proyecto (Developer s p)  = p
 proyecto (Management s p) = p
 
+
 sinProyectosRepetidos :: [Proyecto] -> [Proyecto]
-sinProyectosRepetidos []     = [] 
-sinProyectosRepetidos (p:ps) = if seRepiteEn p ps
+sinProyectosRepetidos []     = []
+sinProyectosRepetidos (p:ps) = if seRepiteEn p (sinProyectosRepetidos ps)
                                     then sinProyectosRepetidos ps
                                     else p : sinProyectosRepetidos ps
 
-
 seRepiteEn :: Proyecto -> [Proyecto] -> Bool
-seRepiteEn p ps = (aparicionesProyecto p ps)>=1
+seRepiteEn _ []        = False
+seRepiteEn p1 (p2:ps2) = esProyectoIgualQue p1 p2 || seRepiteEn p1 ps2
 
-aparicionesProyecto :: Proyecto -> [Proyecto] -> Int
-aparicionesProyecto _ []      = 0
-aparicionesProyecto p (p2:ps) = if esProyectoIgualQue p p2
-                                    then 1 + aparicionesProyecto p ps
-                                    else aparicionesProyecto p ps
- 
 esProyectoIgualQue :: Proyecto -> Proyecto -> Bool
 esProyectoIgualQue (ConsProyecto n) (ConsProyecto n2) = n==n2
+
+{- 
+ 
+esProyectoIgualQue :: Proyecto -> Proyecto -> Bool
+esProyectoIgualQue (ConsProyecto n) (ConsProyecto n2) = n==n2 -}
+
 
 ------------------------------------------
 
 -- Dada una empresa indica la cantidad de desarrolladores senior que posee, que pertecen
 -- además a los proyectos dados por parámetro.
-losDevSenior :: Empresa -> [Proyecto] -> Int
+{- losDevSenior :: Empresa -> [Proyecto] -> Int
 losDevSenior e ps = longitud (rolesConAlgunProyecto (rolesDeveloperDeSeniority (roles e) Senior) ps)
 
 rolesConAlgunProyecto :: [Rol] -> [Proyecto] -> [Rol]
@@ -506,21 +533,64 @@ esSeniorityIgualQue _ _                   = False
 
 seniority :: Rol -> Seniority
 seniority (Developer s p)   = s
-seniority (Management s p)  = s
+seniority (Management s p)  = s -}
+
+losDevSenior :: Empresa -> [Proyecto] -> Int
+losDevSenior _ []     = 0 
+losDevSenior e (p:ps) = cantDevSeniorQueTrabajanEn (roles e) p + losDevSenior e ps 
+
+cantDevSeniorQueTrabajanEn :: [Rol] -> Proyecto -> Int
+cantDevSeniorQueTrabajanEn [] _     = 0
+cantDevSeniorQueTrabajanEn (r:rs) p = unoSi (esDevSeniorQueTrabajaEn r p) + cantDevSeniorQueTrabajanEn rs p
+
+esDevSeniorQueTrabajaEn :: Rol -> Proyecto -> Bool
+esDevSeniorQueTrabajaEn r p = esDevSenior r && trabajaEn r p
+
+esDevSenior :: Rol -> Bool
+esDevSenior r = esDeveloper r && esSenior (seniority r)
+
+esDeveloper :: Rol -> Bool
+esDeveloper (Developer _ _)  = True
+esDeveloper (Management _ _) = False
+
+esSenior :: Seniority -> Bool
+esSenior Senior = True
+esSenior _      = False
+
+seniority :: Rol -> Seniority
+seniority (Developer s _)  = s
+seniority (Management s _) = s
+
+trabajaEn :: Rol -> Proyecto -> Bool
+trabajaEn r p = esProyectoIgualQue (proyecto r) p 
+
 
 ------------------------------------------
 
 -- Indica la cantidad de empleados que trabajan en alguno de los proyectos dados.
 cantQueTrabajanEn :: [Proyecto] -> Empresa -> Int
-cantQueTrabajanEn ps e = longitud( rolesConAlgunProyecto (roles e) ps)
+cantQueTrabajanEn ps e = cantRolesConAlgunProyecto (roles e) ps
+
+cantRolesConAlgunProyecto :: [Rol] -> [Proyecto] -> Int
+cantRolesConAlgunProyecto [] _      = 0
+cantRolesConAlgunProyecto (r:rs) ps = unoSi (tieneAlgunProyectoEn r ps) + cantRolesConAlgunProyecto rs ps
+                                        
+tieneAlgunProyectoEn :: Rol -> [Proyecto] -> Bool
+tieneAlgunProyectoEn r (p:[]) = esProyectoIgualQue (proyecto r) p
+tieneAlgunProyectoEn r (p:ps) = esProyectoIgualQue (proyecto r) p || tieneAlgunProyectoEn r ps
 
 
 -- Devuelve una lista de pares que representa a los proyectos (sin repetir) junto con su
 -- cantidad de personas involucradas.
 asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
-asignadosPorProyecto e = proyectoConCantDePersonasEn (proyectos e) e
+asignadosPorProyecto e = proyectosConCantDePersonas (pedirProyectosDeRoles (roles e)) (roles e)
 
-proyectoConCantDePersonasEn :: [Proyecto] -> Empresa -> [(Proyecto, Int)]
-proyectoConCantDePersonasEn [] _      = []
-proyectoConCantDePersonasEn (p:ps) e  = (p, aparicionesProyecto p (pedirProyectosDeRoles (roles e))) : proyectoConCantDePersonasEn ps e
- 
+proyectosConCantDePersonas :: [Proyecto] -> [Rol] -> [(Proyecto, Int)]
+proyectosConCantDePersonas [] _      = []
+proyectosConCantDePersonas (p:ps) rs = if seRepiteEn p ps
+                                            then proyectosConCantDePersonas ps rs 
+                                            else (p, cantPersonasEn rs p) : proyectosConCantDePersonas ps rs
+
+cantPersonasEn :: [Rol] -> Proyecto -> Int
+cantPersonasEn [] _     = 0
+cantPersonasEn (r:rs) p = unoSi (esProyectoIgualQue (proyecto r) p) + cantPersonasEn rs p
