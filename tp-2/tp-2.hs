@@ -415,9 +415,13 @@ proyecto (Management s p) = p
 
 sinProyectosRepetidos :: [Proyecto] -> [Proyecto]
 sinProyectosRepetidos []     = []
-sinProyectosRepetidos (p:ps) = if seRepiteEn p (sinProyectosRepetidos ps)
-                                    then sinProyectosRepetidos ps
-                                    else p : sinProyectosRepetidos ps
+sinProyectosRepetidos (p:ps) = agregarSiNoExiste p (sinProyectosRepetidos ps)
+    
+agregarSiNoExiste :: Proyecto -> [Proyecto] -> [Proyecto]
+agregarSiNoExiste p []       = p:[]
+agregarSiNoExiste p (p1:ps1) = if esProyectoIgualQue p p1
+                                    then p1:ps1 
+                                    else p1:agregarSiNoExiste p ps1
 
 seRepiteEn :: Proyecto -> [Proyecto] -> Bool
 seRepiteEn _ []        = False
