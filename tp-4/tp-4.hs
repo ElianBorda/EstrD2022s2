@@ -85,3 +85,38 @@ data Cofre = Cofre [Objeto]
 data Mapa = Fin Cofre | Bifurcacion Cofre Mapa Mapa
     deriving Show
 
+mapa = (Bifurcacion (Cofre [Chatarra]) (Fin (Cofre [Chatarra])) (Fin (Cofre [Tesoro])))
+
+-- 1. Indica si hay un tesoro en alguna parte del mapa.
+hayTesoro :: Mapa -> Bool
+hayTesoro (Fin c)               = poseeAlgunTesoro c
+hayTesoro (Bifurcacion c m1 m2) = poseeAlgunTesoro c || hayTesoro m1 || hayTesoro m2
+
+poseeAlgunTesoro :: Cofre -> Bool
+poseeAlgunTesoro (Cofre objs) = tieneTesoro objs
+
+tieneTesoro :: [Objeto] -> Bool
+tieneTesoro []         = False
+tieneTesoro (obj:objs) = esTesoro obj || tieneTesoro objs
+
+esTesoro :: Objeto -> Bool
+esTesoro Tesoro = True
+esTesoro _      = False
+
+-- 2. Indica si al final del camino hay un tesoro. Nota: el final de un camino se representa con una
+-- lista vacía de direcciones.
+hayTesoroEn :: [Dir] -> Mapa -> Bool
+hayTesoroEn [] mp     = tieneTesoroEsteFinal mp  
+hayTesoroEn (d:ds) mp = hayTesoroEn ds (desplazarA mp d)
+
+desplazarA :: Mapa -> Dir -> Mapa
+desplazarA (Bifurcacion _ m1 _) Izq = m1
+desplazarA (Bifurcacion _ _ m2) Der = m2
+desplazarA m _                      = m 
+
+tieneTesoroEsteFinal :: Mapa -> Bool
+tieneTesoroEsteFinal (Bifurcacion c _ _) = poseeAlgunTesoro c
+tieneTesoroEsteFinal (Fin c)             = poseeAlgunTesoro c
+
+
+
