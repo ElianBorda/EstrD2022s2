@@ -77,7 +77,7 @@ pasosHastaTesoro (Cofre os cam) = if tieneTesoro os
                                     else 1 + pasosHastaTesoro cam
 
 -- Indica si hay al menos “n” tesoros en el camino.
-alMenosNTesoros :: Int -> Camino -> Bool
+{- alMenosNTesoros :: Int -> Camino -> Bool
 alMenosNTesoros 0 _ = True 
 alMenosNTesoros n c = cantidadDeTesoros c>=n
 
@@ -86,12 +86,25 @@ cantidadDeTesoros Fin          = 0
 cantidadDeTesoros (Nada c)     = cantidadDeTesoros c
 cantidadDeTesoros (Cofre os c) = if tieneTesoro os
                                   then 1 + cantidadDeTesoros c
-                                  else cantidadDeTesoros c
+                                  else cantidadDeTesoros c -}
+
+alMenosNTesoros :: Int -> Camino -> Bool
+alMenosNTesoros 0 _                = True
+alMenosNTesoros n Fin              = False
+alMenosNTesoros n (Nada cam)       = alMenosNTesoros n cam
+alMenosNTesoros n (Cofre objs cam) = alMenosNTesoros (restarTesorosEncontrados n objs) cam
+
+restarTesorosEncontrados :: Int -> [Objeto] -> Int
+restarTesorosEncontrados 0 _          = 0
+restarTesorosEncontrados n []         = n 
+restarTesorosEncontrados n (obj:objs) = if esTesoro obj
+                                           then restarTesorosEncontrados (n-1) objs
+                                           else restarTesorosEncontrados n objs
 
 -- Dado un rango de pasos, indica la cantidad de tesoros que hay en ese rango. Por ejemplo, si
 -- el rango es 3 y 5, indica la cantidad de tesoros que hay entre hacer 3 pasos y hacer 5. Están
 -- incluidos tanto 3 como 5 en el resultado.
-cantTesorosEntre :: Int -> Int -> Camino -> Int
+ {- cantTesorosEntre :: Int -> Int -> Camino -> Int
 cantTesorosEntre 0 n c           = cantTesorosEn n c
 cantTesorosEntre n m (Nada c)    = cantTesorosEntre (n-1) (m-1) c
 cantTesorosEntre n m (Cofre _ c) = cantTesorosEntre (n-1) (m-1) c
@@ -100,8 +113,7 @@ cantTesorosEn :: Int -> Camino -> Int
 cantTesorosEn 0 _              = 0
 cantTesorosEn n Fin            = 0
 cantTesorosEn n (Nada cam)     = cantTesorosEn (n-1) cam
-cantTesorosEn n (Cofre os cam) = cantidadDeTesoros (Cofre os cam) + cantTesorosEn (n-1) cam
-
+cantTesorosEn n (Cofre os cam) = cantidadDeTesoros (Cofre os cam) + cantTesorosEn (n-1) cam -}
 -- 2. Tipos arbóreos
 
 -- 2.1. Árboles binarios
