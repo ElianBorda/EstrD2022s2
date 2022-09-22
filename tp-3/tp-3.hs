@@ -165,7 +165,13 @@ aparicionesT x (NodeT y n1 n2) = unoSi (x==y) + aparicionesT x n1 + aparicionesT
 -- 6. Dado un árbol devuelve los elementos que se encuentran en sus hojas.
 leaves :: Tree a -> [a]
 leaves EmptyT          = []
-leaves (NodeT x n1 n2) = x : leaves n1 ++ leaves n2
+leaves (NodeT x t1 t2) =  if sonEmpty t1 t2
+                              then x:[]
+                              else leaves t1 ++ leaves t2 
+
+sonEmpty :: Tree a -> Tree a -> Bool
+sonEmpty EmptyT EmptyT = True
+sonEmpty _ _           = False
 
 -- 7. Dado un árbol devuelve su altura.
 -- Nota: la altura de un árbol (height en inglés), también llamada profundidad, es la cantidad
