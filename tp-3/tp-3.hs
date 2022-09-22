@@ -132,7 +132,13 @@ data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
 node1 = NodeT 5 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
 node2 = NodeT 3 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
 --nodeToList = (NodeT 3 (NodeT 4 (NodeT "B" EmptyT EmptyT) (NodeT 5 (NodeT "A" EmptyT EmptyT) (NodeT 6 EmptyT EmptyT))) (NodeT 4 EmptyT EmptyT))
-nodeToListSimple = (NodeT 5 (NodeT 4 (NodeT 6 (NodeT 10 EmptyT EmptyT) EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT))
+nodeToListSimple = (NodeT 5 (
+                             NodeT 4 (
+                                       NodeT 6 (
+                                                NodeT 10 EmptyT EmptyT) 
+                                                EmptyT) 
+                                        EmptyT) 
+                            (NodeT 3 EmptyT EmptyT))
 
 -- 1. Dado un árbol binario de enteros devuelve la suma entre sus elementos.
 sumarT :: Tree Int -> Int
@@ -179,9 +185,7 @@ sonEmpty _ _           = False
 -- La altura para EmptyT es 0, y para una hoja es 1.
 heightT :: Tree a -> Int
 heightT EmptyT          = 0
-heightT (NodeT _ n1 n2) = if tieneProfundidad n1 || tieneProfundidad n2
-                             then 1 + (max (heightT n1) (heightT n2))
-                             else 0
+heightT (NodeT _ n1 n2) = 1 + (max (heightT n1) (heightT n2))
 
 tieneProfundidad :: Tree a -> Bool
 tieneProfundidad EmptyT = False
