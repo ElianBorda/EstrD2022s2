@@ -76,6 +76,20 @@ pasosHastaTesoro (Cofre os cam) = if tieneTesoro os
                                     then 0
                                     else 1 + pasosHastaTesoro cam
 
+-- Indica si hay un tesoro en una cierta cantidad exacta de pasos. Por ejemplo, si el número de
+-- pasos es 5, indica si hay un tesoro en 5 pasos.
+hayTesoroEn :: Int -> Camino -> Bool
+hayTesoroEn 0 cm           = laUbicacionActualTieneTesoro cm
+hayTesoroEn n Fin          = False
+hayTesoroEn n (Nada cm)    = hayTesoroEn (n-1) cm
+hayTesoroEn n (Cofre _ cm) = hayTesoroEn (n-1) cm
+
+laUbicacionActualTieneTesoro :: Camino -> Bool
+laUbicacionActualTieneTesoro (Cofre x _) = tieneTesoro x
+laUbicacionActualTieneTesoro _           = False
+
+
+
 -- Indica si hay al menos “n” tesoros en el camino.
 
 alMenosNTesoros :: Int -> Camino -> Bool
@@ -245,6 +259,25 @@ data ExpA = Valor Int | Sum ExpA ExpA | Prod ExpA ExpA | Neg ExpA
     deriving Show
 
 exp1 = (Sum (Prod (Sum (Valor 1) (Valor 0)) (Prod (Valor 1) (Valor 0))) (Prod (Sum (Valor 1) (Valor 1)) (Neg (Valor 4))))
+
+-- 1. Dada una expresión aritmética devuelve el resultado evaluarla.
+eval :: ExpA -> Int
+eval (Valor m)    = m
+eval (Sum e1 e2)  = efectoDeSuma (eval e1) (eval e2) 
+eval (Prod e1 e2) = efectoDeProducto (eval e1) (eval e2) 
+eval (Neg e)      = efectoDeNegativo (eval e)
+
+efectoDeSuma :: Int -> Int -> Int
+efectoDeSuma m k = m+k
+
+efectoDeProducto :: Int -> Int -> Int
+efectoDeProducto m k = m*k
+
+efectoDeNegativo :: Int -> Int
+efectoDeNegativo m = (-m)
+
+
+
 
 -- 2. Dada una expresión aritmética, la simplifica según los siguientes criterios (descritos utilizando
 -- notación matemática convencional):
