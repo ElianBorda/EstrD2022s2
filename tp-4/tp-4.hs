@@ -118,5 +118,31 @@ tieneTesoroEsteFinal :: Mapa -> Bool
 tieneTesoroEsteFinal (Bifurcacion c _ _) = poseeAlgunTesoro c
 tieneTesoroEsteFinal (Fin c)             = poseeAlgunTesoro c
 
+-- 3. Indica el camino al tesoro. Precondición: existe un tesoro y es único.
+caminoAlTesoro :: Mapa -> [Dir]
+caminoAlTesoro (Fin c)             = checkear c
+caminoAlTesoro mp                  = generarDirecciones mp   
 
+checkear :: Cofre -> [Dir]
+checkear (Cofre objs) = if tieneTesoro objs
+                            then []
+                            else error "No hay cofre"
+
+generarDirecciones :: Mapa -> [Dir]
+generarDirecciones (Fin _)               = []
+generarDirecciones (Bifurcacion c m1 m2) = if poseeAlgunTesoro c
+                                            then []
+                                            else if tieneTesoroElSiguiente m1
+                                                    then Izq:generarDirecciones m1
+                                                    else Der:generarDirecciones m2
+
+tieneTesoroElSiguiente :: Mapa -> Bool
+tieneTesoroElSiguiente (Fin c)             = poseeAlgunTesoro c
+tieneTesoroElSiguiente (Bifurcacion c _ _) = poseeAlgunTesoro c
+
+genDir :: Mapa -> Dir
+            = []
+            = Izq
+            = Der
+genDir (Bifurcacion _ m1 m2)                                      
 
