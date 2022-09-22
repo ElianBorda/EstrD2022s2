@@ -77,16 +77,6 @@ pasosHastaTesoro (Cofre os cam) = if tieneTesoro os
                                     else 1 + pasosHastaTesoro cam
 
 -- Indica si hay al menos “n” tesoros en el camino.
-{- alMenosNTesoros :: Int -> Camino -> Bool
-alMenosNTesoros 0 _ = True 
-alMenosNTesoros n c = cantidadDeTesoros c>=n
-
-cantidadDeTesoros :: Camino -> Int
-cantidadDeTesoros Fin          = 0 
-cantidadDeTesoros (Nada c)     = cantidadDeTesoros c
-cantidadDeTesoros (Cofre os c) = if tieneTesoro os
-                                  then 1 + cantidadDeTesoros c
-                                  else cantidadDeTesoros c -}
 
 alMenosNTesoros :: Int -> Camino -> Bool
 alMenosNTesoros 0 _                = True
@@ -104,16 +94,34 @@ restarTesorosEncontrados n (obj:objs) = if esTesoro obj
 -- Dado un rango de pasos, indica la cantidad de tesoros que hay en ese rango. Por ejemplo, si
 -- el rango es 3 y 5, indica la cantidad de tesoros que hay entre hacer 3 pasos y hacer 5. Están
 -- incluidos tanto 3 como 5 en el resultado.
- {- cantTesorosEntre :: Int -> Int -> Camino -> Int
-cantTesorosEntre 0 n c           = cantTesorosEn n c
-cantTesorosEntre n m (Nada c)    = cantTesorosEntre (n-1) (m-1) c
-cantTesorosEntre n m (Cofre _ c) = cantTesorosEntre (n-1) (m-1) c
+cantTesorosEntre :: Int -> Int -> Camino -> Int
+cantTesorosEntre n m cm = cantTesoros (caminoHasta (m-n+1) (caminoDesde n cm)) 
 
-cantTesorosEn :: Int -> Camino -> Int
-cantTesorosEn 0 _              = 0
-cantTesorosEn n Fin            = 0
-cantTesorosEn n (Nada cam)     = cantTesorosEn (n-1) cam
-cantTesorosEn n (Cofre os cam) = cantidadDeTesoros (Cofre os cam) + cantTesorosEn (n-1) cam -}
+caminoDesde :: Int -> Camino -> Camino
+caminoDesde 0 cm           = cm
+caminoDesde n Fin          = Fin
+caminoDesde n (Nada cm)    = caminoDesde (n-1) cm
+caminoDesde n (Cofre _ cm) = caminoDesde (n-1) cm
+
+caminoHasta :: Int -> Camino -> Camino
+caminoHasta 0 cm           = Fin
+caminoHasta n Fin          = Fin
+caminoHasta n (Nada cm)    = Nada (caminoHasta (n-1) cm)
+caminoHasta n (Cofre objs cm) = Cofre objs (caminoHasta (n-1) cm)
+
+cantTesoros :: Camino -> Int
+cantTesoros Fin             = 0
+cantTesoros (Nada cm)       = cantTesoros cm
+cantTesoros (Cofre objs cm) = contarTesoros objs + cantTesoros cm
+
+contarTesoros :: [Objeto] -> Int
+contarTesoros []     = 0
+contarTesoros (x:xs) = unoSiEsTesoro x + contarTesoros xs
+
+unoSiEsTesoro :: Objeto -> Int
+unoSiEsTesoro Tesoro = 1
+unoSiEsTesoro _      = 0
+
 -- 2. Tipos arbóreos
 
 -- 2.1. Árboles binarios
