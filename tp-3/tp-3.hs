@@ -93,17 +93,22 @@ laUbicacionActualTieneTesoro _           = False
 -- Indica si hay al menos “n” tesoros en el camino.
 
 alMenosNTesoros :: Int -> Camino -> Bool
-alMenosNTesoros 0 _                = True
-alMenosNTesoros n Fin              = False
-alMenosNTesoros n (Nada cam)       = alMenosNTesoros n cam
-alMenosNTesoros n (Cofre objs cam) = alMenosNTesoros (restarTesorosEncontrados n objs) cam
+alMenosNTesoros 0 _  = True
+alMenosNTesoros n cm = cantTesoros cm >= n 
 
-restarTesorosEncontrados :: Int -> [Objeto] -> Int
-restarTesorosEncontrados 0 _          = 0
-restarTesorosEncontrados n []         = n 
-restarTesorosEncontrados n (obj:objs) = if esTesoro obj
-                                           then restarTesorosEncontrados (n-1) objs
-                                           else restarTesorosEncontrados n objs
+cantTesoros :: Camino -> Int
+cantTesoros Fin             = 0
+cantTesoros (Nada cm)       = cantTesoros cm
+cantTesoros (Cofre objs cm) = contarTesoros objs + cantTesoros cm
+
+contarTesoros :: [Objeto] -> Int
+contarTesoros []     = 0
+contarTesoros (x:xs) = unoSiEsTesoro x + contarTesoros xs
+
+unoSiEsTesoro :: Objeto -> Int
+unoSiEsTesoro Tesoro = 1
+unoSiEsTesoro _      = 0
+
 
 -- Dado un rango de pasos, indica la cantidad de tesoros que hay en ese rango. Por ejemplo, si
 -- el rango es 3 y 5, indica la cantidad de tesoros que hay entre hacer 3 pasos y hacer 5. Están
@@ -123,18 +128,6 @@ caminoHasta n Fin          = Fin
 caminoHasta n (Nada cm)    = Nada (caminoHasta (n-1) cm)
 caminoHasta n (Cofre objs cm) = Cofre objs (caminoHasta (n-1) cm)
 
-cantTesoros :: Camino -> Int
-cantTesoros Fin             = 0
-cantTesoros (Nada cm)       = cantTesoros cm
-cantTesoros (Cofre objs cm) = contarTesoros objs + cantTesoros cm
-
-contarTesoros :: [Objeto] -> Int
-contarTesoros []     = 0
-contarTesoros (x:xs) = unoSiEsTesoro x + contarTesoros xs
-
-unoSiEsTesoro :: Objeto -> Int
-unoSiEsTesoro Tesoro = 1
-unoSiEsTesoro _      = 0
 
 -- 2. Tipos arbóreos
 
