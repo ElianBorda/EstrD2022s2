@@ -76,31 +76,58 @@ pasosHastaTesoro (Cofre os cam) = if tieneTesoro os
                                     then 0
                                     else 1 + pasosHastaTesoro cam
 
--- Indica si hay al menos “n” tesoros en el camino.
-alMenosNTesoros :: Int -> Camino -> Bool
-alMenosNTesoros 0 _ = True 
-alMenosNTesoros n c = cantidadDeTesoros c>=n
+-- Indica si hay un tesoro en una cierta cantidad exacta de pasos. Por ejemplo, si el número de
+-- pasos es 5, indica si hay un tesoro en 5 pasos.
+hayTesoroEn :: Int -> Camino -> Bool
+hayTesoroEn 0 cm           = laUbicacionActualTieneTesoro cm
+hayTesoroEn n Fin          = False
+hayTesoroEn n (Nada cm)    = hayTesoroEn (n-1) cm
+hayTesoroEn n (Cofre _ cm) = hayTesoroEn (n-1) cm
 
-cantidadDeTesoros :: Camino -> Int
-cantidadDeTesoros Fin          = 0 
-cantidadDeTesoros (Nada c)     = cantidadDeTesoros c
-cantidadDeTesoros (Cofre os c) = if tieneTesoro os
-                                  then 1 + cantidadDeTesoros c
-                                  else cantidadDeTesoros c
+laUbicacionActualTieneTesoro :: Camino -> Bool
+laUbicacionActualTieneTesoro (Cofre x _) = tieneTesoro x
+laUbicacionActualTieneTesoro _           = False
+
+
+
+-- Indica si hay al menos “n” tesoros en el camino.
+
+alMenosNTesoros :: Int -> Camino -> Bool
+alMenosNTesoros 0 _  = True
+alMenosNTesoros n cm = cantTesoros cm >= n 
+
+cantTesoros :: Camino -> Int
+cantTesoros Fin             = 0
+cantTesoros (Nada cm)       = cantTesoros cm
+cantTesoros (Cofre objs cm) = contarTesoros objs + cantTesoros cm
+
+contarTesoros :: [Objeto] -> Int
+contarTesoros []     = 0
+contarTesoros (x:xs) = unoSiEsTesoro x + contarTesoros xs
+
+unoSiEsTesoro :: Objeto -> Int
+unoSiEsTesoro Tesoro = 1
+unoSiEsTesoro _      = 0
+
 
 -- Dado un rango de pasos, indica la cantidad de tesoros que hay en ese rango. Por ejemplo, si
 -- el rango es 3 y 5, indica la cantidad de tesoros que hay entre hacer 3 pasos y hacer 5. Están
 -- incluidos tanto 3 como 5 en el resultado.
 cantTesorosEntre :: Int -> Int -> Camino -> Int
-cantTesorosEntre 0 n c           = cantTesorosEn n c
-cantTesorosEntre n m (Nada c)    = cantTesorosEntre (n-1) (m-1) c
-cantTesorosEntre n m (Cofre _ c) = cantTesorosEntre (n-1) (m-1) c
+cantTesorosEntre n m cm = cantTesoros (caminoHasta (m-n+1) (caminoDesde n cm)) 
 
-cantTesorosEn :: Int -> Camino -> Int
-cantTesorosEn 0 _              = 0
-cantTesorosEn n Fin            = 0
-cantTesorosEn n (Nada cam)     = cantTesorosEn (n-1) cam
-cantTesorosEn n (Cofre os cam) = cantidadDeTesoros (Cofre os cam) + cantTesorosEn (n-1) cam
+caminoDesde :: Int -> Camino -> Camino
+caminoDesde 0 cm           = cm
+caminoDesde n Fin          = Fin
+caminoDesde n (Nada cm)    = caminoDesde (n-1) cm
+caminoDesde n (Cofre _ cm) = caminoDesde (n-1) cm
+
+caminoHasta :: Int -> Camino -> Camino
+caminoHasta 0 cm           = Fin
+caminoHasta n Fin          = Fin
+caminoHasta n (Nada cm)    = Nada (caminoHasta (n-1) cm)
+caminoHasta n (Cofre objs cm) = Cofre objs (caminoHasta (n-1) cm)
+
 
 -- 2. Tipos arbóreos
 
@@ -112,7 +139,13 @@ data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
 node1 = NodeT 5 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
 node2 = NodeT 3 (NodeT 8 (NodeT 2 EmptyT EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT)
 --nodeToList = (NodeT 3 (NodeT 4 (NodeT "B" EmptyT EmptyT) (NodeT 5 (NodeT "A" EmptyT EmptyT) (NodeT 6 EmptyT EmptyT))) (NodeT 4 EmptyT EmptyT))
-nodeToListSimple = (NodeT 5 (NodeT 4 (NodeT 6 (NodeT 10 EmptyT EmptyT) EmptyT) EmptyT) (NodeT 3 EmptyT EmptyT))
+nodeToListSimple = (NodeT 5 (
+                             NodeT 4 (
+                                       NodeT 6 (
+                                                NodeT 10 EmptyT EmptyT) 
+                                                EmptyT) 
+                                        EmptyT) 
+                            (NodeT 3 EmptyT EmptyT))
 
 -- 1. Dado un árbol binario de enteros devuelve la suma entre sus elementos.
 sumarT :: Tree Int -> Int
@@ -145,7 +178,13 @@ aparicionesT x (NodeT y n1 n2) = unoSi (x==y) + aparicionesT x n1 + aparicionesT
 -- 6. Dado un árbol devuelve los elementos que se encuentran en sus hojas.
 leaves :: Tree a -> [a]
 leaves EmptyT          = []
-leaves (NodeT x n1 n2) = x : leaves n1 ++ leaves n2
+leaves (NodeT x t1 t2) =  if sonEmpty t1 t2
+                              then x:[]
+                              else leaves t1 ++ leaves t2 
+
+sonEmpty :: Tree a -> Tree a -> Bool
+sonEmpty EmptyT EmptyT = True
+sonEmpty _ _           = False
 
 -- 7. Dado un árbol devuelve su altura.
 -- Nota: la altura de un árbol (height en inglés), también llamada profundidad, es la cantidad
@@ -153,9 +192,7 @@ leaves (NodeT x n1 n2) = x : leaves n1 ++ leaves n2
 -- La altura para EmptyT es 0, y para una hoja es 1.
 heightT :: Tree a -> Int
 heightT EmptyT          = 0
-heightT (NodeT _ n1 n2) = if tieneProfundidad n1 || tieneProfundidad n2
-                             then 1 + (max (heightT n1) (heightT n2))
-                             else 0
+heightT (NodeT _ n1 n2) = 1 + (max (heightT n1) (heightT n2))
 
 tieneProfundidad :: Tree a -> Bool
 tieneProfundidad EmptyT = False
@@ -165,7 +202,7 @@ tieneProfundidad _      = True
 -- en cada nodo del árbol.
 mirrorT :: Tree a -> Tree a
 mirrorT EmptyT          = EmptyT
-mirrorT (NodeT x n1 n2) = (NodeT x n2 n1) 
+mirrorT (NodeT x n1 n2) = (NodeT x (mirrorT n2) (mirrorT n1)) 
 
 -- 9. Dado un árbol devuelve una lista que representa el resultado de recorrerlo en modo in-order.
 -- Nota: En el modo in-order primero se procesan los elementos del hijo izquierdo, luego la raiz
@@ -215,6 +252,25 @@ data ExpA = Valor Int | Sum ExpA ExpA | Prod ExpA ExpA | Neg ExpA
     deriving Show
 
 exp1 = (Sum (Prod (Sum (Valor 1) (Valor 0)) (Prod (Valor 1) (Valor 0))) (Prod (Sum (Valor 1) (Valor 1)) (Neg (Valor 4))))
+
+-- 1. Dada una expresión aritmética devuelve el resultado evaluarla.
+eval :: ExpA -> Int
+eval (Valor m)    = m
+eval (Sum e1 e2)  = efectoDeSuma (eval e1) (eval e2) 
+eval (Prod e1 e2) = efectoDeProducto (eval e1) (eval e2) 
+eval (Neg e)      = efectoDeNegativo (eval e)
+
+efectoDeSuma :: Int -> Int -> Int
+efectoDeSuma m k = m+k
+
+efectoDeProducto :: Int -> Int -> Int
+efectoDeProducto m k = m*k
+
+efectoDeNegativo :: Int -> Int
+efectoDeNegativo m = (-m)
+
+
+
 
 -- 2. Dada una expresión aritmética, la simplifica según los siguientes criterios (descritos utilizando
 -- notación matemática convencional):

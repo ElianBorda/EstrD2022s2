@@ -85,7 +85,15 @@ data Cofre = Cofre [Objeto]
 data Mapa = Fin Cofre | Bifurcacion Cofre Mapa Mapa
     deriving Show
 
-mapa = (Bifurcacion (Cofre [Chatarra]) (Fin (Cofre [Chatarra])) (Fin (Cofre [Tesoro])))
+mapa1 = (Bifurcacion 
+            (Cofre [Chatarra]) 
+            (Fin (Cofre [Chatarra])) 
+            (Fin (Cofre [Tesoro])))
+
+mapa1 = (Bifurcacion 
+            (Cofre [Chatarra]) 
+            (Fin (Cofre [Chatarra])) 
+            (Fin (Cofre [Tesoro])))
 
 -- 1. Indica si hay un tesoro en alguna parte del mapa.
 hayTesoro :: Mapa -> Bool
@@ -98,8 +106,8 @@ poseeAlgunTesoro (Cofre objs) = tieneTesoro objs
 tieneTesoro :: [Objeto] -> Bool
 tieneTesoro []         = False
 tieneTesoro (obj:objs) = esTesoro obj || tieneTesoro objs
-
 esTesoro :: Objeto -> Bool
+
 esTesoro Tesoro = True
 esTesoro _      = False
 
@@ -136,6 +144,14 @@ generarDirecciones (Bifurcacion c m1 m2) = if poseeAlgunTesoro c
                                                     then Izq:generarDirecciones m1
                                                     else Der:generarDirecciones m2
 
+generarDirecciones :: Mapa -> [Dir]
+generarDirecciones (Fin _)               = []
+generarDirecciones (Bifurcacion c m1 m2) = if poseeAlgunTesoro c
+                                            then []
+                                            else if tieneTesoroElSiguiente m1
+                                                    then Izq:generarDirecciones m1
+                                                    else Der:generarDirecciones m2
+
 tieneTesoroElSiguiente :: Mapa -> Bool
 tieneTesoroElSiguiente (Fin c)             = poseeAlgunTesoro c
 tieneTesoroElSiguiente (Bifurcacion c _ _) = poseeAlgunTesoro c
@@ -146,3 +162,23 @@ genDir :: Mapa -> Dir
             = Der
 genDir (Bifurcacion _ m1 m2)                                      
 
+caminoAlTesoro' :: Mapa -> [Dir]
+caminoAlTesoro' (Fin c )              = []
+caminoAlTesoro' (Bifurcacion c t1 t2) = if poseeAlgunTesoro c
+                                          then [] 
+                                          else generarDireccion (caminoAlTesoro' t1 ++ caminoAlTesoro' t2)
+
+generarDireccionE :: [Dir] -> [Dir] -> [Dir]
+generarDireccionE [] [] = error "No existe un cofre"
+generarDireccionE [] ds = Der:ds
+generarDireccionE ds [] = Izq:ds
+
+generarDireccion :: Bool -> Bool -> [Dir]
+generarDireccion [] [] = []
+generarDireccion [] ds = Der:ds
+generarDireccion ds [] = Izq:ds
+
+--  4. Indica el camino de la rama más larga.
+caminoDeLaRamaMasLarga :: Mapa -> [Dir]
+caminoDeLaRamaMasLarga (Fin _) = []
+caminoDeLaRamaMasLarga (Mapa _ t1 t2) = 
