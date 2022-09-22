@@ -195,7 +195,7 @@ tieneProfundidad _      = True
 -- en cada nodo del árbol.
 mirrorT :: Tree a -> Tree a
 mirrorT EmptyT          = EmptyT
-mirrorT (NodeT x n1 n2) = (NodeT x n2 n1) 
+mirrorT (NodeT x n1 n2) = (NodeT x (mirrorT n2) (mirrorT n1)) 
 
 -- 9. Dado un árbol devuelve una lista que representa el resultado de recorrerlo en modo in-order.
 -- Nota: En el modo in-order primero se procesan los elementos del hijo izquierdo, luego la raiz
