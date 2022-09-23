@@ -92,7 +92,7 @@ laUbicacionActualTieneTesoro _           = False
 
 -- Indica si hay al menos “n” tesoros en el camino.
 
-alMenosNTesoros :: Int -> Camino -> Bool
+{- alMenosNTesoros :: Int -> Camino -> Bool
 alMenosNTesoros 0 _  = True
 alMenosNTesoros n cm = cantTesoros cm >= n 
 
@@ -107,7 +107,22 @@ contarTesoros (x:xs) = unoSiEsTesoro x + contarTesoros xs
 
 unoSiEsTesoro :: Objeto -> Int
 unoSiEsTesoro Tesoro = 1
+unoSiEsTesoro _      = 0 -}
+alMenosNTesoros :: Int -> Camino -> Bool
+alMenosNTesoros 0 _            = True
+alMenosNTesoros n Fin          = False
+alMenosNTesoros n (Nada c)     = alMenosNTesoros n c
+alMenosNTesoros n (Cofre ys c) = (restarCantTesoros ys n) == 0 || alMenosNTesoros (restarCantTesoros ys n) c
+
+restarCantTesoros :: [Objeto] -> Int -> Int
+restarCantTesoros _ 0      = 0
+restarCantTesoros [] n     = n
+restarCantTesoros (x:xs) n = restarCantTesoros xs (n-unoSiEsTesoro x)
+
+unoSiEsTesoro :: Objeto -> Int
+unoSiEsTesoro Tesoro = 1
 unoSiEsTesoro _      = 0
+
 
 
 -- Dado un rango de pasos, indica la cantidad de tesoros que hay en ese rango. Por ejemplo, si
@@ -127,6 +142,15 @@ caminoHasta 0 cm           = Fin
 caminoHasta n Fin          = Fin
 caminoHasta n (Nada cm)    = Nada (caminoHasta (n-1) cm)
 caminoHasta n (Cofre objs cm) = Cofre objs (caminoHasta (n-1) cm)
+
+cantTesoros :: Camino -> Int
+cantTesoros Fin             = 0
+cantTesoros (Nada cm)       = cantTesoros cm
+cantTesoros (Cofre objs cm) = contarTesoros objs + cantTesoros cm
+
+contarTesoros :: [Objeto] -> Int
+contarTesoros []     = 0
+contarTesoros (x:xs) = unoSiEsTesoro x + contarTesoros xs
 
 
 -- 2. Tipos arbóreos
