@@ -127,3 +127,5 @@ tieneTesoroEsteFinal (Bifurcacion c _ _) = poseeAlgunTesoro c
 tieneTesoroEsteFinal (Fin c)             = poseeAlgunTesoro c
 
 -- 3. Indica el camino al tesoro. Precondición: existe un tesoro y es único.
+caminoAlTesoro :: Mapa -> [Dir]
+caminoAlTesoro Fin
