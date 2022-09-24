@@ -128,30 +128,22 @@ unoSiEsTesoro _      = 0
 -- Dado un rango de pasos, indica la cantidad de tesoros que hay en ese rango. Por ejemplo, si
 -- el rango es 3 y 5, indica la cantidad de tesoros que hay entre hacer 3 pasos y hacer 5. Están
 -- incluidos tanto 3 como 5 en el resultado.
+
 cantTesorosEntre :: Int -> Int -> Camino -> Int
-cantTesorosEntre n m cm = cantTesoros (caminoHasta (m-n+1) (caminoDesde n cm)) 
+cantTesorosEntre 0 m cm           = contarTesoroHasta m cm
+cantTesorosEntre n m Fin          = 0
+cantTesorosEntre n m (Nada c)     = cantTesorosEntre (n-1) (m-1) c
+cantTesorosEntre n m (Cofre ys c) = cantTesorosEntre (n-1) (m-1) c 
 
-caminoDesde :: Int -> Camino -> Camino
-caminoDesde 0 cm           = cm
-caminoDesde n Fin          = Fin
-caminoDesde n (Nada cm)    = caminoDesde (n-1) cm
-caminoDesde n (Cofre _ cm) = caminoDesde (n-1) cm
-
-caminoHasta :: Int -> Camino -> Camino
-caminoHasta 0 cm           = Fin
-caminoHasta n Fin          = Fin
-caminoHasta n (Nada cm)    = Nada (caminoHasta (n-1) cm)
-caminoHasta n (Cofre objs cm) = Cofre objs (caminoHasta (n-1) cm)
-
-cantTesoros :: Camino -> Int
-cantTesoros Fin             = 0
-cantTesoros (Nada cm)       = cantTesoros cm
-cantTesoros (Cofre objs cm) = contarTesoros objs + cantTesoros cm
+contarTesoroHasta :: Int -> Camino -> Int
+contarTesoroHasta 0 _            = 0
+contarTesoroHasta m Fin          = 0
+contarTesoroHasta m (Nada c)     = contarTesoroHasta (m-1) c
+contarTesoroHasta m (Cofre ys c) = contarTesoros ys + contarTesoroHasta (m-1) c
 
 contarTesoros :: [Objeto] -> Int
 contarTesoros []     = 0
 contarTesoros (x:xs) = unoSiEsTesoro x + contarTesoros xs
-
 
 -- 2. Tipos arbóreos
 
