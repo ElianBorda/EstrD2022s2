@@ -90,12 +90,26 @@ mapa1 = (Bifurcacion
             (Fin (Cofre [Chatarra])) 
             (Fin (Cofre [Tesoro])))
 
-mapa1 = (Bifurcacion 
-            (Cofre [Chatarra]) 
-            (Fin (Cofre [Chatarra])) 
-            (Fin (Cofre [Tesoro])))
+mapa2 = (Bifurcacion 
+            (Cofre [Chatarra,Tesoro,Tesoro,Tesoro]) 
+            (Fin 
+                (Cofre [Chatarra,Tesoro,Tesoro])) 
+            (Bifurcacion 
+                (Cofre [Tesoro,Tesoro]) 
+                (Bifurcacion 
+                    (Cofre [Chatarra,Tesoro,Tesoro,Tesoro,Tesoro]) 
+                    (Fin (Cofre [Chatarra,Tesoro])) 
+                    (Bifurcacion 
+                        (Cofre [Chatarra,Tesoro]) 
+                        (Fin 
+                            (Cofre [Chatarra,Tesoro,Tesoro])) 
+                        (Fin 
+                            (Cofre [Chatarra])))) 
+                (Fin 
+                    (Cofre [Chatarra,Tesoro,Tesoro]))))
 
 -- 1. Indica si hay un tesoro en alguna parte del mapa.
+
 hayTesoro :: Mapa -> Bool
 hayTesoro (Fin c)               = poseeAlgunTesoro c
 hayTesoro (Bifurcacion c m1 m2) = poseeAlgunTesoro c || hayTesoro m1 || hayTesoro m2
@@ -106,8 +120,8 @@ poseeAlgunTesoro (Cofre objs) = tieneTesoro objs
 tieneTesoro :: [Objeto] -> Bool
 tieneTesoro []         = False
 tieneTesoro (obj:objs) = esTesoro obj || tieneTesoro objs
-esTesoro :: Objeto -> Bool
 
+esTesoro :: Objeto -> Bool
 esTesoro Tesoro = True
 esTesoro _      = False
 
@@ -127,5 +141,57 @@ tieneTesoroEsteFinal (Bifurcacion c _ _) = poseeAlgunTesoro c
 tieneTesoroEsteFinal (Fin c)             = poseeAlgunTesoro c
 
 -- 3. Indica el camino al tesoro. Precondición: existe un tesoro y es único.
-caminoAlTesoro :: Mapa -> [Dir]
-caminoAlTesoro Fin
+{- caminoAlTesoro :: Mapa -> [Dir]
+caminoAlTesoro Fin -}
+
+-- 4. Indica el camino de la rama más larga.
+caminoDeLaRamaMasLarga :: Mapa -> [Dir]
+caminoDeLaRamaMasLarga (Fin c)               = []
+caminoDeLaRamaMasLarga (Bifurcacion _ c1 c2) = obtenerCaminoLargo c1 c2 ++ elegirGrande (caminoDeLaRamaMasLarga c1) (caminoDeLaRamaMasLarga c2)
+
+obtenerCaminoLargo :: Mapa -> Mapa -> [Dir]
+obtenerCaminoLargo (Fin c1) (Fin c)              = []           
+obtenerCaminoLargo (Bifurcacion _ c1 c2) (Fin c) = [Izq]
+obtenerCaminoLargo _ _                           = [Der]
+
+elegirGrande :: [a] -> [a] -> [a]
+elegirGrande xs ys = if longitud xs > longitud ys
+                        then xs 
+                        else ys
+
+longitud :: [a] -> Int
+longitud []     = 0
+longitud (x:xs) = 1 + longitud xs
+
+
+-- 5. Devuelve los tesoros separados por nivel en el árbol.
+tesorosPorNivel :: Mapa -> [[Objeto]]
+tesorosPorNivel (Fin c)               = [tesorosDeCofre c]   
+tesorosPorNivel (Bifurcacion c t1 t2) = tesorosDeCofre c : unirTPorNivel (tesorosPorNivel t1) (tesorosPorNivel t2)
+
+tesorosDeCofre :: Cofre -> [Objeto]
+tesorosDeCofre (Cofre xs) = tesoros xs
+
+tesoros :: [Objeto] -> [Objeto]
+tesoros []     = []
+tesoros (x:xs) = if esTesoro x 
+                    then x : tesoros xs 
+                    else tesoros xs
+unirTPorNivel :: [[Objeto]] -> [[Objeto]] -> [[Objeto]]
+unirTPorNivel [] yss           = yss
+unirTPorNivel xss []           = xss 
+unirTPorNivel (xs:xss) (ys:yss)= (xs++ys) : unirTPorNivel xss yss 
+
+{-
+tesorosPorNivel t1 = [[T1,T1,T1] [T2,T2,T2,T2,T2,T2] [T3,T3,T3,T3,T3]] = tesoros a1 tesoros a2
+
+tesoros a1 = [[T2,T2,T2] [T3 T3]] = tesoros a4 tesoro a0
+tesoros a2 = [[T2,T2,T2] [T3,T3,T3]] = teosro a5 tesoro a9
+
+tesoros a4 = [[T3,T3]]
+teosoro a0 = []
+
+tesoros a5 = [[T3,t3,t3]]
+tesoroa9 = [] -}
+
+
