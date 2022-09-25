@@ -6,7 +6,7 @@ data Queue a = Q [a] [a]
 -- INV.REP
 --      * El primer elemento que entra en la cola es el primero
 --        que sale
---      * Si [b] es vacia entonces [a] es vacia
+--      * Si fs es vacia entonces bs es vacia
 
 --Crea una cola vacía.
 emptyQ :: Queue a
