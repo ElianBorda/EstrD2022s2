@@ -2,11 +2,11 @@ module QueueV1
         (Queue,emptyQ,isEmptyQ,enqueue,firstQ,dequeue)
     where
 
-data Queue a = Q [a] Int
+data Queue a = Q [a]
 
 --Crea una cola vacía.
 emptyQ :: Queue a
-emptyQ = Q [] 0 -- O(1)
+emptyQ = Q [] -- O(1)
 
 -- Dada una cola indica si la cola está vacía.
 isEmptyQ :: Queue a -> Bool

@@ -32,7 +32,11 @@ firstQ (Q xs fs) = if null fs
 
 -- Dada una cola la devuelve sin su primer elemento.
 dequeue :: Queue a -> Queue a
-dequeue (Q xs fs) = Q (tail xs)  -- O(1)
+dequeue (Q xs fs) = if null fs 
+                        then error "No hay elementos"
+                        else if null xs
+                             then Q xs (tail fs)
+                             else Q (tail xs) fs -- O(1)
 
 
 -- Subtareas

@@ -2,7 +2,7 @@ module StackV1
         (Stack,emptyS,isEmptyS,push,top,pop,lenS)
     where
 
-data Stack = S [a] Int
+data Stack a = Sa [a] Int
 
 emptyS :: Stack a
 -- Crea una pila vacía.
