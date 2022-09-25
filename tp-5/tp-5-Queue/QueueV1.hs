@@ -10,19 +10,19 @@ emptyQ = Q [] 0 -- O(1)
 
 -- Dada una cola indica si la cola está vacía.
 isEmptyQ :: Queue a -> Bool
-isEmptyQ (Q xs n) = null xs -- O(1)
+isEmptyQ (Q xs) = null xs -- O(1)
 
 -- Dados un elemento y una cola, agrega ese elemento a la cola.
 enqueue :: a -> Queue a -> Queue a
-enqueue x (Q ys n) = Q (x:ys) (n+1) -- O(1)
+enqueue x (Q ys) = Q (x:ys) -- O(1)
 
 -- Dada una cola devuelve el primer elemento de la cola.
 firstQ :: Queue a -> a
-firstQ (Q xs n) = primeroDeLista xs -- O(n)
+firstQ (Q xs) = primeroDeLista xs -- O(n)
 
 -- Dada una cola la devuelve sin su primer elemento.
 dequeue :: Queue a -> Queue a
-dequeue (Q xs n) = Q (colaDeLista xs) (n-1) -- O(n)
+dequeue (Q xs) = Q (colaDeLista xs) -- O(n)
 
 
 -- Subtareas

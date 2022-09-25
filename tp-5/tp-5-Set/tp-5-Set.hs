@@ -13,7 +13,7 @@ losQuePertenecen :: Eq a => [a] -> Set a -> [a]
 losQuePertenecen [] s     = []
 losQuePertenecen (x:xs) s = if belongs x s 
                                then x:losQuePertenecen xs s
-                               else losQuePertenecen xs s
+                               else losQuePertenecen xs s -- O(n^2)
 
 
 -- Quita todos los elementos repetidos de la lista dada utilizando un conjunto
@@ -23,7 +23,7 @@ sinRepetidos xs = sinRepetidosEnS xs (emptyS)
 
 sinRepetidosEnS :: Eq a => [a] -> Set a -> [a]
 sinRepetidosEnS [] s     = setToList s
-sinRepetidosEnS (x:xs) s = sinRepetidosEnS xs (addS x s)
+sinRepetidosEnS (x:xs) s = sinRepetidosEnS xs (addS x s) -- O(n)
 
 
 -- Dado un arbol de conjuntos devuelve un conjunto con la union de todos los
