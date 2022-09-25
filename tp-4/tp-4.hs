@@ -194,4 +194,7 @@ teosoro a0 = []
 tesoros a5 = [[T3,t3,t3]]
 tesoroa9 = [] -}
 
-
+-- 6. Devuelve todos lo caminos en el mapa.
+todosLosCaminos :: Mapa -> [[Dir]]
+todosLosCaminos Mapa
+todosLosCaminos Mapa
