@@ -1,5 +1,4 @@
 --1. Cálculo de costos
-
 head' :: [a] -> a
 head' (x:xs) = x --O(1)
 
