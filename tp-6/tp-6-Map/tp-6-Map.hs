@@ -47,3 +47,20 @@ asociarTodos (k:ks) (v:vs) = (k, fromJust v) : asociarTodos ks vs
 fromJust :: Maybe a -> a
 fromJust (Just a) = a 
 
+
+agruparEq :: Eq k => [(k, v)] -> Map k [v]
+agruparEq []          = emptyM
+agruparEq ((k,v):kvs) = assocM k (v:lookupParaLista k kvs) (agruparEq (removeK k kvs))
+
+lookupParaLista :: Eq k => k -> [(k,v)] -> [v]
+lookupParaLista k []            = []
+lookupParaLista k ((k1,v1):kvs) = if k==k1
+                                     then v1 : lookupParaLista k kvs
+                                     else lookupParaLista k kvs
+
+removeK :: Eq k => k -> [(k,v)] -> [(k,v)]
+removeK k []            = []
+removeK k ((k1,v1):kvs) = if k==k1
+                             then removeK k kvs
+                             else (k1,v1) : removeK k kvs
+
