@@ -43,3 +43,7 @@ mapToList m = asociarTodos (keys m) (valuesM m)
 asociarTodos :: Eq k => [k] -> [Maybe v] -> [(k,v)]
 asociarTodos [] []         = []
 asociarTodos (k:ks) (v:vs) = (k, fromJust v) : asociarTodos ks vs
+
+fromJust :: Maybe a -> a
+fromJust (Just a) = a 
+
