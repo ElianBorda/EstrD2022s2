@@ -64,3 +64,24 @@ removeK k ((k1,v1):kvs) = if k==k1
                              then removeK k kvs
                              else (k1,v1) : removeK k kvs
 
+incrementar :: Eq k => [k] -> Map k Int -> Map k Int
+-- Propósito: dada una lista de claves de tipo k y un map que va de k a Int, le suma uno a
+-- cada número asociado con dichas claves.
+incrementar [] m     = m
+incrementar (k:ks) m = incrementar (eliminarDe k ks) (assocM k (apariciones k (k:ks)) m)
+
+apariciones :: Eq a => a -> [a] -> Int
+apariciones _ []       = 0
+apariciones x (y:ys)   = if x==y 
+                          then 1+(apariciones x ys)
+                          else apariciones x ys
+
+eliminarDe :: Eq k => k -> [k] -> [k]
+eliminarDe k []      = []
+eliminarDe k (k1:ks) = if k==k1 
+                          then eliminarDe k ks
+                          else k1 : eliminarDe k ks 
+
+mergeMaps:: Eq k => Map k v -> Map k v -> Map k v
+-- Propósito: dado dos maps se agregan las claves y valores del primer map en el segundo. Si
+-- una clave del primero existe en el segundo, es reemplazada por la del primero.
