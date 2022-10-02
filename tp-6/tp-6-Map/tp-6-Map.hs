@@ -85,3 +85,4 @@ eliminarDe k (k1:ks) = if k==k1
 mergeMaps:: Eq k => Map k v -> Map k v -> Map k v
 -- Propósito: dado dos maps se agregan las claves y valores del primer map en el segundo. Si
 -- una clave del primero existe en el segundo, es reemplazada por la del primero.
+mergeMaps m1 m2 = agregarTodosAlMap (mapToList m2) m1
