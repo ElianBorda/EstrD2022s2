@@ -12,20 +12,19 @@ m = assocM 5 "f"
 -- Hay solo una clave unica por valor en el Map
  
 
-valuesM :: Eq k => Map k v -> [Maybe v]
--- Propósito: obtiene los valores asociados a cada clave del map.
+valuesM :: Eq k => Map k v -> [Maybe v] -- O(n^2), a cada k en listaDeValores se le aplica lookupM O(n)
 valuesM m = listaValores (keys m) m  
 
-listaValores :: Eq k => [k] -> Map k v -> [Maybe v]
+listaValores :: Eq k => [k] -> Map k v -> [Maybe v] 
 listaValores [] m     = []
 listaValores (k:ks) m = lookupM k m : listaValores ks m
 
-todasAsociadas :: Eq k => [k] -> Map k v -> Bool
+todasAsociadas :: Eq k => [k] -> Map k v -> Bool -- O(n^2), a cada k se le aplica estaEnElMap O(n) con k m 
 -- Propósito: indica si en el map se encuentran todas las claves dadas.
 todasAsociadas [] m     = True
 todasAsociadas (k:ks) m = estaEnElMap k m && todasAsociadas ks m 
 
-estaEnElMap :: Eq k => k -> Map k v -> Bool
+estaEnElMap :: Eq k => k -> Map k v -> Bool -- O
 estaEnElMap k m = elem k (keys m)
 
 listToMap :: Eq k => [(k, v)] -> Map k v
@@ -49,6 +48,8 @@ fromJust (Just a) = a
 
 
 agruparEq :: Eq k => [(k, v)] -> Map k [v]
+-- Propósito: dada una lista de pares clave valor, agrupa los valores de los pares que compartan
+-- la misma clave.
 agruparEq []          = emptyM
 agruparEq ((k,v):kvs) = assocM k (v:lookupParaLista k kvs) (agruparEq (removeK k kvs))
 
