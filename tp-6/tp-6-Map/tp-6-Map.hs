@@ -59,6 +59,12 @@ fromJust (Just a) = a
 --                                      then v1 : lookupParaLista k kvs
 --                                      else lookupParaLista k kvs
 
+-- removeK :: Eq k => k -> [(k,v)] -> [(k,v)]
+-- removeK k []            = []
+-- removeK k ((k1,v1):kvs) = if k==k1
+--                              then removeK k kvs
+--                              else (k1,v1) : removeK k kvs
+
 agruparEq :: Eq k => [(k, v)] -> Map k [v]
 -- Propósito: dada una lista de pares clave valor, agrupa los valores de los pares que compartan
 -- la misma clave.
@@ -68,29 +74,31 @@ agruparEq ((k,v):kvs) = let x = agruparEq kvs in
                                 Nothing -> assocM k [v] x
                                 Just vs -> assocM k (v:vs) x
 
-removeK :: Eq k => k -> [(k,v)] -> [(k,v)]
-removeK k []            = []
-removeK k ((k1,v1):kvs) = if k==k1
-                             then removeK k kvs
-                             else (k1,v1) : removeK k kvs
+-- incrementar :: Eq k => [k] -> Map k Int -> Map k Int
+-- -- Propósito: dada una lista de claves de tipo k y un map que va de k a Int, le suma uno a
+-- -- cada número asociado con dichas claves.
+-- incrementar [] m     = m
+-- incrementar (k:ks) m = incrementar (eliminarDe k ks) (assocM k (apariciones k (k:ks)) m)
+
+-- apariciones :: Eq a => a -> [a] -> Int
+-- apariciones _ []       = 0
+-- apariciones x (y:ys)   = if x==y 
+--                           then 1+(apariciones x ys)
+--                           else apariciones x ys
+
+-- eliminarDe :: Eq k => k -> [k] -> [k]
+-- eliminarDe k []      = []
+-- eliminarDe k (k1:ks) = if k==k1 
+--                           then eliminarDe k ks
+--                           else k1 : eliminarDe k ks 
 
 incrementar :: Eq k => [k] -> Map k Int -> Map k Int
--- Propósito: dada una lista de claves de tipo k y un map que va de k a Int, le suma uno a
--- cada número asociado con dichas claves.
+-- -- Propósito: dada una lista de claves de tipo k y un map que va de k a Int, le suma uno a
+-- -- cada número asociado con dichas claves.
 incrementar [] m     = m
-incrementar (k:ks) m = incrementar (eliminarDe k ks) (assocM k (apariciones k (k:ks)) m)
-
-apariciones :: Eq a => a -> [a] -> Int
-apariciones _ []       = 0
-apariciones x (y:ys)   = if x==y 
-                          then 1+(apariciones x ys)
-                          else apariciones x ys
-
-eliminarDe :: Eq k => k -> [k] -> [k]
-eliminarDe k []      = []
-eliminarDe k (k1:ks) = if k==k1 
-                          then eliminarDe k ks
-                          else k1 : eliminarDe k ks 
+incrementar (k:ks) m = case lookupM k (incrementar ks m) of
+                            Nothing -> incrementar ks m
+                            Just n  -> assocM k (n+1) (incrementar ks m)  
 
 mergeMaps:: Eq k => Map k v -> Map k v -> Map k v
 -- Propósito: dado dos maps se agregan las claves y valores del primer map en el segundo. Si
