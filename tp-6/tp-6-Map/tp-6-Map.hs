@@ -47,17 +47,26 @@ fromJust :: Maybe a -> a
 fromJust (Just a) = a 
 
 
+-- agruparEq :: Eq k => [(k, v)] -> Map k [v]
+-- Propósito: dada una lista de pares clave valor, agrupa los valores de los pares que compartan
+-- la misma clave.
+-- agruparEq []          = emptyM
+-- agruparEq ((k,v):kvs) = assocM k (v:lookupParaLista k kvs) (agruparEq (removeK k kvs))
+
+-- lookupParaLista :: Eq k => k -> [(k,v)] -> [v]
+-- lookupParaLista k []            = []
+-- lookupParaLista k ((k1,v1):kvs) = if k==k1
+--                                      then v1 : lookupParaLista k kvs
+--                                      else lookupParaLista k kvs
+
 agruparEq :: Eq k => [(k, v)] -> Map k [v]
 -- Propósito: dada una lista de pares clave valor, agrupa los valores de los pares que compartan
 -- la misma clave.
 agruparEq []          = emptyM
-agruparEq ((k,v):kvs) = assocM k (v:lookupParaLista k kvs) (agruparEq (removeK k kvs))
-
-lookupParaLista :: Eq k => k -> [(k,v)] -> [v]
-lookupParaLista k []            = []
-lookupParaLista k ((k1,v1):kvs) = if k==k1
-                                     then v1 : lookupParaLista k kvs
-                                     else lookupParaLista k kvs
+agruparEq ((k,v):kvs) = let x = agruparEq kvs in   
+                            case lookupM k x of
+                                Nothing -> assocM k [v] x
+                                Just vs -> assocM k (v:vs) x
 
 removeK :: Eq k => k -> [(k,v)] -> [(k,v)]
 removeK k []            = []
