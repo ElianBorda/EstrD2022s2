@@ -1,4 +1,4 @@
-import MapV1
+import MapV2
 
 m = assocM 5 "f"
     $ assocM 4 "c"
