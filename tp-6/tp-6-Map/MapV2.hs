@@ -29,18 +29,12 @@ keys :: Map k v -> [k]
 -- Propósito: devuelve las claves del map
 keys (M kvs) = listKeys kvs -- O(n)
 
-agregarSiNoExiste :: Eq k => k -> v -> [(k,v)] -> [(k,v)]
-agregarSiNoExiste k v []            = [(k,v)]
-agregarSiNoExiste k v ((k1,v1):kvs) = if k==k1 
-                                         then (k1,v1) : kvs
-                                         else (k1,v1) : agregarSiNoExiste k v kvs 
 
 valorSiEsta :: Eq k => k -> [(k,v)] -> Maybe v
 valorSiEsta k []            = Nothing
 valorSiEsta k ((k1,v1):kvs) = if k==k1 
                               then Just v1
                               else valorSiEsta k kvs
-
 
 borrar :: Eq k => k -> [(k,v)] -> [(k,v)]
 borrar k []            = []
