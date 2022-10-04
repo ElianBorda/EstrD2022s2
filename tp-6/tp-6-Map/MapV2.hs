@@ -4,7 +4,7 @@ module MapV2
 
 
 
-data Map k v = M [(k, v)]
+data Map k v = M [(k, v)] 
 
 -- INV.REP: para (M [(k, v)])
 --     no Tiene
