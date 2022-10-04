@@ -198,3 +198,89 @@ tesoroa9 = [] -}
 todosLosCaminos :: Mapa -> [[Dir]]
 todosLosCaminos Mapa
 todosLosCaminos Mapa
+
+
+
+
+
+type Presa = String -- nombre de presa
+type Territorio = String -- nombre de territorio
+type Nombre = String -- nombre de lobo
+data Lobo = Cazador Nombre [Presa] Lobo Lobo Lobo | Explorador Nombre [Territorio] Lobo Lobo | Cria Nombre
+data Manada = M Lobo
+
+prueba1 = (M (Cazador "A" ["1","2"] 
+                (Explorador "Exp1" ["Argentina", "Canada", "Venezuela"] 
+                    (Cria "Bebito1") 
+                    (Cria "Bebito2")) 
+                (Explorador "Exp2" ["Argentina", "Jamaica", "Chile"] 
+                    (Explorador "Exp3" ["Argentina", "Venezuela", "Jamaica"] 
+                        (Cria "Bebito6") 
+                        (Cria "Bebito3")) 
+                    (Explorador "Exp4" ["Chile", "Colombia"] 
+                        (Cria "Bebito8") 
+                        (Cria "Bebito231"))) 
+                (Explorador "Exp5" ["Colombia", "Rusia", "Argentina", "Jamaica"] 
+                    (Cria "Bebito123") 
+                    (Cria "Bebito312"))))
+
+prueba2 = (M (Explorador "Exp5" ["Colombia", "Rusia", "Argentina", "Jamaica"] 
+                (Cria "Bebito123") 
+                (Cria "Bebito312")))
+
+prueba3 = (M (Explorador "Exp5" ["Colombia", "Rusia", "Argentina", "Jamaica"] 
+                (Explorador "Exp1" ["Argentina", "Canada", "Venezuela"] 
+                    (Cria "Bebito1") 
+                    (Cria "Bebito2")) 
+                (Explorador "Exp2" ["Argentina", "Jamaica", "Chile"] 
+                    (Explorador "Exp3" ["Argentina", "Venezuela", "Jamaica"] 
+                        (Cria "Bebito6") 
+                        (Cria "Bebito3")) 
+                    (Explorador "Exp4" ["Chile", "Colombia"] 
+                        (Cria "Bebito8") 
+                        (Cria "Bebito231")))))
+
+pruebaAsig = [("Arg", ["Jose"]), ("Ven", ["Alberto", "Jose"]), ("Rod", ["Mig"]), ("Rus", ["Alberto"])]
+tup = ("Rus", ["Jose","Alberto", "Mig"])
+
+list1 = [("Arg", ["Jose"]), ("Ven", ["Alberto", "Ronaldo"]), ("Rus", ["jOSE"])]
+list2 = [("Arg", ["Jose"]), ("Ven", ["Alberto", "Jose"]), ("Rus", ["Alberto"])]
+
+exploradoresPorTerritorio :: Manada -> [(Territorio, [Nombre])]
+-- Propósito:dada una manada, denota la lista de los pares cuyo primer elemento es un 
+-- territorio y cuyo segundo elemento es la lista de los nombres de los exploradores
+-- que explorarondicho territorio. Los territorios no deben repetirse.
+exploradoresPorTerritorio (M l) = lobosConTerritorioExplorado l
+
+lobosConTerritorioExplorado :: Lobo -> [(Territorio, [Nombre])]
+lobosConTerritorioExplorado (Cria n)                = []
+lobosConTerritorioExplorado (Explorador n ts l1 l2) = combinarTupla (listarNombrePorTerritorio n ts) (combinarTupla (lobosConTerritorioExplorado l1) (lobosConTerritorioExplorado l2))
+lobosConTerritorioExplorado (Cazador _ _ l1 l2 l3)  = combinarTupla (lobosConTerritorioExplorado l1) (combinarTupla (lobosConTerritorioExplorado l2) (lobosConTerritorioExplorado l3))
+
+combinarTupla :: [(Territorio, [Nombre])] -> [(Territorio, [Nombre])] -> [(Territorio, [Nombre])]
+combinarTupla txs []        = txs
+combinarTupla [] tys        = tys
+combinarTupla (tx:txs) tys  = combinarTupla txs (asignarLobosEn tx tys)
+
+territorio :: (Territorio, [Nombre]) -> Territorio
+territorio (t, ns) = t 
+
+asignarLobosEn :: (Territorio, [Nombre]) -> [(Territorio, [Nombre])] -> [(Territorio, [Nombre])]
+asignarLobosEn tx []       = [] 
+asignarLobosEn tx ((t, ns):tys) = if (territorio tx)==t
+                                     then (t, asignarNombres ns (nombres tx)):tys
+                                     else (t, ns) : asignarLobosEn tx tys
+
+nombres :: (Territorio, [Nombre]) -> [Nombre]
+nombres (_, ns) = ns
+
+listarNombrePorTerritorio :: Nombre -> [Territorio] -> [(Territorio, [Nombre])]
+listarNombrePorTerritorio n []     = []
+listarNombrePorTerritorio n (t:ts) = (t, [n]) : listarNombrePorTerritorio n ts
+
+asignarNombres :: [Nombre] -> [Nombre] -> [Nombre]
+asignarNombres ns []      = ns
+asignarNombres [] ns      = ns
+asignarNombres (n:ns) ns2 = if elem n ns2
+                                then asignarNombres ns ns2
+                                else n : asignarNombres ns ns2
