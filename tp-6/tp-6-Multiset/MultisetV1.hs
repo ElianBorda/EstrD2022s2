@@ -1,14 +1,14 @@
-import MapV1 
 module MultisetV1
         (Multiset, emptyMS,addMS,ocurrencesMS,unionMS,intersectionMS,multiSetToList)
     where
+
 
 data MultiSet a = MS (Map a Int)
 
 
 emptyMS :: MultiSet a
 -- Propósito: denota un multiconjunto vacío.
-emptyM = MS (emptyM)
+emptyMS = MS (emptyM)
 
 addMS :: Ord a => a -> MultiSet a -> MultiSet a
 -- Propósito: dados un elemento y un multiconjunto, agrega una ocurrencia de ese elemento al
@@ -44,3 +44,4 @@ getOcurrence :: Ord a => a -> Map a Int -> Int
 getOcurrence a m = case lookupM a m of
                         Nothing -> 0
                         Just n  -> n 
+
