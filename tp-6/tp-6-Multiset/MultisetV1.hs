@@ -1,5 +1,5 @@
 module MultisetV1
-        (Multiset, emptyMS,addMS,ocurrencesMS,unionMS,intersectionMS,multiSetToList)
+        (MultiSet, emptyMS,addMS,ocurrencesMS,unionMS,intersectionMS,multiSetToList)
     where
 import Map
 
@@ -54,3 +54,6 @@ unionMapWith [] m m'     = emptyM
 unionMapWith (a:as) m m' = case lookupM a m' of
                                 Nothing -> assocM a (fromJust (lookupM a m)) (unionMapWith as m m')
                                 Just n  -> assocM a ((fromJust (lookupM a m))+n) (unionMapWith as m m')
+
+fromJust :: Maybe a -> a
+fromJust (Just a) = a 
