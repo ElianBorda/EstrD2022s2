@@ -114,7 +114,7 @@ indexar (x:xs) = assocM ((head (keys (indexar xs)))+1) x (indexar xs)
 ocurrencias :: String -> Map Char Int
 -- Propósito: dado un string, devuelve un map donde las claves son los caracteres que aparecen
 -- en el string, y los valores la cantidad de veces que aparecen en el mismo.
-ocurrencias []     = 
+ocurrencias []     = emptyM
 ocurrencias (c:cs) = case lookupM c (ocurrencias cs) of 
                           Nothing -> assocM c 1 (ocurrencias cs)
                           Just n  -> assocM c (n+1) (ocurrencias cs)
