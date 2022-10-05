@@ -104,3 +104,17 @@ mergeMaps:: Eq k => Map k v -> Map k v -> Map k v
 -- Propósito: dado dos maps se agregan las claves y valores del primer map en el segundo. Si
 -- una clave del primero existe en el segundo, es reemplazada por la del primero.
 mergeMaps m1 m2 = agregarTodosAlMap (mapToList m2) m1
+
+indexar :: [a] -> Map Int a
+-- Propósito: dada una lista de elementos construye un map que relaciona cada elemento con
+-- su posición en la lista.
+indexar []     = emptyM
+indexar (x:xs) = assocM ((head (keys (indexar xs)))+1) x (indexar xs)
+
+ocurrencias :: String -> Map Char Int
+-- Propósito: dado un string, devuelve un map donde las claves son los caracteres que aparecen
+-- en el string, y los valores la cantidad de veces que aparecen en el mismo.
+ocurrencias []     = 
+ocurrencias (c:cs) = case lookupM c (ocurrencias cs) of 
+                          Nothing -> assocM c 1 (ocurrencias cs)
+                          Just n  -> assocM c (n+1) (ocurrencias cs)
