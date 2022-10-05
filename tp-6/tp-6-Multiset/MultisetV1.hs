@@ -1,3 +1,4 @@
+import MapV1 
 module MultisetV1
         (Multiset, emptyMS,addMS,ocurrencesMS,unionMS,intersectionMS,multiSetToList)
     where
