@@ -1,3 +1,4 @@
+import MapSV1
 module MultisetV1
         (Multiset, emptyMS,addMS,ocurrencesMS,unionMS,intersectionMS,multiSetToList)
     where
@@ -23,7 +24,7 @@ ocurrencesMS a (MS m) = getOcurrence a m
 unionMS :: Ord a => MultiSet a -> MultiSet a -> MultiSet a (opcional)
 -- Propósito: dados dos multiconjuntos devuelve un multiconjunto con todos los elementos de
 -- ambos multiconjuntos.
-unionMS a b = undefined
+unionMS 
 
 intersectionMS :: Ord a => MultiSet a -> MultiSet a -> MultiSet a (opcional)
 -- Propósito: dados dos multiconjuntos devuelve el multiconjunto de elementos que ambos
