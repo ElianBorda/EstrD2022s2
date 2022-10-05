@@ -1,4 +1,4 @@
-module MapSV1
+module Map
         (Map,emptyM,assocM,lookupM,deleteM,keys)
     where
         

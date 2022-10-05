@@ -1,8 +1,7 @@
-import MapSV1
 module MultisetV1
         (Multiset, emptyMS,addMS,ocurrencesMS,unionMS,intersectionMS,multiSetToList)
     where
-
+import Map
 
 data MultiSet a = MS (Map a Int)
 
@@ -21,12 +20,12 @@ ocurrencesMS :: Ord a => a -> MultiSet a -> Int
 -- elemento en el multiconjunto.
 ocurrencesMS a (MS m) = getOcurrence a m 
 
-unionMS :: Ord a => MultiSet a -> MultiSet a -> MultiSet a (opcional)
+unionMS :: Ord a => MultiSet a -> MultiSet a -> MultiSet a 
 -- Propósito: dados dos multiconjuntos devuelve un multiconjunto con todos los elementos de
 -- ambos multiconjuntos.
-unionMS 
+unionMS (MS m) (MS m') = MS (unionMap m m') 
 
-intersectionMS :: Ord a => MultiSet a -> MultiSet a -> MultiSet a (opcional)
+intersectionMS :: Ord a => MultiSet a -> MultiSet a -> MultiSet a 
 -- Propósito: dados dos multiconjuntos devuelve el multiconjunto de elementos que ambos
 -- multiconjuntos tienen en común.
 intersectionMS a b = undefined
@@ -46,3 +45,12 @@ getOcurrence a m = case lookupM a m of
                         Nothing -> 0
                         Just n  -> n 
 
+unionMap :: Ord a => Map a Int -> Map a Int -> Map a Int 
+unionMap m m' = unionMapWith (keys m) m m'
+
+unionMapWith :: Ord a => [a] -> Map a Int -> Map a Int -> Map a Int
+-- Precond: Todos los elementos de [a] estan en m
+unionMapWith [] m m'     = emptyM
+unionMapWith (a:as) m m' = case lookupM a m' of
+                                Nothing -> assocM a (fromJust (lookupM a m)) (unionMapWith as m m')
+                                Just n  -> assocM a ((fromJust (lookupM a m))+n) (unionMapWith as m m')
