@@ -29,7 +29,7 @@ empleadosDelSector :: SectorId -> Empresa -> [Empleado]
 -- Precond: existe un sector con el id dado
 empleadosDelSector r (ConsE m1 m2) = case lookupM r m1 of 
                                           Nothing -> error "No existe un sector con ese id"
-                                          Just s  -> setToList s
+                                          Just st  -> setToList st
 
 todosLosCUIL :: Empresa -> [CUIL]
 -- Propósito: indica todos los CUIL de empleados de la empresa.
@@ -49,21 +49,27 @@ agregarSector r (ConsE m1 m2) = (ConsE (assocM r emptyS m1) m2)
 agregarEmpleado :: [SectorId] -> CUIL -> Empresa -> Empresa
 -- Propósito: agrega un empleado a la empresa, en el que trabajará en dichos sectores y tendrá
 -- el CUIL dado.
--- Costo: calcular.
+-- Costo: O(S + logE)
 agregarEmpleado rs c (ConsE m1 m2) = let emp = consEmpleado c
-                                         m2' = assocM c emp m2 
+                                         m2' = assocM c emp m2
                                          in ConsE (agregarEmpleado' rs emp m1) m2'
 
 agregarEmpleado' :: [SectorId] -> Empleado -> Map SectorId (Set Empleado) -> Map SectorId (Set Empleado)
-agregarEmpleado' [] emp m
-agregarEmpleado' (r:rs) emp m = let s = 
+agregarEmpleado' [] emp m     = m
+agregarEmpleado' (r:rs) emp m = case lookupM r m of
+                                     Nothing -> agregarEmpleado' rs emp m 
+                                     Just st -> agregarEmpleado' rs emp (assocM r (addS emp st) m)
 
 
 agregarASector :: SectorId -> CUIL -> Empresa -> Empresa
 -- Propósito: agrega un sector al empleado con dicho CUIL.
--- Costo: calcular.
+-- Costo: (logS + logE)
+agregarASector sid c (ConsE m1 m2) = let emp = fromJust (lookupM c m2)
+                                         st  = fromJust (lookupM sid m1)
+                                         in assocM sid (addS emp st) m1 
 
 borrarEmpleado :: CUIL -> Empresa -> Empresa
 -- Propósito: elimina al empleado que posee dicho CUIL.
 -- Costo: calcular
+borrarEmpleado c (ConsE m1 m2) = 
                       
