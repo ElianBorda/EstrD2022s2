@@ -6,8 +6,13 @@ data Empresa = ConsE (Map SectorId (Set Empleado)) (Map CUIL Empleado)
 
 {- 
     INV.REP: Para (ConsE (Map SectorId (Set Empleado)) (Map CUIL Empleado))
-        * Map es un BST
-        * Set es un BST
+        * Cuando se borra el empleado del sector, se borra
+          en los registros.
+        * Si el empleado esta en m1 entonces esta en m2 y viseversa.
+        * Un empleado puede estar en mas de un conjunto.
+        * La CUIL es unica por empleado.
+
+
 -}
 
 consEmpresa :: Empresa
@@ -71,5 +76,11 @@ agregarASector sid c (ConsE m1 m2) = let emp = fromJust (lookupM c m2)
 borrarEmpleado :: CUIL -> Empresa -> Empresa
 -- Propósito: elimina al empleado que posee dicho CUIL.
 -- Costo: calcular
-borrarEmpleado c (ConsE m1 m2) = 
+borrarEmpleado c (ConsE m1 m2) = let (emp, m2') = splitEmpleado c m2
+                                     in ConsE (sacarEmpleadoEn emp m1) m2'
+
+splitEmpleado :: CUIL -> Map CUIL Empleado -> (Empleado, Map CUIL Empleado)
+splitEmpleado c mp -> (fromJust (lookupM c mp), deleteM c mp)
+
+sacarEmpleadoEn :: Empleado -> Map SectorId (Set Empleado) -> 
                       
