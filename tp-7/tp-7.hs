@@ -210,9 +210,18 @@ ocurrencias (c:cs) = case lookupM c (ocurrencias cs) of
                           Nothing -> assocM c 1 (ocurrencias cs)
                           Just n  -> assocM c (n+1) (ocurrencias cs)
 
+-- Ejercicio 5
+
 comenzarCon :: [SectorId] -> [CUIL] -> Empresa
 -- Propósito: construye una empresa con la información de empleados dada. Los sectores no
 -- tienen empleados.
 -- Costo: calcular.
-comenzarCon [] 
-    
+comenzarCon rs cs = agregarSectores rs (agregarEmpleadosSinSectores cs consEmpresa)
+
+agregarEmpleadosSinSectores :: [CUIL] -> Empresa -> Empresa
+agregarEmpleadosSinSectores [] e     = e
+agregarEmpleadosSinSectores (c:cs) e = agregarEmpleado [] c (agregarEmpleadosSinSectores cs e) 
+
+agregarSectores :: [SectorId] -> Empresa -> Empresa
+agregarSectores [] e     = e
+agregarSectores (r:rs) e = agregarSectores rs (agregarSector r e) 

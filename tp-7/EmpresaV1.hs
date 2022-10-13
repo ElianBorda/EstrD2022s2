@@ -56,23 +56,23 @@ agregarSector :: SectorId -> Empresa -> Empresa
 -- Costo: O(logS)
 agregarSector r (ConsE m1 m2) = (ConsE (assocM r emptyS m1) m2)
 
-agregarEmpleado :: [SectorId] -> CUIL -> Empresa -> Empresa
+agregarEmpleado :: [SectorId] -> CUIL -> Empresa -> Empresa -- (S log S) + (log E)
 -- Propósito: agrega un empleado a la empresa, en el que trabajará en dichos sectores y tendrá
 -- el CUIL dado.
--- Costo: O(S + logE)
-agregarEmpleado rs c (ConsE m1 m2) = let emp = incorporarSectores rs (consEmpleado c)
-                                         m2' = assocM c emp m2
-                                         in ConsE (agregarEmpleado' rs emp m1) m2'
+-- Costo: O()
+agregarEmpleado rs c (ConsE m1 m2) = let emp = consEmpleado c -- emp = incorporarSectores rs (consEmpleado c)
+                                         m2' = assocM c emp m2 -- --> (log E)
+                                         in ConsE (agregarEmpleado' rs emp m1) m2' -- --> (S log S)
 
-incorporarSectores :: [SectorId] -> Empleado -> Empleado
+-- incorporarSectores :: [SectorId] -> Empleado -> Empleado
 -- ############################### 
 
 
-agregarEmpleado' :: [SectorId] -> Empleado -> Map SectorId (Set Empleado) -> Map SectorId (Set Empleado)
+agregarEmpleado' :: [SectorId] -> Empleado -> Map SectorId (Set Empleado) -> Map SectorId (Set Empleado) -- --> (S log S) A cada elemento de una lista se le aplica procesos logaritmicos
 agregarEmpleado' [] emp m     = m
-agregarEmpleado' (r:rs) emp m = case lookupM r m of
+agregarEmpleado' (r:rs) emp m = case lookupM r m of -- --> logS Buscamos, en el map con sectores, el sector dado.
                                      Nothing -> agregarEmpleado' rs emp m 
-                                     Just st -> agregarEmpleado' rs emp (assocM r (addS emp st) m)
+                                     Just st -> agregarEmpleado' rs emp (assocM r (addS emp st) m) -- --> (log S) A un elemento se le aplica 2 procesos logaritmicos 
 
 
 agregarASector :: SectorId -> CUIL -> Empresa -> Empresa
