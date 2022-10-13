@@ -1,7 +1,12 @@
+import EmpresaV1
 
-
-{-
 -- Ejercicio 1
+
+-- Indicar el costo de heapsort :: Ord a => [a] -> [a] (de la práctica anterior) suponiendo que
+-- el usuario utiliza una priority queue con costos logarítmicos de inserción y borrado (o sea, usa una
+-- Heap como tipo de representación).
+
+
 heapSort :: Ord a => [a] -> [a] -- O(n)
 heapSort xs = ordEnPQ xs (emptyPQ)
 
@@ -12,11 +17,15 @@ ordEnPQ (x:xs) pq = ordEnPQ xs (insertPQ x pq)
 obtenerListaPQ :: Ord a => PriorityQueue a -> [a] -- O(n)
 obtenerListaPQ pq = if isEmptyPQ pq 
                        then []
-                       else (findMinPQ pq) : obtenerListaPQ (deleteMinPQ pq)
--}
+                       else (findMinPQ pq) : obtenerListaPQ (deleteMinPQ pq)    
+
+
 -- Ejercicio 2
 
-data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
+-- Implementar las siguientes funciones suponiendo que reciben un árbol binario que cumple los
+-- invariantes de BST y sin elementos repetidos (despreocuparse por el hecho de que el árbol puede
+-- desbalancearse al insertar o borrar elementos). En todos los costos, N es la cantidad de elementos
+-- del árbol. Justificar por qué la implementación satisface los costos dados.
 
 belongsBST :: Ord a => a -> Tree a -> Bool
 -- Propósito: dado un BST dice si el elemento pertenece o no al árbol.
@@ -201,9 +210,9 @@ ocurrencias (c:cs) = case lookupM c (ocurrencias cs) of
                           Nothing -> assocM c 1 (ocurrencias cs)
                           Just n  -> assocM c (n+1) (ocurrencias cs)
 
--- Ejercicio 4
-
-type SectorId = Int
-type CUIL = Int
-data Empresa = ConsE (Map SectorId (Set Empleado)) (Map CUIL Empleado)
-
+comenzarCon :: [SectorId] -> [CUIL] -> Empresa
+-- Propósito: construye una empresa con la información de empleados dada. Los sectores no
+-- tienen empleados.
+-- Costo: calcular.
+comenzarCon [] 
+    
