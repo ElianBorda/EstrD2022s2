@@ -55,9 +55,13 @@ agregarEmpleado :: [SectorId] -> CUIL -> Empresa -> Empresa
 -- Propósito: agrega un empleado a la empresa, en el que trabajará en dichos sectores y tendrá
 -- el CUIL dado.
 -- Costo: O(S + logE)
-agregarEmpleado rs c (ConsE m1 m2) = let emp = consEmpleado c
+agregarEmpleado rs c (ConsE m1 m2) = let emp = incorporarSectores rs (consEmpleado c)
                                          m2' = assocM c emp m2
                                          in ConsE (agregarEmpleado' rs emp m1) m2'
+
+incorporarSectores :: [SectorId] -> Empleado -> Empleado
+-- ############################### 
+
 
 agregarEmpleado' :: [SectorId] -> Empleado -> Map SectorId (Set Empleado) -> Map SectorId (Set Empleado)
 agregarEmpleado' [] emp m     = m
@@ -82,5 +86,20 @@ borrarEmpleado c (ConsE m1 m2) = let (emp, m2') = splitEmpleado c m2
 splitEmpleado :: CUIL -> Map CUIL Empleado -> (Empleado, Map CUIL Empleado)
 splitEmpleado c mp -> (fromJust (lookupM c mp), deleteM c mp)
 
-sacarEmpleadoEn :: Empleado -> Map SectorId (Set Empleado) -> 
-                      
+sacarEmpleadoEn :: Empleado -> Map SectorId (Set Empleado) -> Map SectorId (Set Empleado)
+sacarEmpleadoEn emp m1 -> eliminarEmpleado (sectores emp) emp m1
+
+eliminarEmpleado :: [SectorId] -> Empleado -> Map SectorId (Set Empleado) -> Map SectorId (Set Empleado)
+eliminarEmpleado [] emp m1     = m1 
+eliminarEmpleado (r:rs) emp m1 = eliminarEmpleado rs emp (assocM r (removeS emp (fromJust (lookupM r m1))) m1)
+
+
+{- agregarEmpleado, agregarSector, borrarEmpleado
+    * Falta manipular los SectorId dentro del empleado
+    * El empleado tiene en su estructura una lista de sectorId
+      que son todos los sectores en el que trabaja el Empleado.
+   
+   FALTA CALCULAR LOS COSTOS!!! 
+   
+ -}
+
