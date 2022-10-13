@@ -1,3 +1,8 @@
+module EmpresaV1
+        (Empresa,consEmpresa,buscarPorCUIL,empleadosDelSector,todosLosCUIL,todosLosSectores
+        agregarSector,agregarEmpleado,agregarASector,borrarEmpleado)
+    where
+
 -- Ejercicio 4
 
 type SectorId = Int
@@ -100,6 +105,6 @@ eliminarEmpleado (r:rs) emp m1 = eliminarEmpleado rs emp (assocM r (removeS emp 
       que son todos los sectores en el que trabaja el Empleado.
    
    FALTA CALCULAR LOS COSTOS!!! 
-   
+
  -}
 

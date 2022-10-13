@@ -1,3 +1,5 @@
+import EmpresaV1
+
 -- Ejercicio 1
 
 -- Indicar el costo de heapsort :: Ord a => [a] -> [a] (de la práctica anterior) suponiendo que
@@ -207,5 +209,6 @@ ocurrencias []     = emptyM
 ocurrencias (c:cs) = case lookupM c (ocurrencias cs) of 
                           Nothing -> assocM c 1 (ocurrencias cs)
                           Just n  -> assocM c (n+1) (ocurrencias cs)
+
 
     
