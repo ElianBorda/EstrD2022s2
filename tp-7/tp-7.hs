@@ -200,3 +200,10 @@ ocurrencias []     = emptyM
 ocurrencias (c:cs) = case lookupM c (ocurrencias cs) of 
                           Nothing -> assocM c 1 (ocurrencias cs)
                           Just n  -> assocM c (n+1) (ocurrencias cs)
+
+-- Ejercicio 4
+
+type SectorId = Int
+type CUIL = Int
+data Empresa = ConsE (Map SectorId (Set Empleado)) (Map CUIL Empleado)
+
