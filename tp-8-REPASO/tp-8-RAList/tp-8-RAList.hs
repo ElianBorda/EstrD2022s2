@@ -67,19 +67,22 @@ deleteLastElem 0 mp hp = (deleteM 0 mp, hp)
 deleteLastElem n mp hp = case lookupM mp n of 
                               Just v -> deleteLastElem (n-1) mp (insert v hp)
 
-set :: Ord a => Int -> a -> RAList a -> RAList a
--- Propósito: reemplaza el elemento en la posición dada.
--- Precondición: el índice debe existir.
--- Eficiencia: O(N log N).
-set m a (MkR n mp hp) = set' m a (n-1) (MkR n mp hp) 
+-- set :: Ord a => Int -> a -> RAList a -> RAList a
+-- -- Propósito: reemplaza el elemento en la posición dada.
+-- -- Precondición: el índice debe existir.
+-- -- Eficiencia: O(N log N).
+-- set m a (MkR n mp hp) = set' m a (n-1) (MkR n mp hp) 
 
-set' :: Ord a => Int -> a -> Int -> RAList a -> RAList a -- O(N log N)
-set' m a 0 (MkR n mp hp) =if 0==m
-                              then MkR n (assocM 0 a mp) (insertH a hp)
-                              else MkR n mp (insertH (fromJust (lookupM mp 0)) hp)
-set' m a k (MkR n mp hp) = if k==m 
-                              then set' m a (k-1) (MkR n (assocM m a mp) (insertH a hp))
-                              else set' m a (k-1) (MkR n mp (insertH (fromJust (lookupM mp k)) hp))
+-- set' :: Ord a => Int -> a -> Int -> RAList a -> RAList a -- O(N log N)
+-- set' m a 0 (MkR n mp hp) =if 0==m
+--                              then MkR n (assocM 0 a mp) (insertH a hp)
+--                              else MkR n mp (insertH (fromJust (lookupM mp 0)) hp)
+-- set' m a k (MkR n mp hp) = if k==m
+--                               then set' m a (k-1) (MkR n (assocM m a mp) (insertH a hp))
+--                               else set' m a (k-1) (MkR n mp (insertH (fromJust (lookupM mp k)) hp))
+
+set :: Ord a => Int -> a -> RAList a -> RAList a
+set m a (MkR n mp hp) = MkR n ... ...
 
 addAt :: Ord a => Int -> a -> RAList a -> RAList a
 -- Propósito: agrega un elemento en la posición dada.
