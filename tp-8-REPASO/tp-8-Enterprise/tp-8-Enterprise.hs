@@ -13,3 +13,30 @@ tripulantesDeLosSectoresEn [] n     = emptyS
 tripulantesDeLosSectoresEn [s:ss] n = let setT1 = tripulantesDe s n
                                           setT2 = tripulantesDeLosSectoresEn ss n
                                           in union setT1 setT2
+
+
+-- b)
+bajaDeTripulante :: Tripulante -> Nave -> Nave
+-- PROPOSITO: Elimina al tripulante de la nave.
+-- PISTA: Considere reconstruir la nave sin ese tripulante.
+bajaDeTripulante t n = let s  = sectorDe t n
+                           ts = tripulantesDeSectorSin s n t 
+                           ss = sectores n
+                           n' = naveVacia ss 
+                           ss'= sectorDe n'
+                           in reconstruirNaveCon ss ts ss' n' s
+
+tripulantesDeSectorSin :: Sector -> Nave -> Tripulante -> [Tripulante]
+-- PROPOSITO: Devuelve todos los tripulantes que estaban en el sector de la nave sin el tripulante dado.
+-- PRECONDICION: El sector esta en la nave. 
+tripulantesDeSectorSin s n t = let setT = tripulantesDe s n
+                                   in set2list (removeS t setT)
+
+reconstruirNaveCon :: [Sector] -> [Tripulante] -> [Sector] -> Nave -> Sector -> Nave
+-- PROPOSITO: Devuelve la nave con los sectores y sus tripulantes, asignandole a un solo sector los tripulantes dados.
+-- PRECONDICION: Los sectores dados poseen tripulantes.
+reconstruirNaveCon [] ts [] n sec 
+reconstruirNaveCon (s:ss) ts (f:fs) n sec = let gs = set2list
+                                             if s==sec 
+                                                then 
+                                                else s reconstruirNaveCon ss ts n sec
