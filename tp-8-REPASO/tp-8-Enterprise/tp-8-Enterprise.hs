@@ -1,6 +1,7 @@
 -- a)
 tripulantes :: Nave -> Set Tripulante
 -- PROPOSITO: Denota los tripulantes de la nave
+-- EFICIENCIA: O(S (S log S)) porque el sector que mas fuerza tiene con respecto a los costos es "tripulantesDeLosSectoresEn".
 tripulantes n = let ss = sectores n
                 in tripulantesDeLosSectoresEn ss n
 
