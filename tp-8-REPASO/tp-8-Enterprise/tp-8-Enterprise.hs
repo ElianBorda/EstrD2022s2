@@ -35,8 +35,22 @@ tripulantesDeSectorSin s n t = let setT = tripulantesDe s n
 reconstruirNaveCon :: [Sector] -> [Tripulante] -> [Sector] -> Nave -> Sector -> Nave
 -- PROPOSITO: Devuelve la nave con los sectores y sus tripulantes, asignandole a un solo sector los tripulantes dados.
 -- PRECONDICION: Los sectores dados poseen tripulantes.
-reconstruirNaveCon [] ts [] n sec 
+reconstruirNaveCon [] ts [] n sec         = 
 reconstruirNaveCon (s:ss) ts (f:fs) n sec = let gs = set2list
                                              if s==sec 
                                                 then 
                                                 else s reconstruirNaveCon ss ts n sec
+
+
+-- Esquema de ayuda
+
+transportar :: [Sector] -> Nave -> [Sector] -> Nave -> Nave
+-- PROPOSITO: Devuelve una nave cuyos sectores tienen los tripulantes de los sectores de otra nave.
+-- PRECONDICION: ss2 tiene mas sectores que ss1.
+transportar [] n1 ss2 n2            = n2
+transportar (s1:ss1) n1 [s2:ss2] n2 = let ts = set2list (tripulantesDe s1 n1)
+                                          in transportar ss1 n1 ss2 (agregarTripulantes ts s2 n2) 
+
+agregarTripulantes :: [Tripulante] -> Sector -> Nave -> Nave
+agregarTripulantes [] s n     = n
+agregarTripulantes (t:ts) s n = agregarTripulantes ss (agregarTripulante t s n2) 
