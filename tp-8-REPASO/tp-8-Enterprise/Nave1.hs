@@ -55,6 +55,7 @@ sectorDe :: Tripulante -> Nave -> Sector
 -- Propósito: Devuelve el sector en el que se encuentra un tripulante.
 -- Precondición: el tripulante pertenece a la nave.
 -- Costo: O(S log S log P) siendo S la cantidad de sectores y P la cantidad de tripulantes.
+sectorDe t (NkM mp hp tp) = 
 
 agregarTripulante :: Tripulante -> Sector -> Nave -> Nave
 -- Propósito: Agrega un tripulante a ese sector de la nave.
