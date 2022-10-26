@@ -15,11 +15,18 @@ naveVacia :: [Sector] -> Nave
 -- Propósito: Crea una nave con todos esos sectores sin tripulantes.
 -- Precondición: la lista de sectores no está vacía
 -- Costo: O(S log S) siendo S la cantidad de sectores de la lista.
-naveVacia ss = MkN (assocAllM ss emptyS) emptyH (head ss, 0)
+naveVacia ss = MkN (assocAllM ss emptyS emptyM) emptyH (head ss, 0)
 
-tripulantesDe :: Sector -> Nave -> Set Tripulante
--- Propósito: Obtiene los tripulantes de un sector.
--- Costo: O(log S) siendo S la cantidad de sectores.
+assocAllM :: [Sector] -> Set Tripulante -> Map Sector (Set Tripulante) -> Map Sector (Set Tripulante)
+-- Proposito: Devuelve todos los sectores sin tripulantes asociados.
+-- Costo
+assocAllM (s:[]) setT mapS = assocM s setT mapS
+assocAllM (s:ss) setT mapS = let mapS' = assocM s setT mapS
+                                 in assocAllM ss setT mapS' 
+
+tripulantesDe :: Sector -> Nave -> Ses de un sector.
+-- Costo: O(log S) siendo S la cantet Tripulante
+-- Propósito: Obtiene los tripulantidad de sectores.
 
 sectores :: Nave -> [Sector]
 -- Propósito: Denota los sectores de la nave
