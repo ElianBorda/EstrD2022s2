@@ -119,6 +119,8 @@ cambiarTripulantesDe n1 n2 (s:ss) = let setT = tripulantesDe s n1
 
 
 
+
+
 -- bajaDeTripulante :: Tripulante -> Nave -> Nave
 -- -- PROPOSITO: Elimina al tripulante de la nave.
 -- -- PISTA: Considere reconstruir la nave sin ese tripulante.
