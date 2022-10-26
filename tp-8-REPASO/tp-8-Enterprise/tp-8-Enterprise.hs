@@ -62,6 +62,14 @@ sinElSector (s1:ss1) s2 = if s1==s2
                              then ss1
                              else s1 : sinElSector ss1 s2                                   
 
+cambiarTripulantesDe :: Nave -> Nave -> [Sector] -> Nave
+-- PROPOSITO: Devuelve una nave con los tripulantes de n1 en n2 en los sectores dados
+-- PRECONDICION: Ambas naves tienen los sectores dados
+cambiarTripulantesDe n1 n2 []     = n2
+cambiarTripulantesDe n1 n2 (s:ss) = let setT = tripulantesDe s n1
+                                        n2'  = agregarTripulantes setT s n2 
+                                        in cambiarTripulantesDe n1 n2' ss
+
 
 
 
