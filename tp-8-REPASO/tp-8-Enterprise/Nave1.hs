@@ -28,24 +28,28 @@ assocAllM (s:ss) setT mapS = let mapS' = assocM s setT mapS
 tripulantesDe :: Sector -> Nave -> Set Tripulante
 -- Propósito: Obtiene los tripulantes de un sector.
 -- Costo: O(log S) siendo S la cantidad de sectores. 
-tripulantesDe 
+tripulantesDe s (MkN mp hp tp) = fromJust (lookupM mp s)
 
 sectores :: Nave -> [Sector]
 -- Propósito: Denota los sectores de la nave
 -- Costo: O(S) siendo S la cantidad de sectores.
+sectores (MkN mp hp tp) = domM mp
 
 conMayorRango :: Nave -> Tripulante
 -- Propósito: Denota el tripulante con mayor rango.
 -- Precondición: la nave no está vacía.
 -- Costo: O(1).
+conMayorRango (MkN mp hp tp) = findMin hp
 
 conMasTripulantes :: Nave -> Sector
 -- Propósito: Denota el sector de la nave con más tripulantes.
 -- Costo: O(1).
+conMasTripulantes (MkN mp hp (s, n)) = s 
 
 conRango :: Rango -> Nave -> Set Tripulante
 -- Propósito: Denota el conjunto de tripulantes con dicho rango.
 -- Costo: O(P log P) siendo P la cantidad de tripulantes.
+conRango r (NkM mp hp tp) = 
 
 sectorDe :: Tripulante -> Nave -> Sector
 -- Propósito: Devuelve el sector en el que se encuentra un tripulante.
