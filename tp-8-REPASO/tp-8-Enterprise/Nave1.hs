@@ -19,14 +19,16 @@ naveVacia ss = MkN (assocAllM ss emptyS emptyM) emptyH (head ss, 0)
 
 assocAllM :: [Sector] -> Set Tripulante -> Map Sector (Set Tripulante) -> Map Sector (Set Tripulante)
 -- Proposito: Devuelve todos los sectores sin tripulantes asociados.
--- Costo
+-- Costo: O(S log S) S como la cantidad de sectores sin tripulantes, por cada sector se le aplica "assocM" que es
+-- que es (log S). 
 assocAllM (s:[]) setT mapS = assocM s setT mapS
 assocAllM (s:ss) setT mapS = let mapS' = assocM s setT mapS
                                  in assocAllM ss setT mapS' 
 
-tripulantesDe :: Sector -> Nave -> Ses de un sector.
--- Costo: O(log S) siendo S la cantet Tripulante
--- Propósito: Obtiene los tripulantidad de sectores.
+tripulantesDe :: Sector -> Nave -> Set Tripulante
+-- Propósito: Obtiene los tripulantes de un sector.
+-- Costo: O(log S) siendo S la cantidad de sectores. 
+tripulantesDe 
 
 sectores :: Nave -> [Sector]
 -- Propósito: Denota los sectores de la nave

@@ -8,12 +8,11 @@ tripulantes n = let ss = sectores n
 tripulantesDeLosSectoresEn :: [Sector] -> Nave -> Set Tripulante
 -- PROPOSITO: Devuelve todos los tripulantes de los sectores en una nave.
 -- PRECONDICION: Los sectores existen en la nave.
--- EFICIENCIA: O(S (S log S)) teniendo S como cada sector, a cada S se le aplica "union setT1 setT2" de costo O(S log S) 
+-- EFICIENCIA: O(s(log S + T log T)) 
 tripulantesDeLosSectoresEn [] n     = emptyS
 tripulantesDeLosSectoresEn [s:ss] n = let setT1 = tripulantesDe s n
                                           setT2 = tripulantesDeLosSectoresEn ss n
                                           in union setT1 setT2
-
 
 -- b)
 bajaDeTripulante :: Tripulante -> Nave -> Nave
