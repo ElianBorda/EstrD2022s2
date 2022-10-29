@@ -1,3 +1,4 @@
+#include<iostream>
 using namespace std;
 
 // Ejercicio 3
@@ -8,8 +9,6 @@ struct Par {
     int x;
     int y;
 };
-
-typedef struct Par Par;
 
 
 // Propósito: construye un par

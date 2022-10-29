@@ -1,10 +1,11 @@
-using namespace std;
+#include<iostream>
 #include "Par.h"
+using namespace std;
+
 
 Par consPar(int x, int y){
     Par p;
-    p.x = x;
-    p.y = y;
+    p.x = x; p.y = y;
     return(p);
 }
 
