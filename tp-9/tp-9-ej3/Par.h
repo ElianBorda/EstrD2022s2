@@ -9,6 +9,9 @@ struct Par {
     int y;
 };
 
+typedef struct Par Par;
+
+
 // Propósito: construye un par
 Par consPar(int x, int y);
 
