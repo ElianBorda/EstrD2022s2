@@ -24,7 +24,7 @@ int energia(Pokemon p){
 
 void perderEnergia(int energia, Pokemon p){
     if(p->vida > energia){
-        p->vida - energia;
+        p->vida = p->vida - energia;
     }
     else{
         p->vida = 0;
@@ -32,7 +32,7 @@ void perderEnergia(int energia, Pokemon p){
 }
 
 bool superaA(Pokemon p1, Pokemon p2){
-    
+
     if(p1->tipo == "Agua" && p2->tipo == "Fuego"){
         return true;
     } 
