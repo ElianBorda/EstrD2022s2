@@ -12,7 +12,7 @@ Entrenador consEntrenador(string nombre, int cantidad, Pokemon* pokemon){
     Entrenador e = new EntrenadorSt;
     e->nombre = nombre;
     e->cantPokemon = cantidad;
-    e->pokemon = new Pokemon[cantidad];
+    e->pokemon = pokemon;
     return e;
 }
 
@@ -39,4 +39,7 @@ Pokemon pokemonNro(int i, Entrenador e){
    return e->pokemon[i];
 }
 
+bool leGanaATodos(Entrenador e1, Entrenador e2){
+    return false;
+}
 
