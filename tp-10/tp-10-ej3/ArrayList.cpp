@@ -39,23 +39,22 @@ void set(int i, int x, ArrayList xs){
 }
 
 void resize(int capacidad, ArrayList xs){
-
     int* array = xs->elementos;
     xs->elementos = new int[capacidad];
-
-    if (xs->cantidad < capacidad){
+    if(xs->capacidad <= capacidad && xs->cantidad <= capacidad){
         for (int i = 0; i < xs->cantidad; i++){
             xs->elementos[i] = array[i];
         }
-    }
-    else {
-        for (int i = 0; i < capacidad; i++){
+    } else {
+        for(int i = 0; i < capacidad; i++){
             xs->elementos[i] = array[i];
-            xs->cantidad = capacidad - (xs->cantidad);
         }
+        xs->cantidad = capacidad;
     }
     xs->capacidad = capacidad;
-    delete array;
+
+
+    
 }
 
 void add(int x, ArrayList xs){
