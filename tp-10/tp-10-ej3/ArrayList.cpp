@@ -57,3 +57,12 @@ void resize(int capacidad, ArrayList xs){
     xs->capacidad = capacidad;
     delete array;
 }
+
+void add(int x, ArrayList xs){
+    xs->cantidad++;
+    int i = 0;
+    while(i<xs->cantidad){
+        i++;
+    }
+    xs->elementos[i] = x;
+}
