@@ -35,7 +35,10 @@ int get(int i, ArrayList xs){
 }
 
 void set(int i, int x, ArrayList xs){
-     xs->elementos[i] = x;
+    if (xs->elementos[i] == NULL){
+        xs->cantidad++;
+    }
+    xs->elementos[i] = x;
 }
 
 void resize(int capacidad, ArrayList xs){
@@ -58,9 +61,8 @@ void resize(int capacidad, ArrayList xs){
 }
 
 void add(int x, ArrayList xs){
-        xs->cantidad++;
         int i = 0;
-        while(i<xs->cantidad){
+        while(i < xs->cantidad){
             i++;
         }
         xs->elementos[i] = x;
