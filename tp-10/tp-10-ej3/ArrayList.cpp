@@ -59,10 +59,18 @@ void resize(int capacidad, ArrayList xs){
 }
 
 void add(int x, ArrayList xs){
-    xs->cantidad++;
+        xs->cantidad++;
+        int i = 0;
+        while(i<xs->cantidad){
+            i++;
+        }
+        xs->elementos[i] = x;
+}
+
+void remove(ArrayList xs){
     int i = 0;
-    while(i<xs->cantidad){
+    while (i<xs->cantidad){
         i++;
     }
-    xs->elementos[i] = x;
+    delete (xs->elementos + i);
 }
