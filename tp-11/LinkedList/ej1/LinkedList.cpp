@@ -107,5 +107,6 @@ void Append(LinkedList xs, LinkedList ys){
         u = u->siguiente;
     }
     u->siguiente = ys->primero;
+    xs->cantidad += ys->cantidad;
     DestroyL(ys);
 }
