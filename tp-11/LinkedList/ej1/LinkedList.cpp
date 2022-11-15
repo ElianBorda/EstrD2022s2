@@ -100,3 +100,12 @@ void DestroyL(LinkedList xs){
     }
     delete xs;
 }
+
+void Append(LinkedList xs, LinkedList ys){
+    NodoL* u = xs->primero;
+    while ( u->siguiente != NULL){
+        u = u->siguiente;
+    }
+    u->siguiente = ys->primero;
+    DestroyL(ys);
+}
