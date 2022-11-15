@@ -35,9 +35,6 @@ int get(int i, ArrayList xs){
 }
 
 void set(int i, int x, ArrayList xs){
-    if (xs->elementos[i] == NULL){
-        xs->cantidad++;
-    }
     xs->elementos[i] = x;
 }
 
@@ -61,17 +58,20 @@ void resize(int capacidad, ArrayList xs){
 }
 
 void add(int x, ArrayList xs){
-        int i = 0;
-        while(i < xs->cantidad){
-            i++;
-        }
-        xs->elementos[i] = x;
+    xs->elementos[ xs->cantidad ] = x;
+    xs->cantidad++;
 }
 
 void remove(ArrayList xs){
-    int i = 0;
-    while (i<xs->cantidad){
-        i++;
+    xs->cantidad--;
+}
+
+
+
+int max(int n, int m){
+    if (n>m){
+        return n;
+    } else {
+        return m;
     }
-    delete (xs->elementos + i);
 }
