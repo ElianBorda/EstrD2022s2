@@ -44,8 +44,24 @@ void Conectar(Cliente c, Ruta r, Switch s) {
 
 void Desconectar(Ruta r, Switch s) {
   RutaIterator ir = iniciarRuta(r);
-  while(!estaAlFinalDeLaRuta(ir)){
-    //hacerAlgo
+  SNode* actual = s->root; 
+  while(!estaAlFinalDeLaRuta(ir) && actual!=NULL){
+    if(bocaActual(ir)==Boca1){
+      actual = actual->boca1;
+    } else {
+      actual = actual->boca2;
+    }
+    AvanzarEnRuta(ir);
+  }
+  LiberarRutaIterator(ir);
+
+  //Cubro la INV.REP
+  if (actual!=NULL){
+    if(actual->boca1==NULL && actual->boca2==NULL){
+      actual = NULL;
+    } else {
+      actual->conexion = NULL;
+    }
   }
 }
 
