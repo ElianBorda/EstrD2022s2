@@ -33,25 +33,29 @@ struct BinHeapHeaderSt{
 };
 
 BinHeapC emptyHC() { // O(1)
-  // COMPLETAR
-  return(NULL); // REEMPLAZAR
+  BinHeapC h = new BinHeapHeaderSt;
+  h->maxSize = 16;
+  h->curSize = 0;
+  h->pins = new int[h->maxSize];
+  h->clientes = new Cliente[h->maxSize];
+  h->pins[0] = INT_MIN; // macro de h.limits
+  
+  return h;
 } 
 
 bool isEmptyHC(BinHeapC h) {  // O(1)
-  // COMPLETAR
-  return(false); // REEMPLAZAR
+  return (h->curSize==0);
 }
 
 int  findMinPinHC(BinHeapC h) { // O(1)
   // PRECOND: la heap no está vacía
-  // COMPLETAR
-  return(0); // REEMPLAZAR
+  return (h->pins[1]);
 }
 
 Cliente findMinClienteHC(BinHeapC h) { // O(1)
   // PRECOND: la heap no está vacía
   // COMPLETAR
-  return(NULL); // REEMPLAZAR
+  return (h->clientes[1]); 
 }
 
 //---------------------------------------
@@ -59,7 +63,21 @@ Cliente findMinClienteHC(BinHeapC h) { // O(1)
 //  en caso de ser necesario
 //---------------------------------------
 void AumentarEspacio(BinHeapC h) { // O(N)
-  // COMPLETAR
+  int* ns = new int[h->maxSize*2];
+  for(int i=0;i<=h->curSize;i++){
+    ns[i] = h->elem[i];
+  }
+  delete h->elem;
+  h->maxSize *= 2;
+  h->elems = nc;
+
+  int* ns = new int[h->maxSize*2];
+  for(int i=0;i<h->curSize;i++){
+    ns[i] = h->elem[i];
+  }
+  delete h->elem;
+  h->maxSize *= 2;
+  h->elems = nc
 }
 
 void InsertHC(int pin, Cliente c, BinHeapC h) { // O(log N)
