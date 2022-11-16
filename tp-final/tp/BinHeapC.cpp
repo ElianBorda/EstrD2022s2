@@ -63,34 +63,64 @@ Cliente findMinClienteHC(BinHeapC h) { // O(1)
 //  en caso de ser necesario
 //---------------------------------------
 void AumentarEspacio(BinHeapC h) { // O(N)
-  int* ns = new int[h->maxSize*2];
-  for(int i=0;i<=h->curSize;i++){
-    ns[i] = h->elem[i];
+  int* newPins = new int[h->maxSize*2];
+  Cliente* newCliente = new Cliente[h->maxSize*2];
+  for (int i = 0; i < h->curSize; i++)
+  {
+    newPins[i] = h->pins[i];
+    newCliente[i] = h->clientes[i];
   }
-  delete h->elem;
+  delete h->pins;
+  h->pins = newPins;
+  delete h->clientes;
+  h->clientes = newCliente;
   h->maxSize *= 2;
-  h->elems = nc;
-
-  int* ns = new int[h->maxSize*2];
-  for(int i=0;i<h->curSize;i++){
-    ns[i] = h->elem[i];
-  }
-  delete h->elem;
-  h->maxSize *= 2;
-  h->elems = nc
 }
 
 void InsertHC(int pin, Cliente c, BinHeapC h) { // O(log N)
-  // COMPLETAR
+  if(h->curSize==h->maxSize-1){
+    AumentarEspacio(h);
+  }
+  int curNode = ++h->curSize; 
+  while(pin < h->pins[curNode/2]){
+    h->pins[curNode] = h->pins[curNode/2];
+    h->clientes[curNode] = h->clientes[curNode/2];
+    curNode /= 2;
+  }
+  h->pins[curNode] = pin;
+  h->clientes[curNode] = c;
 }
 
 void DeleteMinHC(BinHeapC h) { // O(log N)
   // PRECOND: h->curSize > 0
-  // COMPLETAR
+  
+  int child;
+  int curNode;
+  int last = h->pins[h->curSize--];
+
+  for(curNode=1; curNode*2 <= h->curSize; curNode=child*2){
+    child *= curNode*2;
+
+    if((child != h->curSize) && (h->pins[child++] < h->pins[child])){
+      child++; //checkeamos que haya un hermano y que sea menor;
+    }
+    
+    if(last > h->pins[child]){
+      h->pins[curNode] = h->pins[child];
+      h->clientes[curNode] = h->clientes[child];
+    } else {
+      break; //Evitamos preguntar last > h->pins[curNode*2] 2 veces;
+    }
+    h->pins[curNode] = last;
+    h->clientes[curNode] = h->clientes[h->curSize--];
+  }
+
 }
 
 void LiberarHC(BinHeapC h) { // O(1)
-  // COMPLETAR
+  delete h->clientes;
+  delete h->pins;
+  delete h;
 }
 
 //---------------------------------------

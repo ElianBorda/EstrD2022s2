@@ -19,16 +19,34 @@ struct  SwHeaderSt {
 };
 
 Switch newSwitch() {
-  // COMPLETAR
-  return (NULL); // REEMPLAZAR
+  Switch s = new SwHeaderSt;
+  s->root = NULL; // Switch es una terminal
+  return s; 
 }
 
 void Conectar(Cliente c, Ruta r, Switch s) {
-  // COMPLETAR
+  RutaIterator ir = iniciarRuta(r);
+  if (s->root==NULL){ s->root = new SNode; }
+  SNode* actual = s->root;
+  while(!estaAlFinalDeLaRuta(ir)){
+    if(bocaActual(ir)==Boca1){
+      if(actual->boca1==NULL){ actual->boca1 = new SNode; }
+      actual = actual->boca1;
+    } else {
+      if(actual->boca1==NULL){ actual->boca1 = new SNode; }
+      actual = actual->boca2;
+    }
+    AvanzarEnRuta(ir);
+  }
+  LiberarRutaIterator(ir);
+  actual->conexion = c;
 }
 
 void Desconectar(Ruta r, Switch s) {
-  // COMPLETAR
+  RutaIterator ir = iniciarRuta(r);
+  while(!estaAlFinalDeLaRuta(ir)){
+    //hacerAlgo
+  }
 }
 
 Rutas disponiblesADistancia(Switch s, int d) {
