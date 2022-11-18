@@ -22,31 +22,44 @@ struct  DNHeaderSt {
 };
 
 DualNet emptyDN() {
-  // COMPLETAR
-  return(NULL);
+  DualNet dn = new DNHeaderSt;
+  dn->mcr = emptyMCR();
+  dn->sw  = newSwitch();
+  return dn;
 }
 
 int cantidadDeClientesConectados(DualNet dn) {
-  // COMPLETAR
-  return(0); // REEMPLAZAR
+  return sizeMCR(dn->mcr); 
 }
 
 bool estaDisponible(Ruta r, DualNet dn) {
-  // COMPLETAR
-  return(false); // REEMPLAZAR
+  ClientesIterator clientesAProcesar = iniciarRecorridoClientes(keysMCR(dn->mcr));
+  while(!estaAlFinalDeLosClientes(clientesAProcesar) && 
+        !mismaRuta(r, lookupMCR(clienteActual(clientesAProcesar), dn->mcr))){
+    AvanzarASiguienteCliente(clientesAProcesar);
+  }
+  return(!mismaRuta(r, lookupMCR(clienteActual(clientesAProcesar), dn->mcr))); // REEMPLAZAR
 }
 
 void ConectarCliente(Ruta r, Cliente c, DualNet dn) {
-  // COMPLETAR
+  AddMCR(c, r, dn->mcr);
+  Conectar(c, r, dn->sw);
 }
 
 void DesconectarCliente(Cliente c, DualNet dn) {
-  // COMPLETAR
+  DeleteMCR(c, dn->mcr);
+  Desconectar(lookupMCR(c, dn->mcr), dn->sw);
 }
 
 BinHeapC pinPorCliente(DualNet dn) {
-  // COMPLETAR
-  return(NULL); // REEMPLAZAR
+  BinHeapC bh = emptyHC();
+  ClientesIterator clientesAProcesar = iniciarRecorridoClientes(keysMCR(dn->mcr));
+  for (int i = 0;!estaAlFinalDeLosClientes(clientesAProcesar); i++){
+    InsertHC(i, clienteActual(clientesAProcesar), bh);
+    AvanzarASiguienteCliente(clientesAProcesar);
+  }
+  
+  return bh;
 }
 
 void LiberarDN(DualNet dn) {

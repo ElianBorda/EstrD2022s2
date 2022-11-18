@@ -44,6 +44,21 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "xiosbase": "cpp"
+        "xiosbase": "cpp",
+        "cstring": "cpp",
+        "ctime": "cpp",
+        "iomanip": "cpp",
+        "ios": "cpp",
+        "xfacet": "cpp",
+        "xlocale": "cpp",
+        "xlocinfo": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp",
+        "xmemory": "cpp",
+        "xstddef": "cpp",
+        "xstring": "cpp",
+        "xtr1common": "cpp",
+        "xutility": "cpp"
     }
 }
