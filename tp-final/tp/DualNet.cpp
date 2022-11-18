@@ -33,12 +33,15 @@ int cantidadDeClientesConectados(DualNet dn) {
 }
 
 bool estaDisponible(Ruta r, DualNet dn) {
+  Cliente actual; // Se necesita el actual para poder liberar al iterator;
   ClientesIterator clientesAProcesar = iniciarRecorridoClientes(keysMCR(dn->mcr));
   while(!estaAlFinalDeLosClientes(clientesAProcesar) && 
         !mismaRuta(r, lookupMCR(clienteActual(clientesAProcesar), dn->mcr))){
+    actual = clienteActual(clientesAProcesar);
     AvanzarASiguienteCliente(clientesAProcesar);
   }
-  return(!mismaRuta(r, lookupMCR(clienteActual(clientesAProcesar), dn->mcr))); // REEMPLAZAR
+  LiberarClientesIterator(clientesAProcesar);
+  return(!mismaRuta(r, lookupMCR(actual, dn->mcr))); // REEMPLAZAR
 }
 
 void ConectarCliente(Ruta r, Cliente c, DualNet dn) {
@@ -58,12 +61,14 @@ BinHeapC pinPorCliente(DualNet dn) {
     InsertHC(i, clienteActual(clientesAProcesar), bh);
     AvanzarASiguienteCliente(clientesAProcesar);
   }
-  
+  LiberarClientesIterator(clientesAProcesar);
   return bh;
 }
 
 void LiberarDN(DualNet dn) {
-  // COMPLETAR
+  LiberarMCR(dn->mcr);
+  LiberarSwitch(dn->sw);
+  delete dn;
 }
 
 void ShowDualNet(DualNet dn) {
