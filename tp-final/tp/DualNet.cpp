@@ -50,8 +50,8 @@ void ConectarCliente(Ruta r, Cliente c, DualNet dn) {
 }
 
 void DesconectarCliente(Cliente c, DualNet dn) {
-  DeleteMCR(c, dn->mcr);
   Desconectar(lookupMCR(c, dn->mcr), dn->sw);
+  DeleteMCR(c, dn->mcr);
 }
 
 BinHeapC pinPorCliente(DualNet dn) {
