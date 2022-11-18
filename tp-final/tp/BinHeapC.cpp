@@ -76,22 +76,35 @@ void AumentarEspacio(BinHeapC h) { // O(N)
 
 void InsertHC(int pin, Cliente c, BinHeapC h) { // O(log N)
   if(h->curSize==h->maxSize-1){ AumentarEspacio(h); }
-  int nodoActual = ++h->curSize; 
+  /* El ultimo nodo en la nueva posicion (curSize + 1) */
+  int nodoActual = ++h->curSize;
+  /* Preguntar si el pin que se desea agregar es menor al
+  padre. Si se cumple, el elemento flota a la posicion del padre
+  y el elemento del padre se inserta en su hijo*/
   while(pin < h->pins[nodoActual/2]){
     h->pins[nodoActual]     = h->pins[nodoActual/2];
     h->clientes[nodoActual] = h->clientes[nodoActual/2];
+    /* Ahora vamos a ver la posicion del padre ya que sus elementos
+    bajaron al nodo de uno de sus hijos*/
     nodoActual /= 2;
   }
+  /*Si el elemento a insertar ya no puede flotar mas, se inserta en
+  el nodo actual*/
   h->pins[nodoActual]     = pin;
   h->clientes[nodoActual] = c;
 }
 
 void DeleteMinHC(BinHeapC h) { // O(log N)
   // PRECOND: h->curSize > 0
+  /* La posicion del nodo del hijo de un padre */
   int nodoHijo;
+  /* Es la posicion que se evalua actualmente */
   int nodoActual;
+  /* Es el cliente de la ultima posicion en clientes */
   Cliente ultimoClie = h->clientes[h->curSize];
+  /* Es el pin de la ultima posicion en pins */
   int ultimoElem = h->pins[h->curSize];
+  /* Hacemos el recorrido por el arbol */
   for(nodoActual=1; nodoActual*2<=h->curSize; nodoActual=nodoHijo){
     nodoHijo = nodoActual*2;
     if((nodoHijo!=h->curSize) && (h->pins[nodoHijo+1] < h->pins[nodoHijo])){nodoHijo++;}
@@ -99,9 +112,10 @@ void DeleteMinHC(BinHeapC h) { // O(log N)
       h->pins[nodoActual] = h->pins[nodoHijo];
       h->clientes[nodoActual] = h->clientes[nodoHijo]; 
     } else {
-      break;
+      break; // evitamos volver a iterar cuando lo encontramos. (Esto solo sirve para eficiencia)
     }
   }
+  /*Si ya se llego al nodo indicado, movemos ahi sus elementos*/
     h->pins[nodoActual] = ultimoElem;
     h->clientes[nodoActual] = ultimoClie;
     h->curSize--;
