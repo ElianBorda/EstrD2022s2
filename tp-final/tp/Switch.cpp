@@ -26,36 +26,28 @@ Switch newSwitch() {
 
 void Conectar(Cliente c, Ruta r, Switch s) {
   RutaIterator ir = iniciarRuta(r);
-  SNode* actual;
-  if (s->root==NULL){
-    s->root           = new SNode;
-    s->root->conexion = NULL;
-    s->root->boca1    = NULL;
-    s->root->boca2    = NULL;
-  }
-  actual = s->root;
+  SNode* actual = s->root;
+  inicializarNodoSiNULL(actual);
   while (!estaAlFinalDeLaRuta(ir)){
     if (bocaActual(ir)==Boca1){
-      if (actual->boca1==NULL){
-        actual->boca1           = new SNode;
-        actual->boca1->conexion = NULL;
-        actual->boca1->boca1    = NULL;
-        actual->boca1->boca2    = NULL;
-      }
       actual = actual->boca1;
     } else {
-      if (actual->boca2==NULL){
-        actual->boca2           = new SNode;
-        actual->boca2->conexion = NULL;
-        actual->boca2->boca1    = NULL;
-        actual->boca2->boca2    = NULL;
-      }
       actual = actual->boca2;
     }
+    inicializarNodoSiNULL(actual);
     AvanzarEnRuta(ir);
   }
   actual->conexion = c;
   LiberarRutaIterator(ir);
+}
+
+void inicializarNodoSiNULL(SNode* n){
+  if (n==NULL){
+    n           = new SNode;
+    n->conexion = NULL;
+    n->boca1    = NULL;
+    n->boca2    = NULL;
+  }
 }
 
 void Desconectar(Ruta r, Switch s) {
