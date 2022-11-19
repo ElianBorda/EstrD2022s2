@@ -53,7 +53,7 @@ void inicializarNodoSiNULL(SNode* n){
 void Desconectar(Ruta r, Switch s) {
   RutaIterator ir = iniciarRuta(r);
   SNode* actual = s->root;
-  while(!estaAlFinalDeLaRuta(ir)){
+  while(!estaAlFinalDeLaRuta(ir) && actual!=NULL){
     if(bocaActual(ir)==Boca1){
       actual = actual->boca1;
     } else {
@@ -62,7 +62,9 @@ void Desconectar(Ruta r, Switch s) {
     AvanzarEnRuta(ir);
   }
   LiberarRutaIterator(ir);
-  actual->conexion = NULL;
+  if (actual!=NULL && actual->conexion!=NULL){
+    actual->conexion = NULL;
+  }
 }
 
 
