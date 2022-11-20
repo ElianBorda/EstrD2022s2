@@ -24,31 +24,87 @@ Switch newSwitch() {
   return s; 
 }
 
+void inicializarNodeCon(SNode* n, RutaIterator ir){
+  if (estaAlFinalDeLaRuta(ir)){
+    n->boca1 = NULL;
+    n->boca2 = NULL;
+  } else if (bocaActual(ir) == Boca1){
+    AvanzarEnRuta(ir);
+    n->boca1 = new SNode;
+    n->boca2 = NULL;
+    n->conexion = NULL;
+    inicializarNodeCon(n->boca1, ir);
+  } else {
+    AvanzarEnRuta(ir);
+    n->boca1 = NULL;
+    n->boca2 = new SNode;
+    n->conexion = NULL;
+    inicializarNodeCon(n->boca2, ir);
+  }
+}
+
 void Conectar(Cliente c, Ruta r, Switch s) {
   RutaIterator ir = iniciarRuta(r);
-  SNode* actual = s->root;
-  inicializarNodoSiNULL(actual);
+  SNode* actual;
+  if(s->root == NULL){
+    s->root = new SNode;
+    inicializarNodeCon(s->root, ir);
+  }
+  actual = s->root;
   while (!estaAlFinalDeLaRuta(ir)){
     if (bocaActual(ir)==Boca1){
+      if(actual->boca1 == NULL){
+        actual->boca1 = new SNode;
+        inicializarNodeCon(actual->boca1, ir);
+      }
       actual = actual->boca1;
     } else {
+      if(actual->boca2 == NULL){
+        actual->boca2 = new SNode;
+        inicializarNodeCon(actual->boca2, ir);
+      }
       actual = actual->boca2;
     }
-    inicializarNodoSiNULL(actual);
     AvanzarEnRuta(ir);
   }
   actual->conexion = c;
   LiberarRutaIterator(ir);
 }
 
-void inicializarNodoSiNULL(SNode* n){
-  if (n==NULL){
-    n           = new SNode;
-    n->conexion = NULL;
-    n->boca1    = NULL;
-    n->boca2    = NULL;
+/*
+void Conectar(Cliente c, Ruta r, Switch s) {
+  RutaIterator ir = iniciarRuta(r);
+  SNode* actual;
+  if (s->root==NULL){
+    s->root           = new SNode;
+    s->root->conexion = NULL;
+    s->root->boca1    = NULL;
+    s->root->boca2    = NULL;
   }
-}
+  actual = s->root;
+  while (!estaAlFinalDeLaRuta(ir)){
+    if (bocaActual(ir)==Boca1){
+      if (actual->boca1==NULL){
+        actual->boca1           = new SNode;
+        actual->boca1->conexion = NULL;
+        actual->boca1->boca1    = NULL;
+        actual->boca1->boca2    = NULL;
+      }
+      actual = actual->boca1;
+    } else {
+      if (actual->boca2==NULL){
+        actual->boca2           = new SNode;
+        actual->boca2->conexion = NULL;
+        actual->boca2->boca1    = NULL;
+        actual->boca2->boca2    = NULL;
+      }
+      actual = actual->boca2;
+    }
+    AvanzarEnRuta(ir);
+  }
+  actual->conexion = c;
+  LiberarRutaIterator(ir);
+} */
 
 void Desconectar(Ruta r, Switch s) {
   RutaIterator ir = iniciarRuta(r);
