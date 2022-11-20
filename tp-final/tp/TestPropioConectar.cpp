@@ -21,9 +21,6 @@ int main() {
 
     Ruta ruta0 = rutaVacia();
     Switch s = newSwitch();
-    SnocBoca(ruta0, Boca2);
-    SnocBoca(ruta0, Boca1);
-    SnocBoca(ruta0, Boca2);
     Conectar(kevin, ruta0, s);
 
     ShowSwitch(s, 2);
