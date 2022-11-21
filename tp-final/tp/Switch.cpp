@@ -68,27 +68,28 @@ void Conectar(Cliente c, Ruta r, Switch s) {
   LiberarRutaIterator(ir);
 }
 
-//-------------------------
+//------------------------- 
 
-void avanzarABoca(Boca b, Switch s){
+void Desconectar(Ruta r, Switch s) {
+  RutaIterator ir = iniciarRuta(r);
+  Switch act = new SwHeaderSt; 
+  act->root = s->root;
+  while (!estaAlFinalDeLaRuta(ir)){
+    if (act->root == NULL){ break; }
+    avanzarABoca(act, bocaActual(ir));
+    AvanzarEnRuta(ir);
+  }
+  if (act->root != NULL){ act->root->conexion = NULL;}
+  LiberarRutaIterator(ir);
+}
+
+void avanzarABoca(Switch s, Boca b){
   if (b == Boca1){
     s->root = s->root->boca1;
   } else {
     s->root = s->root->boca2;
   }
-} 
-
-void Desconectar(Ruta r, Switch s) {
-  RutaIterator ir = iniciarRuta(r);
-  while (!estaAlFinalDeLaRuta(ir)){
-    if (s->root == NULL){ break; }
-    avanzarABoca(bocaActual(ir), s);
-    AvanzarEnRuta(ir);
-  }
-  if (s->root != NULL){ s->root->conexion = NULL;}
-  LiberarRutaIterator(ir);
 }
-
 
 Rutas disponiblesADistancia(Switch s, int d) {
     Switch left = new SwHeaderSt;
