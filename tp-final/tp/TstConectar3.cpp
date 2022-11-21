@@ -24,6 +24,8 @@ int main() {
     Conectar(maria, ruta0, s);
     ConsBoca(Boca2, ruta0);
     Conectar(tatiana, ruta0, s);
+    ConsBoca(Boca1, ruta0);
+    Conectar(kevin, ruta0, s);
     ShowSwitch(s, 2);
     
 }

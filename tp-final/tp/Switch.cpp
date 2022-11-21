@@ -24,51 +24,63 @@ Switch newSwitch() {
   return s; 
 }
 
-//----------------------
+SNode* nodoDeSwEn(Switch s, Boca b){
+  if(b == Boca1){
+    return s->root->boca1;
+  } else {
+    return s->root->boca2;
+  }
+}
 
-void inicializarNodo(SNode* n){
+void AvanzarABoca(Switch s, Boca b){
+  if (b == Boca1){
+    s->root = s->root->boca1;
+  } else {
+    s->root = s->root->boca2;
+  }
+}
+
+void IniNodo(SNode* n){
   n->boca1 = NULL;
   n->boca2 = NULL;
   n->conexion = NULL;
 }
 
-void inicializarEstructuraEn(SNode* n, Boca boca){
-  if (boca == Boca1){
-    n->boca1 = new SNode;
-    inicializarNodo(n->boca1);
+void InicializarSw(Switch s){
+  SNode* n = new SNode;
+  IniNodo(n);
+  s->root = n;
+}
+
+void IniDeSwEnBoca(Switch s, Boca b){
+  if (b == Boca1){
+    s->root->boca1 = new SNode;
+    IniNodo(s->root->boca1);
   } else {
-    n->boca2 = new SNode;
-    inicializarNodo(n->boca2);
+    s->root->boca2 = new SNode;
+    IniNodo(s->root->boca2);
   }
 }
 
+
 void Conectar(Cliente c, Ruta r, Switch s) {
   RutaIterator ir = iniciarRuta(r);
-  SNode* actual;
-  if (s->root==NULL){
-    s->root           = new SNode;
-    inicializarNodo(s->root);
-  }
-  actual = s->root;
+  Switch act = new SwHeaderSt;
+  if(s->root == NULL){InicializarSw(s);}
+  act->root = s->root;
   while (!estaAlFinalDeLaRuta(ir)){
-    if (bocaActual(ir)==Boca1){
-      if (actual->boca1 == NULL){
-        inicializarEstructuraEn(actual, Boca1);
-      }
-      actual = actual->boca1;
-    } else {
-      if (actual->boca2 == NULL){
-        inicializarEstructuraEn(actual, Boca2);
-      };
-      actual = actual->boca2;
+    if (nodoDeSwEn(act, bocaActual(ir)) == NULL){
+      IniDeSwEnBoca(act, bocaActual(ir));
     }
+    AvanzarABoca(act, bocaActual(ir));
     AvanzarEnRuta(ir);
   }
-  actual->conexion = c;
+  act->root->conexion = c;
   LiberarRutaIterator(ir);
 }
 
 //------------------------- 
+
 
 void Desconectar(Ruta r, Switch s) {
   RutaIterator ir = iniciarRuta(r);
@@ -76,20 +88,14 @@ void Desconectar(Ruta r, Switch s) {
   act->root = s->root;
   while (!estaAlFinalDeLaRuta(ir)){
     if (act->root == NULL){ break; }
-    avanzarABoca(act, bocaActual(ir));
+    AvanzarABoca(act, bocaActual(ir));
     AvanzarEnRuta(ir);
   }
-  if (act->root != NULL){ act->root->conexion = NULL;}
+  if (s->root == NULL) {InicializarSw(s);}
+  else if (act->root != NULL){ act->root->conexion = NULL;}
   LiberarRutaIterator(ir);
 }
 
-void avanzarABoca(Switch s, Boca b){
-  if (b == Boca1){
-    s->root = s->root->boca1;
-  } else {
-    s->root = s->root->boca2;
-  }
-}
 
 Rutas disponiblesADistancia(Switch s, int d) {
     Switch left = new SwHeaderSt;
