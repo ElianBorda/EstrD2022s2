@@ -19,9 +19,12 @@ int main() {
     Cliente ana       = cliente("Ana");
     Cliente diana     = cliente("Diana");
 
+
     Ruta ruta0 = rutaVacia();
     Switch s = newSwitch();
-    Conectar(kevin, ruta0, s);
-
+    Conectar(maria, ruta0, s);
+    ConsBoca(Boca1, ruta0);
+    ConsBoca(Boca2, ruta0);
+    Desconectar(ruta0, s);
     ShowSwitch(s, 2);
 }
