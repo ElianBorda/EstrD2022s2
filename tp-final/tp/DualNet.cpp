@@ -33,15 +33,11 @@ int cantidadDeClientesConectados(DualNet dn) {
 }
 
 bool estaDisponible(Ruta r, DualNet dn) {
-  Cliente actual; // Se necesita el actual para poder liberar al iterator;
-  ClientesIterator clientesAProcesar = iniciarRecorridoClientes(keysMCR(dn->mcr));
-  while(!estaAlFinalDeLosClientes(clientesAProcesar) && 
-        !mismaRuta(r, lookupMCR(clienteActual(clientesAProcesar), dn->mcr))){
-    actual = clienteActual(clientesAProcesar);
-    AvanzarASiguienteCliente(clientesAProcesar);
+  RutasIterator rs = iniciarRecorridoDeRutas(disponiblesADistancia(dn->sw, (lenRuta(r)-1)));
+  while (!estaAlFinalDeLasRutas || rutaActual(rs) != r){
+    AvanzarASiguienteRuta(rs);
   }
-  LiberarClientesIterator(clientesAProcesar);
-  return(!mismaRuta(r, lookupMCR(actual, dn->mcr))); // REEMPLAZAR
+  return !estaAlFinalDeLaRuta && rutaActual(rs) == r;
 }
 
 void ConectarCliente(Ruta r, Cliente c, DualNet dn) {
@@ -56,13 +52,11 @@ void DesconectarCliente(Cliente c, DualNet dn) {
 
 BinHeapC pinPorCliente(DualNet dn) {
   BinHeapC bh = emptyHC();
-  ClientesIterator clientesAProcesar = iniciarRecorridoClientes(keysMCR(dn->mcr));
-  for (int i = 0;!estaAlFinalDeLosClientes(clientesAProcesar); i++){
-    InsertHC(i, clienteActual(clientesAProcesar), bh);
-    AvanzarASiguienteCliente(clientesAProcesar);
+  ClientesIterator cs = iniciarRecorridoClientes(keysMCR(dn->mcr));
+  while(!estaAlFinalDeLosClientes){
+    InsertHC(lenRuta(lookupMCR(clienteActual(cs), dn->mcr)), clienteActual(cs), bh);
+    AvanzarASiguienteCliente(cs);
   }
-  LiberarClientesIterator(clientesAProcesar);
-  return bh;
 }
 
 void LiberarDN(DualNet dn) {
