@@ -14,11 +14,11 @@ struct SNode {
     //  * (BONUS) uno de los 3 campos es distinto de NULL
 };
 
-struct  SwHeaderSt {
+struct  SwHeaderSt { 
   SNode* root;
 };
 
-Switch newSwitch() {
+Switch newSwitch() { //<------ 1)
   Switch s = new SwHeaderSt;
   s->root = NULL; // Switch es una terminal
   return s; 
@@ -46,11 +46,6 @@ void IniNodo(SNode* n){
   n->conexion = NULL;
 }
 
-void InicializarSw(Switch s){
-  SNode* n = new SNode;
-  IniNodo(n);
-  s->root = n;
-}
 
 void IniDeSwEnBoca(Switch s, Boca b){
   if (b == Boca1){
@@ -63,10 +58,11 @@ void IniDeSwEnBoca(Switch s, Boca b){
 }
 
 
-void Conectar(Cliente c, Ruta r, Switch s) {
+void Conectar(Cliente c, Ruta r, Switch s) { //<------ 2)
   RutaIterator ir = iniciarRuta(r);
   Switch act = new SwHeaderSt;
-  if(s->root == NULL){InicializarSw(s);}
+  if(s->root == NULL){s->root = NULL;
+                      IniNodo(s->root);}
   act->root = s->root;
   while (!estaAlFinalDeLaRuta(ir)){
     if (nodoDeSwEn(act, bocaActual(ir)) == NULL){
@@ -79,56 +75,53 @@ void Conectar(Cliente c, Ruta r, Switch s) {
   LiberarRutaIterator(ir);
 }
 
-//------------------------- 
 
 
-void Desconectar(Ruta r, Switch s) {
+void Desconectar(Ruta r, Switch s) { //<------ 3)
   RutaIterator ir = iniciarRuta(r);
-  Switch act = new SwHeaderSt; 
-  act->root = s->root;
-  while (!estaAlFinalDeLaRuta(ir)){
-    if (act->root == NULL){ break; }
-    AvanzarABoca(act, bocaActual(ir));
+  if (s->root == NULL){ s->root = new SNode;
+                        IniNodo(s->root); }
+  SNode* act = s->root;
+  while (!estaAlFinalDeLaRuta(ir) && act!=NULL){
+    if (bocaActual(ir) == Boca1){
+      act = act->boca1;
+    } else {
+      act = act->boca2;
+    }
     AvanzarEnRuta(ir);
   }
-  if (s->root == NULL) {InicializarSw(s);}
-  else if (act->root != NULL){ act->root->conexion = NULL;}
+  if (act == NULL) {act = new SNode;
+                    IniNodo(act);}
+  else { act->conexion = NULL;}
   LiberarRutaIterator(ir);
 }
 
 
-Rutas disponiblesADistancia(Switch s, int d) {
-    Switch left = new SwHeaderSt;
-    Switch right = new SwHeaderSt;
-    Rutas disponibleLeft;
-    Rutas disponibleRight;
-
-    if (d==0){
-    
-      return emptyRutas();
-
-    } else if(s->root==NULL){
-      disponibleLeft = emptyRutas();
-      ConsRuta(rutaVacia(), disponibleLeft);
-
-      return disponibleLeft;
-
-    } else {
-      left->root = s->root->boca1;
-      right->root = s->root->boca2;
-      disponibleLeft = disponiblesADistancia(left, d-1);
-      disponibleRight = disponiblesADistancia(right, d-1);
-      ExtenderTodasLasRutasCon(Boca1, disponibleLeft);
-      ExtenderTodasLasRutasCon(Boca2, disponibleRight);
-      AgregarA_LasRutasDe_(disponibleLeft, disponibleRight);
-      if (s->root->conexion==NULL){
-        ConsRuta(rutaVacia(), disponibleLeft);
-      }
-      return disponibleLeft;
-    }
+Rutas rutasDisponiblesHasta(SNode* n, int d){
+  Rutas rs1;
+  Rutas rs2;
+  if(d == 0){
+    rs1 = emptyRutas();
+    if (n == NULL || n->conexion == NULL){ ConsRuta(rutaVacia(), rs1); }
+    return(rs1);
+  } else {
+    if (n == NULL){ n = new SNode;
+                    IniNodo(n); }
+    Rutas rs1 = rutasDisponiblesHasta(n->boca1, d-1);
+    Rutas rs2 = rutasDisponiblesHasta(n->boca2, d-1);
+    ExtenderTodasLasRutasCon(Boca1, rs1);
+    ExtenderTodasLasRutasCon(Boca2, rs2);
+    AgregarA_LasRutasDe_(rs1, rs2);
+    if (n->conexion == NULL){ ConsRuta(rutaVacia(), rs1); }
+    return(rs1);
+  }
 }
 
-void LiberarNodos(SNode* n){
+Rutas disponiblesADistancia(Switch s, int d) { //<------ 4)
+  return rutasDisponiblesHasta(s->root, d);    
+}
+
+void LiberarNodos(SNode* n){ 
   if(n!=NULL){
     LiberarNodos(n->boca1);
     LiberarNodos(n->boca2);
@@ -136,7 +129,7 @@ void LiberarNodos(SNode* n){
   }
 }
 
-void LiberarSwitch(Switch s) {
+void LiberarSwitch(Switch s) { //<------ 5)
   LiberarNodos(s->root);
   delete s;
 }

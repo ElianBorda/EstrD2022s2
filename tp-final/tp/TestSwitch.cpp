@@ -39,6 +39,6 @@ int main() {
 
     ShowSwitch(s, 2);
 
-    Rutas rs = disponiblesADistancia(s, 4);
+    Rutas rs = disponiblesADistancia(s, 2);
     ShowRutas(rs, 0);
 }

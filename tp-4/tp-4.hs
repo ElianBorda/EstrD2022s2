@@ -14,6 +14,8 @@ data Ingrediente = Salsa
 pizza = (Capa Jamon (Capa Queso (Capa Salsa Prepizza)))
 
 pizza2 = (Capa (Aceitunas 2) (Capa Jamon (Capa Queso (Capa Salsa Prepizza))))
+
+pizzaSSYQ = (Capa Queso (Capa Salsa (Capa Queso (Capa Salsa Prepizza))))
 -- funciones
 
 -- Dada una pizza devuelve la cantidad de ingredientes
@@ -38,6 +40,13 @@ esJamon Jamon = True
 esJamon _     = False                            
 
 -- Dice si una pizza tiene salsa y queso
+tieneSoloSalsaYQueso' :: Pizza -> Bool 
+tieneSoloSalsaYQueso' (Capa Queso Prepizza) = True 
+tieneSoloSalsaYQueso' (Capa Salsa Prepizza) = True
+tieneSoloSalsaYQueso' (Capa Salsa p)        = True && tieneSoloSalsaYQueso' p 
+tieneSoloSalsaYQueso' (Capa Queso p)        = True && tieneSoloSalsaYQueso' p
+tieneSoloSalsaYQueso' p                     = False 
+
 tieneSoloSalsaYQueso :: Pizza -> Bool
 tieneSoloSalsaYQueso p = tieneIngrediente Salsa p && tieneIngrediente Queso p
 
@@ -195,9 +204,9 @@ tesoros a5 = [[T3,t3,t3]]
 tesoroa9 = [] -}
 
 -- 6. Devuelve todos lo caminos en el mapa.
-todosLosCaminos :: Mapa -> [[Dir]]
-todosLosCaminos Mapa
-todosLosCaminos Mapa
+-- todosLosCaminos :: Mapa -> [[Dir]]
+-- todosLosCaminos Mapa
+-- todosLosCaminos Mapa
 
 
 
