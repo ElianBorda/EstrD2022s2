@@ -24,37 +24,10 @@ Switch newSwitch() { //<------ 1)
   return s; 
 }
 
-SNode* nodoDeSwEn(Switch s, Boca b){
-  if(b == Boca1){
-    return s->root->boca1;
-  } else {
-    return s->root->boca2;
-  }
-}
-
-void AvanzarABoca(Switch s, Boca b){
-  if (b == Boca1){
-    s->root = s->root->boca1;
-  } else {
-    s->root = s->root->boca2;
-  }
-}
-
 void IniNodo(SNode* n){
   n->boca1 = NULL;
   n->boca2 = NULL;
   n->conexion = NULL;
-}
-
-
-void IniDeSwEnBoca(Switch s, Boca b){
-  if (b == Boca1){
-    s->root->boca1 = new SNode;
-    IniNodo(s->root->boca1);
-  } else {
-    s->root->boca2 = new SNode;
-    IniNodo(s->root->boca2);
-  }
 }
 
 void Conectar(Cliente c, Ruta r, Switch s) {
