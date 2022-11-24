@@ -33,11 +33,11 @@ int cantidadDeClientesConectados(DualNet dn) {
 }
 
 bool estaDisponible(Ruta r, DualNet dn) {
-  RutasIterator rs = iniciarRecorridoDeRutas(disponiblesADistancia(dn->sw, (lenRuta(r)-1)));
-  while (!estaAlFinalDeLasRutas || rutaActual(rs) != r){
+  RutasIterator rs = iniciarRecorridoDeRutas(disponiblesADistancia(dn->sw, lenRuta(r)));
+  while (!estaAlFinalDeLasRutas || !mismaRuta(rutaActual(rs), r)){
     AvanzarASiguienteRuta(rs);
   }
-  return !estaAlFinalDeLaRuta && rutaActual(rs) == r;
+  return !estaAlFinalDeLaRuta && mismaRuta(rutaActual(rs), r);
 }
 
 void ConectarCliente(Ruta r, Cliente c, DualNet dn) {
@@ -53,7 +53,7 @@ void DesconectarCliente(Cliente c, DualNet dn) {
 BinHeapC pinPorCliente(DualNet dn) {
   BinHeapC bh = emptyHC();
   ClientesIterator cs = iniciarRecorridoClientes(keysMCR(dn->mcr));
-  while(!estaAlFinalDeLosClientes){
+  while(!estaAlFinalDeLosClientes(cs)){
     InsertHC(lenRuta(lookupMCR(clienteActual(cs), dn->mcr)), clienteActual(cs), bh);
     AvanzarASiguienteCliente(cs);
   }
