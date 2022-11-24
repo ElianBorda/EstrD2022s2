@@ -67,11 +67,6 @@ void Desconectar(Ruta r, Switch s) { //<------ 3)
 if (act != NULL && act->conexion != NULL) {act->conexion = NULL;}
   LiberarRutaIterator(ir);
 }
-/*
-  if (act == NULL) {act = new SNode;
-                    IniNodo(act);}
-  else { act->conexion = NULL;}
-*/
 
 Rutas rutasDisponiblesHasta(SNode* n, int d){ 
   Rutas rs1;
