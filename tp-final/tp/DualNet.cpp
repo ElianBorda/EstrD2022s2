@@ -57,6 +57,7 @@ BinHeapC pinPorCliente(DualNet dn) {
     InsertHC(lenRuta(lookupMCR(clienteActual(cs), dn->mcr)), clienteActual(cs), bh);
     AvanzarASiguienteCliente(cs);
   }
+  return bh;
 }
 
 void LiberarDN(DualNet dn) {
