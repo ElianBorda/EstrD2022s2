@@ -27,6 +27,10 @@ int main() {
     Ruta ruta12 = rutaVacia();
     ConsBoca(Boca2, ruta12);
     ConsBoca(Boca1, ruta12);
+    Ruta ruta121 = rutaVacia();
+    ConsBoca(Boca2, ruta121);
+    ConsBoca(Boca1, ruta121);
+    ConsBoca(Boca2, ruta121);
 
     DualNet dn = emptyDN();
     ConectarCliente(ruta0,  maria,   dn);
@@ -35,6 +39,12 @@ int main() {
         
     ShowDualNet(dn);
 
+    cout << "Minimo de heapC: " << findMinPinHC(pinPorCliente(dn)) << " " << nombre(findMinClienteHC(pinPorCliente(dn))) << endl;
+
     DesconectarCliente(maria, dn);
     ShowDualNet(dn);
+
+    cout << "estaDisponible: " << estaDisponible(ruta12, dn) << endl;
+
+    cout << "Minimo de heapC: " << findMinPinHC(pinPorCliente(dn)) << " " << nombre(findMinClienteHC(pinPorCliente(dn))) << endl;
 }

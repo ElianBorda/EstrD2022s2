@@ -34,10 +34,10 @@ int cantidadDeClientesConectados(DualNet dn) {
 
 bool estaDisponible(Ruta r, DualNet dn) {
   RutasIterator rs = iniciarRecorridoDeRutas(disponiblesADistancia(dn->sw, lenRuta(r)));
-  while (!estaAlFinalDeLasRutas || !mismaRuta(rutaActual(rs), r)){
+  while (!estaAlFinalDeLasRutas(rs) && !mismaRuta(rutaActual(rs), r)){
     AvanzarASiguienteRuta(rs);
   }
-  return !estaAlFinalDeLaRuta;
+  return !estaAlFinalDeLasRutas(rs);
 }
 
 void ConectarCliente(Ruta r, Cliente c, DualNet dn) {
