@@ -37,10 +37,13 @@ bool estaDisponible(Ruta r, DualNet dn) {
   while (!estaAlFinalDeLasRutas || !mismaRuta(rutaActual(rs), r)){
     AvanzarASiguienteRuta(rs);
   }
-  return !estaAlFinalDeLaRuta && mismaRuta(rutaActual(rs), r);
+  return !estaAlFinalDeLaRuta;
 }
 
 void ConectarCliente(Ruta r, Cliente c, DualNet dn) {
+  if (lookupMCR(c, dn->mcr) != NULL){
+    Desconectar(lookupMCR(c, dn->mcr), dn->sw);
+  }
   AddMCR(c, r, dn->mcr);
   Conectar(c, r, dn->sw);
 }

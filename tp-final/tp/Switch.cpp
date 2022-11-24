@@ -115,7 +115,6 @@ Rutas rutasDisponiblesHasta(SNode* n, int d){
     ExtenderTodasLasRutasCon(Boca1, rs1);
     ExtenderTodasLasRutasCon(Boca2, rs2);
     AgregarA_LasRutasDe_(rs1, rs2);
-    if (n->conexion == NULL){ ConsRuta(rutaVacia(), rs1); }
     return(rs1);
   }
 }
