@@ -22,8 +22,10 @@ int main() {
 
     Ruta ruta0 = rutaVacia();
     Switch s = newSwitch();
-    Conectar(maria, ruta0, s);
     ConsBoca(Boca1, ruta0);
+    ConsBoca(Boca2, ruta0);
+    ConsBoca(Boca2, ruta0);
+    ConsBoca(Boca2, ruta0);
     ConsBoca(Boca2, ruta0);
     Desconectar(ruta0, s);
     ShowSwitch(s, 2);

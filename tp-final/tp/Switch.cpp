@@ -51,8 +51,6 @@ void Conectar(Cliente c, Ruta r, Switch s) {
   actual->conexion = c;
 }
 
-
-
 void Desconectar(Ruta r, Switch s) { //<------ 3)
   RutaIterator ir = iniciarRuta(r);
   if (s->root == NULL){ s->root = new SNode;
@@ -66,12 +64,14 @@ void Desconectar(Ruta r, Switch s) { //<------ 3)
     }
     AvanzarEnRuta(ir);
   }
+if (act != NULL && act->conexion != NULL) {act->conexion = NULL;}
+  LiberarRutaIterator(ir);
+}
+/*
   if (act == NULL) {act = new SNode;
                     IniNodo(act);}
   else { act->conexion = NULL;}
-  LiberarRutaIterator(ir);
-}
-
+*/
 
 Rutas rutasDisponiblesHasta(SNode* n, int d){ 
   Rutas rs1;
