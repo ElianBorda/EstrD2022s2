@@ -57,22 +57,25 @@ void IniDeSwEnBoca(Switch s, Boca b){
   }
 }
 
-
-void Conectar(Cliente c, Ruta r, Switch s) { //<------ 2)
-  RutaIterator ir = iniciarRuta(r);
-  Switch act = new SwHeaderSt;
-  if(s->root == NULL){s->root = NULL;
-                      IniNodo(s->root);}
-  act->root = s->root;
-  while (!estaAlFinalDeLaRuta(ir)){
-    if (nodoDeSwEn(act, bocaActual(ir)) == NULL){
-      IniDeSwEnBoca(act, bocaActual(ir));
+void Conectar(Cliente c, Ruta r, Switch s) {
+  RutaIterator bs = iniciarRuta(r);
+  if (s->root == NULL) { s->root = new SNode;
+                         IniNodo(s->root); }
+  SNode* actual = s->root;
+  while (!estaAlFinalDeLaRuta(bs)){
+    if (bocaActual(bs) == Boca1){
+      if (actual->boca1 == NULL){ actual->boca1 = new SNode;
+                                  IniNodo(actual->boca1);}
+      actual = actual->boca1;                                   
+    } else {
+      if (actual->boca2 == NULL){ actual->boca2 = new SNode;
+                                  IniNodo(actual->boca2);}
+      actual = actual->boca2;  
     }
-    AvanzarABoca(act, bocaActual(ir));
-    AvanzarEnRuta(ir);
+    AvanzarEnRuta(bs);
   }
-  act->root->conexion = c;
-  LiberarRutaIterator(ir);
+  LiberarRutaIterator(bs);
+  actual->conexion = c;
 }
 
 
@@ -97,7 +100,7 @@ void Desconectar(Ruta r, Switch s) { //<------ 3)
 }
 
 
-Rutas rutasDisponiblesHasta(SNode* n, int d){
+Rutas rutasDisponiblesHasta(SNode* n, int d){ 
   Rutas rs1;
   Rutas rs2;
   if(d == 0){
